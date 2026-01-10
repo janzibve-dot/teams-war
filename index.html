@@ -2,49 +2,129 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TEAMS WAR | NiksOnGame</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEAMS WAR | TACTICAL PORTAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #0a0a0a; --red: #D32F2F; --green: #388E3C; --text: #fff;
+        }
+
         body {
-            background-color: #000; /* Черный фон */
-            color: #0ff; /* Неоновый голубой текст */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            text-transform: uppercase;
-            overflow: hidden; /* Чтобы гильзы не создавали прокрутку */
+            margin: 0; padding: 0; background-color: var(--bg); color: var(--text);
+            font-family: 'Roboto', sans-serif;
+            background-image: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.98)), url('https://images.alphacoders.com/133/1331242.png');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            overflow: hidden; position: relative;
         }
-        .neon-box {
-            border: 4px solid #0ff;
-            padding: 40px;
-            box-shadow: 0 0 20px #0ff, inset 0 0 20px #0ff;
-            text-align: center;
-            z-index: 2; /* Рамка будет над гильзами */
-            background: rgba(0, 0, 0, 0.8); /* Полупрозрачный фон */
+
+        /* --- РЕАЛИСТИЧНЫЕ ПАДАЮЩИЕ ГИЛЬЗЫ --- */
+        .shell-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 5; overflow: hidden;
         }
-        /* Стиль для гильз */
+
         .shell {
             position: absolute;
-            width: 50px; /* Размер гильзы */
-            height: auto;
-            z-index: 1; /* Гильзы под текстом */
-            opacity: 0.6; /* Слегка прозрачные */
-            pointer-events: none; /* Чтобы не мешали нажимать на кнопки */
+            width: 40px; height: 25px; /* Размер под твое фото */
+            background-image: url('shell.png'); /* ИСПОЛЬЗУЕМ ТВОЙ ФАЙЛ */
+            background-size: contain; background-repeat: no-repeat;
+            top: -100px; opacity: 0;
+            animation: falling-shell linear infinite;
         }
+
+        @keyframes falling-shell {
+            0% { opacity: 0; transform: translateY(-100px) rotate(0deg); }
+            10% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(110vh) rotate(1080deg); }
+        }
+
+        /* Разброс гильз по экрану */
+        .s1 { left: 10%; animation-duration: 4s; }
+        .s2 { left: 30%; animation-duration: 6s; animation-delay: 2s; }
+        .s3 { left: 50%; animation-duration: 5s; animation-delay: 1s; }
+        .s4 { left: 75%; animation-duration: 7s; animation-delay: 3s; }
+        .s5 { left: 90%; animation-duration: 4.5s; }
+
+        /* --- ДИЗАЙН ИНТЕРФЕЙСА --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 50px; background: rgba(0, 0, 0, 0.98);
+            border-bottom: 2px solid var(--red); position: relative; z-index: 100;
+        }
+        .logo { font-family: 'Chakra Petch', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 2px; }
+        .logo span { color: var(--red); }
+        
+        .hero { height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
+
+        .bg-neon-text {
+            position: absolute; top: 82%; left: 50%; transform: translate(-50%, -50%);
+            font-family: 'Chakra Petch', sans-serif; font-size: 14vw; font-weight: 900;
+            color: transparent; -webkit-text-stroke: 2px var(--red);
+            text-transform: uppercase; white-space: nowrap; z-index: 0;
+            animation: flicker-red 2.5s infinite linear;
+        }
+
+        .dev-tag {
+            font-family: 'Chakra Petch', sans-serif; font-size: 16px; font-weight: 900;
+            color: transparent; -webkit-text-stroke: 1px var(--green); text-transform: uppercase;
+            animation: flicker-green 3s infinite linear; margin-bottom: 15px;
+        }
+
+        @keyframes flicker-red {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 0.2; filter: drop-shadow(0 0 5px var(--red)); }
+            20%, 24%, 55% { opacity: 0.8; filter: drop-shadow(0 0 20px var(--red)); }
+        }
+        @keyframes flicker-green {
+            0%, 100% { opacity: 0.4; } 50% { opacity: 1; filter: drop-shadow(0 0 10px var(--green)); }
+        }
+
+        .hero-content {
+            background: rgba(10, 10, 10, 0.15); backdrop-filter: blur(2px);
+            padding: 50px; border-radius: 40px; border: 1px solid rgba(211, 47, 47, 0.3);
+            max-width: 750px; position: relative; z-index: 10; margin-top: -240px; 
+        }
+
+        h1 { font-family: 'Chakra Petch', sans-serif; font-size: 60px; margin: 15px 0; }
+        h1 span { color: var(--red); }
+
+        .btn-container { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
+        .btn {
+            padding: 16px 35px; font-family: 'Chakra Petch', sans-serif; font-size: 18px; font-weight: 700;
+            text-decoration: none; border-radius: 20px; border: 3px solid var(--red);
+            color: var(--text); background: rgba(0,0,0,0.6); transition: 0.3s;
+        }
+        .btn:hover { background: var(--red); color: #000; box-shadow: 0 0 30px var(--red); }
     </style>
 </head>
 <body>
-    <img src="shell.png" class="shell" style="top: 10%; left: 15%; transform: rotate(45deg);">
-    <img src="shell.png" class="shell" style="bottom: 20%; right: 10%; transform: rotate(-30deg);">
 
-    <div class="neon-box">
-        <h1>TEAMS WAR</h1>
-        <p>Разработчик: NiksOnGame</p>
-        <p style="color: #f0f;">САЙТ УСПЕШНО ЗАПУЩЕН!</p>
+    <div class="shell-container">
+        <div class="shell s1"></div><div class="shell s2"></div>
+        <div class="shell s3"></div><div class="shell s4"></div>
+        <div class="shell s5"></div>
     </div>
 
-    <script src="app.js"></script>
+    <nav>
+        <div class="logo">TEAMS <span>WAR</span></div>
+        <div style="display: flex; gap: 25px;">
+            <a href="profile.html" style="color: white; text-decoration: none; font-weight: bold;">ПРОФИЛЬ</a>
+            <a href="shop.html" style="color: white; text-decoration: none; font-weight: bold;">МАГАЗИН</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="bg-neon-text">TEAMS WAR</div>
+        <div class="hero-content">
+            <span class="dev-tag">РАЗРАБОТЧИК NIKSONGAME</span>
+            <h1>TEAMS <span>WAR</span></h1>
+            <p>Глобальное противостояние в разгаре. Ссылка на сервер верифицирована.</p>
+            <div class="btn-container">
+                <a href="https://vkplay.ru/play/game/teams-war/?mt_link_id=yud5e0" target="_blank" class="btn">ВСТУПИТЬ В БОЙ</a>
+                <a href="profile.html" class="btn">ЛИЧНЫЙ КАБИНЕТ</a>
+            </div>
+        </div>
+    </section>
+
 </body>
 </html>
