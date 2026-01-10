@@ -16,80 +16,60 @@
         body {
             margin: 0; padding: 0; background-color: var(--bg); color: var(--text);
             font-family: 'Roboto', sans-serif;
-            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), url('https://images.alphacoders.com/133/1331242.png');
+            /* Фон немного затемнен, чтобы неон лучше смотрелся */
+            background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.95)), url('https://images.alphacoders.com/133/1331242.png');
             background-size: cover; background-position: center; background-attachment: fixed;
+            overflow-x: hidden; /* Скрываем возможную прокрутку от большого текста */
         }
 
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 20px 50px; background: rgba(0, 0, 0, 0.9);
             border-bottom: 2px solid var(--red);
+            position: relative; z-index: 10; /* Меню всегда сверху */
         }
 
         .logo { font-family: 'Chakra Petch', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 2px; }
         .logo span { color: var(--red); }
 
-        .hero { height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .hero-content {
-            background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(10px);
-            padding: 50px; border-radius: 30px; border: 1px solid #333; max-width: 700px;
+        /* --- ГЛАВНЫЙ БЛОК С ФОНОВЫМ НЕОНОМ --- */
+        .hero {
+            height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center;
+            position: relative; /* Нужно для позиционирования фона */
         }
 
-        .dev-tag { color: var(--green); font-size: 14px; letter-spacing: 3px; margin-bottom: 10px; display: block; font-weight: bold; }
-        h1 { font-family: 'Chakra Petch', sans-serif; font-size: 60px; margin: 20px 0; }
-        h1 span { color: var(--red); }
-
-        /* СТИЛЬ КНОПОК: Красная рамка, закругление, свечение */
-        .btn-container { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
-        
-        .btn {
-            padding: 15px 35px;
+        /* ЭТО НОВЫЙ ЭЛЕМЕНТ: ФОНОВАЯ НАДПИСЬ */
+        .bg-neon-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%); /* Центрируем */
             font-family: 'Chakra Petch', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            text-decoration: none;
+            font-size: 15vw; /* Очень большой размер, зависит от ширины экрана */
+            font-weight: 900;
+            color: var(--red);
             text-transform: uppercase;
-            border-radius: 20px; /* Закругленные края */
-            border: 3px solid var(--red); /* Жирная красная рамка */
-            color: var(--text);
-            transition: 0.3s;
-            background: transparent;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(211, 47, 47, 0.3); /* Начальное свечение */
+            white-space: nowrap;
+            z-index: 0; /* Кладем НА ЗАДНИЙ ПЛАН */
+            opacity: 0.1; /* Изначально почти не видно */
+            pointer-events: none; /* Чтобы сквозь него можно было кликать */
+            animation: broken-neon 4s infinite rough-ease; /* Применяем анимацию */
         }
 
-        .btn:hover {
-            background-color: var(--red);
-            box-shadow: 0 0 30px rgba(211, 47, 47, 0.8);
-            transform: scale(1.05);
-            color: #000;
+        /* АНИМАЦИЯ СЛОМАННОГО НЕОНА */
+        @keyframes broken-neon {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 0.08; /* Базовое тусклое состояние */
+                text-shadow: none;
+            }
+            20%, 24%, 55% {
+                opacity: 0.25; /* Резкие вспышки поярче (но не сильно) */
+                text-shadow: 0 0 20px rgba(211, 47, 47, 0.6); /* Красное свечение при вспышке */
+            }
         }
 
-        .btn-secondary { border-color: var(--red); color: var(--green); } /* Рамка красная, текст зеленый для контраста */
-    </style>
-</head>
-<body>
-
-    <nav>
-        <div class="logo">TEAMS <span>WAR</span></div>
-        <div style="display: flex; gap: 20px;">
-            <a href="profile.html" style="color: white; text-decoration: none; font-weight: bold;">ПРОФИЛЬ</a>
-            <a href="shop.html" style="color: white; text-decoration: none; font-weight: bold;">МАГАЗИН</a>
-        </div>
-    </nav>
-
-    <section class="hero">
-        <div class="hero-content">
-            <span class="dev-tag">// СТАТУС: БОЕВАЯ ГОТОВНОСТЬ // РАЗРАБОТЧИК: NiksOnGame</span>
-            <h1>TEAMS <span>WAR</span></h1>
-            <p style="color: #ccc; font-size: 18px;">Твой путь к славе начинается здесь. Сражайся на лучших картах, собирай редкие скины и стань легендой.</p>
-            
-            <div class="btn-container">
-                <a href="https://vkplay.ru/play/game/teams-war/?mt_link_id=yud5e0" target="_blank" class="btn">ВСТУПИТЬ В БОЙ</a>
-                <a href="profile.html" class="btn btn-secondary">ЛИЧНЫЙ КАБИНЕТ</a>
-            </div>
-        </div>
-    </section>
-
-</body>
-</html>
+        /* --- БЛОК С КОНТЕНТОМ (ПЕРЕДНИЙ ПЛАН) --- */
+        .hero-content {
+            background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(15px); /* Сильное размытие фона */
+            padding: 50px; border-radius: 30px; border: 1px solid #333; max-width: 700px;
+            position: relative; z-index: 1; /* Кладем НА ПЕРЕДНИЙ ПЛАН */
+            box-shadow: 0 20px 50px rgba(0,0,
