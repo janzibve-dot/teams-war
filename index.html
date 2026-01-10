@@ -11,8 +11,8 @@
             --red: #D32F2F;
             --green: #388E3C;
             --text: #fff;
-            --brass-light: #f5d78e; /* Цвет светлой латуни */
-            --brass-dark: #bfa372;  /* Цвет темной латуни */
+            --brass-light: #f5d78e;
+            --brass-dark: #bfa372;
         }
 
         body {
@@ -23,61 +23,44 @@
             overflow: hidden; position: relative;
         }
 
-        /* --- СТИЛИ ДЛЯ ПАДАЮЩИХ ГИЛЬЗ --- */
+        /* --- ОБНОВЛЕННЫЕ КРУПНЫЕ ГИЛЬЗЫ --- */
         .shell-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* Чтобы сквозь них можно было кликать */
-            z-index: 5; /* Слой между фоновым неоном и главным окном */
-            overflow: hidden;
+            pointer-events: none; z-index: 5; overflow: hidden;
         }
 
         .shell {
             position: absolute;
-            width: 6px;  /* Ширина гильзы */
-            height: 20px; /* Высота гильзы */
-            /* Градиент для имитации металлического блеска золота/латуни */
+            width: 10px;  /* Увеличили ширину (было 6px) */
+            height: 35px; /* Увеличили высоту (было 20px) */
             background: linear-gradient(90deg, var(--brass-dark), var(--brass-light), var(--brass-dark));
-            border-radius: 1px;
-            /* Имитация донца гильзы */
-            border-bottom: 2px solid #8c744c;
-            box-shadow: 0 0 5px rgba(0,0,0,0.5); /* Легкая тень */
-            top: -50px; /* Начальная позиция за экраном */
+            border-radius: 2px;
+            border-bottom: 3px solid #8c744c;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            top: -60px;
             opacity: 0;
             animation: falling-shell linear infinite;
         }
 
-        /* Анимация падения и вращения */
         @keyframes falling-shell {
-            0% {
-                opacity: 1;
-                transform: translateY(-100px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0; /* Исчезают внизу */
-                /* Падают вниз на 110% высоты экрана и хаотично вращаются */
-                transform: translateY(110vh) rotateX(360deg) rotateY(180deg) rotateZ(90deg);
-            }
+            0% { opacity: 1; transform: translateY(-100px) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            90% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(110vh) rotateX(720deg) rotateY(360deg) rotateZ(180deg); }
         }
 
-        /* Настройка каждой гильзы индивидуально (позиция, скорость, задержка) */
-        .s1 { left: 10%; animation-duration: 5s; animation-delay: 0s; }
-        .s2 { left: 25%; animation-duration: 7s; animation-delay: 2s; width: 7px; height: 24px; } /* Чуть другой калибр */
-        .s3 { left: 40%; animation-duration: 4s; animation-delay: 1s; }
-        .s4 { left: 55%; animation-duration: 6s; animation-delay: 3s; }
-        .s5 { left: 70%; animation-duration: 5s; animation-delay: 0.5s; width: 7px; height: 24px; }
-        .s6 { left: 85%; animation-duration: 8s; animation-delay: 4s; }
-        .s7 { left: 5%; animation-duration: 6.5s; animation-delay: 1.5s; }
-        .s8 { left: 95%; animation-duration: 5.5s; animation-delay: 2.5s; }
-        .s9 { left: 20%; animation-duration: 4.5s; animation-delay: 3.5s; }
-        .s10 { left: 60%; animation-duration: 7.5s; animation-delay: 0.8s; }
-        .s11 { left: 33%; animation-duration: 5s; animation-delay: 5s; }
-        .s12 { left: 77%; animation-duration: 6s; animation-delay: 1.2s; }
+        /* Индивидуальные настройки для разнообразия */
+        .s1 { left: 8%; animation-duration: 5s; animation-delay: 0s; }
+        .s2 { left: 22%; animation-duration: 7s; animation-delay: 2s; width: 12px; height: 42px; } /* Тяжелый калибр */
+        .s3 { left: 38%; animation-duration: 4.5s; animation-delay: 1s; }
+        .s4 { left: 52%; animation-duration: 6s; animation-delay: 3s; }
+        .s5 { left: 68%; animation-duration: 5.5s; animation-delay: 0.5s; width: 12px; height: 42px; }
+        .s6 { left: 82%; animation-duration: 8s; animation-delay: 4s; }
+        .s7 { left: 15%; animation-duration: 6.5s; animation-delay: 1.5s; }
+        .s8 { left: 92%; animation-duration: 5.8s; animation-delay: 2.8s; }
+        .s9 { left: 45%; animation-duration: 4.2s; animation-delay: 3.2s; }
+        .s10 { left: 75%; animation-duration: 7.2s; animation-delay: 0.9s; }
 
-
-        /* --- ОСТАЛЬНЫЕ СТИЛИ (БЕЗ ИЗМЕНЕНИЙ) --- */
+        /* --- ОСТАЛЬНЫЕ СТИЛИ --- */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 50px; background: rgba(0, 0, 0, 0.98);
@@ -86,23 +69,29 @@
         }
         .logo { font-family: 'Chakra Petch', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 2px; }
         .logo span { color: var(--red); }
+        
         .hero {
             height: 90vh; display: flex; flex-direction: column; align-items: center; 
             justify-content: center; text-align: center; position: relative;
         }
+
+        /* Фоновый неон внизу */
         .bg-neon-text {
-            position: absolute; top: 80%; left: 50%; transform: translate(-50%, -50%);
+            position: absolute; top: 82%; left: 50%; transform: translate(-50%, -50%);
             font-family: 'Chakra Petch', sans-serif; font-size: 14vw; font-weight: 900;
             color: transparent; -webkit-text-stroke: 2px var(--red);
             text-transform: uppercase; white-space: nowrap; z-index: 0; pointer-events: none;
             animation: flicker-neon-red 2.5s infinite linear;
         }
+
+        /* Зеленый тэг разработчика */
         .dev-tag {
             font-family: 'Chakra Petch', sans-serif; font-size: 16px; font-weight: 900;
             letter-spacing: 2px; margin-bottom: 15px; display: block;
             color: transparent; -webkit-text-stroke: 0.8px var(--green); text-transform: uppercase;
             animation: flicker-neon-green 3s infinite linear;
         }
+
         @keyframes flicker-neon-red {
             0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 0.2; filter: drop-shadow(0 0 5px var(--red)); }
             20%, 24%, 55% { opacity: 0.8; filter: drop-shadow(0 0 20px var(--red)) drop-shadow(0 0 40px var(--red)); }
@@ -111,15 +100,21 @@
             0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 0.3; filter: drop-shadow(0 0 0px var(--green)); }
             20%, 24%, 55% { opacity: 1; filter: drop-shadow(0 0 5px var(--green)) drop-shadow(0 0 15px var(--green)); }
         }
+
+        /* ОКНО СДВИНУТО ВВЕРХ (margin-top: -200px) */
         .hero-content {
             background: rgba(10, 10, 10, 0.15); backdrop-filter: blur(1px);
             padding: 50px; border-radius: 40px; border: 1px solid rgba(211, 47, 47, 0.3);
-            max-width: 750px; position: relative; z-index: 10; margin-top: -120px;
+            max-width: 750px; position: relative; z-index: 10; 
+            margin-top: -200px; /* Подняли вверх на ~2см */
         }
+
         h1 { font-family: 'Chakra Petch', sans-serif; font-size: 60px; margin: 15px 0; text-shadow: 0 4px 15px rgba(0,0,0,1); }
         h1 span { color: var(--red); }
         p { text-shadow: 0 2px 10px rgba(0,0,0,1); font-size: 18px; color: #eee; }
+
         .btn-container { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
+        
         .btn {
             padding: 16px 35px; font-family: 'Chakra Petch', sans-serif; font-size: 18px; font-weight: 700;
             text-decoration: none; text-transform: uppercase;
@@ -144,8 +139,6 @@
         <div class="shell s8"></div>
         <div class="shell s9"></div>
         <div class="shell s10"></div>
-        <div class="shell s11"></div>
-        <div class="shell s12"></div>
     </div>
 
     <nav>
