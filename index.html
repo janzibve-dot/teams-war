@@ -7,12 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0a;
-            --red: #D32F2F;
-            --green: #388E3C;
-            --text: #fff;
-            /* Цвета настоящей латуни */
-            --brass-body: linear-gradient(90deg, #8b6b23 0%, #d4af37 25%, #f1d592 50%, #d4af37 75%, #8b6b23 100%);
+            --bg: #0a0a0a; --red: #D32F2F; --green: #388E3C; --text: #fff;
         }
 
         body {
@@ -23,7 +18,7 @@
             overflow: hidden; position: relative;
         }
 
-        /* --- РЕАЛИСТИЧНЫЕ ГИЛЬЗЫ --- */
+        /* --- ФОТОРЕАЛИСТИЧНЫЕ ГИЛЬЗЫ (КАРТИНКИ) --- */
         .shell-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 5; overflow: hidden;
@@ -31,210 +26,43 @@
 
         .shell {
             position: absolute;
-            width: 12px;
-            height: 38px;
-            background: var(--brass-body);
-            border-radius: 1px;
-            top: -100px;
-            opacity: 0;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.7);
-            animation: falling-shell linear infinite;
-        }
-
-        /* Отверстие сверху гильзы */
-        .shell::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: #1a1a1a; border-radius: 50% 50% 0 0; box-shadow: inset 0 1px 2px #000;
-        }
-
-        /* Донце гильзы (капсюль) */
-        .shell::before {
-            content: ''; position: absolute; bottom: -2px; left: -1px; width: 14px; height: 5px;
-            background: #a68a44; border-radius: 2px; border: 1px solid #735d2d;
-        }
-
-        @keyframes falling-shell {
-            0% { opacity: 0; transform: translateY(-100px) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-            5% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(115vh) rotateX(1080deg) rotateY(720deg) rotateZ(360deg); }
-        }
-
-        /* Позиции и тайминги для хаоса */
-        .s1 { left: 5%; animation-duration: 4s; animation-delay: 0s; }
-        .s2 { left: 15%; animation-duration: 6s; animation-delay: 2s; transform: scale(1.2); }
-        .s3 { left: 30%; animation-duration: 3.5s; animation-delay: 1s; }
-        .s4 { left: 45%; animation-duration: 5.5s; animation-delay: 4s; }
-        .s5 { left: 60%; animation-duration: 4.8s; animation-delay: 0.5s; transform: scale(1.1); }
-        .s6 { left: 75%; animation-duration: 7s; animation-delay: 3s; }
-        .s7 { left: 85%; animation-duration: 5s; animation-delay: 1.5s; }
-        .s8 { left: 95%; animation-duration: 6.5s; animation-delay: 2.5s; }
-
-        /* --- ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ --- */
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 50px; background: rgba(0, 0, 0, 0.98);
-            border-bottom: 2px solid var(--red);
-            position: relative; z-index: 100;
-        }
-        .logo { font-family: 'Chakra Petch', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 2px; }
-        .logo span { color: var(--red); }
-        
-        .hero { height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
-
-        .bg-neon-text {
-            position: absolute; top: 82%; left: 50%; transform: translate(-50%, -50%);
-            font-family: 'Chakra Petch', sans-serif; font-size: 14vw; font-weight: 900;
-            color: transparent; -webkit-text-stroke: 2px var(--red);
-            text-transform: uppercase; white-space: nowrap; z-index: 0; pointer-events: none;
-            animation: flicker-neon-red 2.5s infinite linear;
-        }
-
-        .dev-tag {
-            font-family: 'Chakra Petch', sans-serif; font-size: 16px; font-weight: 900;
-            letter-spacing: 2px; margin-bottom: 15px; display: block;
-            color: transparent; -webkit-text-stroke: 1px var(--green); text-transform: uppercase;
-            animation: flicker-neon-green 3s infinite linear;
-        }
-
-        @keyframes flicker-neon-red {
-            0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 0.2; filter: drop-shadow(0 0 5px var(--red)); }
-            20%, 24%, 55% { opacity: 0.8; filter: drop-shadow(0 0 15px var(--red)) drop-shadow(0 0 30px var(--red)); }
-        }
-        @keyframes flicker-neon-green {
-            0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 0.3; filter: drop-shadow(0 0 0px var(--green)); }
-            20%, 24%, 55% { opacity: 1; filter: drop-shadow(0 0 5px var(--green)) drop-shadow(0 0 10px var(--green)); }
-        }
-
-        /* ОКНО СДВИНУТО ЕЩЕ ВЫШЕ (margin-top: -240px) */
-        .hero-content {
-            background: rgba(10, 10, 10, 0.1); backdrop-filter: blur(1px);
-            padding: 50px; border-radius: 40px; border: 1px solid rgba(211, 47, 47, 0.2);
-            max-width: 750px; position: relative; z-index: 10; 
-            margin-top: -240px; 
-        }
-
-        h1 { font-family: 'Chakra Petch', sans-serif; font-size: 60px; margin: 15px 0; text-shadow: 0 4px 15px rgba(0,0,0,1); }
-        h1 span { color: var(--red); }
-        p { text-shadow: 0 2px 10px rgba(0,0,0,1); font-size: 18px; color: #eee; }
-
-        .btn-container { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
-        
-        .btn {
-            padding: 16px 35px; font-family: 'Chakra Petch', sans-serif; font-size: 18px; font-weight: 700;
-            text-decoration: none; text-transform: uppercase;
-            border-radius: 20px; border: 3px solid var(--red); color: var(--text);
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(0,0,0,0.6);
-            cursor: pointer; box-shadow: 0 0 15px rgba(211, 47, 47, 0.2);
-        }
-        .btn:hover { background-color: var(--red); box-shadow: 0 0 35px rgba(211, 47, 47, 0.8); transform: scale(1.05); color: #000; }
-        .btn-secondary { border-color: var(--red); color: var(--green); }
-    </style>
-</head>
-<body>
-
-    <div class="shell-container">
-        <div class="shell s1"></div><div class="shell s2"></div>
-        <div class="shell s3"></div><div class="shell s4"></div>
-        <div class="shell s5"></div><div class="shell s6"></div>
-        <div class="shell s7"></div><div class="shell s8"></div>
-    </div>
-
-    <nav>
-        <div class="logo">TEAMS <span>WAR</span></div>
-        <div style="display: flex; gap: 25px;">
-            <a href="profile.html" style="color: white; text-decoration: none; font-weight: bold; font-size: 14px;">ПРОФИЛЬ</a>
-            <a href="shop.html" style="color: white; text-decoration: none; font-weight: bold; font-size: 14px;">МАГАЗИН</a>
-        </div>
-    </nav>
-
-    <section class="hero">
-        <div class="bg-neon-text">TEAMS WAR</div>
-
-        <div class="hero-content">
-            <span class="dev-tag">РАЗРАБОТЧИК NIKSONGAME</span>
-            <h1>TEAMS <span>WAR</span></h1>
-            <p>Глобальное противостояние в разгаре. Ссылка на сервер верифицирована. Подключайся и покажи свой скилл.</p>
+            width: 15px;  /* Ширина картинки */
+            height: 45px; /* Высота картинки */
             
-            <div class="btn-container">
-                <a href="https://vkplay.ru/play/game/teams-war/?mt_link_id=yud5e0" target="_blank" class="btn">ВСТУПИТЬ В БОЙ</a>
-                <a href="profile.html" class="btn btn-secondary">ЛИЧНЫЙ КАБИНЕТ</a>
-            </div>
-        </div>
-    </section>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | TACTICAL PORTAL</title>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #0a0a0a;
-            --red: #D32F2F;
-            --green: #388E3C;
-            --text: #fff;
-            /* Цвета настоящей латуни */
-            --brass-body: linear-gradient(90deg, #8b6b23 0%, #d4af37 25%, #f1d592 50%, #d4af37 75%, #8b6b23 100%);
-        }
-
-        body {
-            margin: 0; padding: 0; background-color: var(--bg); color: var(--text);
-            font-family: 'Roboto', sans-serif;
-            background-image: linear-gradient(rgba(0,0,0,0.96), rgba(0,0,0,0.98)), url('https://images.alphacoders.com/133/1331242.png');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            overflow: hidden; position: relative;
-        }
-
-        /* --- РЕАЛИСТИЧНЫЕ ГИЛЬЗЫ --- */
-        .shell-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 5; overflow: hidden;
-        }
-
-        .shell {
-            position: absolute;
-            width: 12px;
-            height: 38px;
-            background: var(--brass-body);
-            border-radius: 1px;
-            top: -100px;
-            opacity: 0;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+            /* ССЫЛКА НА РЕАЛИСТИЧНУЮ КАРТИНКУ ГИЛЬЗЫ */
+            /* Если захочешь свою, замени ссылку внутри url('') */
+            background-image: url('https://purepng.com/public/uploads/large/purepng.com-bullet-shellbulletprojectilemetalfirearmsshell-981524636518a2s3h.png');
+            
+            background-size: contain; /* Картинка вписывается в блок */
+            background-repeat: no-repeat;
+            background-position: center;
+            
+            top: -100px; opacity: 0;
+            /* Добавили перспективу для объема при вращении */
+            transform-style: preserve-3d;
             animation: falling-shell linear infinite;
         }
 
-        /* Отверстие сверху гильзы */
-        .shell::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: #1a1a1a; border-radius: 50% 50% 0 0; box-shadow: inset 0 1px 2px #000;
-        }
-
-        /* Донце гильзы (капсюль) */
-        .shell::before {
-            content: ''; position: absolute; bottom: -2px; left: -1px; width: 14px; height: 5px;
-            background: #a68a44; border-radius: 2px; border: 1px solid #735d2d;
-        }
+        /* Псевдоэлементы больше не нужны, картинка делает всё сама */
+        .shell::after, .shell::before { content: none; }
 
         @keyframes falling-shell {
             0% { opacity: 0; transform: translateY(-100px) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-            5% { opacity: 1; }
+            10% { opacity: 1; }
             90% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(115vh) rotateX(1080deg) rotateY(720deg) rotateZ(360deg); }
+            /* Увеличили вращение по всем осям для 3D эффекта */
+            100% { opacity: 0; transform: translateY(120vh) rotateX(1440deg) rotateY(720deg) rotateZ(360deg); }
         }
 
-        /* Позиции и тайминги для хаоса */
-        .s1 { left: 5%; animation-duration: 4s; animation-delay: 0s; }
-        .s2 { left: 15%; animation-duration: 6s; animation-delay: 2s; transform: scale(1.2); }
-        .s3 { left: 30%; animation-duration: 3.5s; animation-delay: 1s; }
-        .s4 { left: 45%; animation-duration: 5.5s; animation-delay: 4s; }
-        .s5 { left: 60%; animation-duration: 4.8s; animation-delay: 0.5s; transform: scale(1.1); }
-        .s6 { left: 75%; animation-duration: 7s; animation-delay: 3s; }
-        .s7 { left: 85%; animation-duration: 5s; animation-delay: 1.5s; }
-        .s8 { left: 95%; animation-duration: 6.5s; animation-delay: 2.5s; }
+        /* Разные размеры и скорости для реализма */
+        .s1 { left: 5%; animation-duration: 4s; }
+        .s2 { left: 15%; animation-duration: 6s; width: 18px; height: 55px; } /* Крупный калибр */
+        .s3 { left: 30%; animation-duration: 3.5s; }
+        .s4 { left: 45%; animation-duration: 5.5s; }
+        .s5 { left: 60%; animation-duration: 4.8s; width: 18px; height: 55px; }
+        .s6 { left: 75%; animation-duration: 7s; }
+        .s7 { left: 85%; animation-duration: 5s; }
+        .s8 { left: 95%; animation-duration: 6.5s; }
 
         /* --- ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ --- */
         nav {
@@ -272,12 +100,11 @@
             20%, 24%, 55% { opacity: 1; filter: drop-shadow(0 0 5px var(--green)) drop-shadow(0 0 10px var(--green)); }
         }
 
-        /* ОКНО СДВИНУТО ЕЩЕ ВЫШЕ (margin-top: -240px) */
+        /* ОКНО СДВИНУТО ВВЕРХ */
         .hero-content {
             background: rgba(10, 10, 10, 0.1); backdrop-filter: blur(1px);
             padding: 50px; border-radius: 40px; border: 1px solid rgba(211, 47, 47, 0.2);
-            max-width: 750px; position: relative; z-index: 10; 
-            margin-top: -240px; 
+            max-width: 750px; position: relative; z-index: 10; margin-top: -240px; 
         }
 
         h1 { font-family: 'Chakra Petch', sans-serif; font-size: 60px; margin: 15px 0; text-shadow: 0 4px 15px rgba(0,0,0,1); }
