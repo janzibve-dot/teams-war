@@ -3,175 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | TACTICAL SHOOTER</title>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>TEAMS WAR | TACTICAL PORTAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Настройка нашей новой палитры */
         :root {
-            --bg-main: #0a0a0a;     /* Глубокий черный */
-            --bg-secondary: #141414; /* Чуть светлее для блоков */
-            --red-accent: #D32F2F;   /* Агрессивный красный */
-            --green-accent: #388E3C; /* Тактический зеленый */
-            --text-main: #ffffff;
-            --text-muted: #aaaaaa;
+            --bg: #0a0a0a;
+            --red: #D32F2F;
+            --green: #388E3C;
+            --text: #fff;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            font-family: 'Roboto', sans-serif; /* Основной текст - читаемый */
-            /* Добавляем легкую текстуру сетки на фон для "тактичности" */
-            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px);
+            margin: 0; padding: 0; background-color: var(--bg); color: var(--text);
+            font-family: 'Roboto', sans-serif;
+            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), url('https://images.alphacoders.com/133/1331242.png');
+            background-size: cover; background-position: center; background-attachment: fixed;
         }
 
-        h1, h2, h3, .logo, .btn {
-            font-family: 'Chakra Petch', sans-serif; /* Заголовки - техно/военные */
-            text-transform: uppercase;
-        }
-
-        /* --- ВЕРХНЕЕ МЕНЮ (НАВИГАЦИЯ) --- */
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 50px;
-            background: rgba(10, 10, 10, 0.9);
-            border-bottom: 2px solid var(--red-accent); /* Красная линия снизу */
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 50px; background: rgba(0, 0, 0, 0.9);
+            border-bottom: 2px solid var(--red);
         }
 
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text-main);
-            letter-spacing: 2px;
-        }
-        .logo span { color: var(--red-accent); } /* Выделяем "WAR" красным */
+        .logo { font-family: 'Chakra Petch', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 2px; }
+        .logo span { color: var(--red); }
 
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            transition: 0.3s;
-            position: relative;
-        }
-        /* Эффект при наведении на ссылки */
-        .nav-links a:hover { color: var(--red-accent); }
-        .nav-links a::after {
-            content: ''; position: absolute; width: 0%; height: 2px; bottom: -5px; left: 0;
-            background-color: var(--red-accent); transition: 0.3s;
-        }
-        .nav-links a:hover::after { width: 100%; }
-
-
-        /* --- ГЛАВНЫЙ БЛОК (HERO) --- */
-        .hero {
-            height: 85vh;
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Центрируем по горизонтали */
-            text-align: center;
-            padding: 0 20px;
-        }
-
+        .hero { height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; }
         .hero-content {
-            max-width: 800px;
-            /* Добавляем "военную" рамку */
-            border: 1px solid #333;
-            background: var(--bg-secondary);
-            padding: 50px;
-            position: relative;
+            background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(10px);
+            padding: 50px; border-radius: 30px; border: 1px solid #333; max-width: 700px;
         }
-        /* Декоративные уголки для рамки */
-        .hero-content::before { content: ''; position: absolute; top: -2px; left: -2px; width: 30px; height: 30px; border-top: 3px solid var(--red-accent); border-left: 3px solid var(--red-accent); }
-        .hero-content::after { content: ''; position: absolute; bottom: -2px; right: -2px; width: 30px; height: 30px; border-bottom: 3px solid var(--red-accent); border-right: 3px solid var(--red-accent); }
 
+        .dev-tag { color: var(--green); font-size: 14px; letter-spacing: 3px; margin-bottom: 10px; display: block; font-weight: bold; }
+        h1 { font-family: 'Chakra Petch', sans-serif; font-size: 60px; margin: 20px 0; }
+        h1 span { color: var(--red); }
 
-        .dev-tag { color: var(--green-accent); font-size: 14px; letter-spacing: 3px; margin-bottom: 10px; display: block; font-weight: bold;}
+        /* СТИЛЬ КНОПОК: Красная рамка, закругление, свечение */
+        .btn-container { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
         
-        h1.main-title {
-            font-size: 70px;
-            line-height: 1;
-            margin: 20px 0;
-            color: var(--text-main);
-        }
-        h1.main-title span { color: var(--red-accent); } /* Выделяем "WAR" красным */
-
-        p.subtitle { color: var(--text-muted); font-size: 18px; max-width: 600px; margin: 0 auto 40px auto; }
-
-        /* --- КНОПКИ --- */
-        .btn-container { display: flex; gap: 20px; justify-content: center; }
-
         .btn {
-            padding: 15px 40px;
-            font-size: 16px;
+            padding: 15px 35px;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 18px;
             font-weight: 700;
             text-decoration: none;
-            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); /* Скошенные углы */
+            text-transform: uppercase;
+            border-radius: 20px; /* Закругленные края */
+            border: 3px solid var(--red); /* Жирная красная рамка */
+            color: var(--text);
             transition: 0.3s;
-            letter-spacing: 1px;
-            border: none;
+            background: transparent;
             cursor: pointer;
+            box-shadow: 0 0 15px rgba(211, 47, 47, 0.3); /* Начальное свечение */
         }
 
-        /* Красная кнопка (Основное действие) */
-        .btn-primary {
-            background-color: var(--red-accent);
-            color: var(--text-main);
-        }
-        .btn-primary:hover { background-color: #ff1f1f; transform: translateY(-3px); box-shadow: 0 10px 20px -10px rgba(211, 47, 47, 0.5); }
-
-        /* Зеленая кнопка (Второстепенное действие) */
-        .btn-secondary {
-            background-color: transparent;
-            border: 2px solid var(--green-accent);
-            color: var(--green-accent);
-        }
-        .btn-secondary:hover {
-            background-color: var(--green-accent);
-            color: var(--bg-main);
-            transform: translateY(-3px);
+        .btn:hover {
+            background-color: var(--red);
+            box-shadow: 0 0 30px rgba(211, 47, 47, 0.8);
+            transform: scale(1.05);
+            color: #000;
         }
 
-        /* Адаптив для мобильных */
-        @media (max-width: 768px) {
-            nav { padding: 15px 20px; flex-direction: column; gap: 15px; }
-            h1.main-title { font-size: 40px; }
-            .btn-container { flex-direction: column; }
-            .hero-content { padding: 30px 20px; }
-        }
+        .btn-secondary { border-color: var(--red); color: var(--green); } /* Рамка красная, текст зеленый для контраста */
     </style>
 </head>
 <body>
 
     <nav>
         <div class="logo">TEAMS <span>WAR</span></div>
-        <div class="nav-links">
-            <a href="index.html" style="color: var(--red-accent);">ГЛАВНАЯ</a>
-            <a href="profile.html">ПРОФИЛЬ</a>
-            <a href="shop.html">МАГАЗИН</a>
+        <div style="display: flex; gap: 20px;">
+            <a href="profile.html" style="color: white; text-decoration: none; font-weight: bold;">ПРОФИЛЬ</a>
+            <a href="shop.html" style="color: white; text-decoration: none; font-weight: bold;">МАГАЗИН</a>
         </div>
     </nav>
 
     <section class="hero">
         <div class="hero-content">
-            <span class="dev-tag">// РАЗРАБОТЧИК: NIKSONGAME // статус: онлайн</span>
-            <h1 class="main-title">TEAMS <span>WAR</span></h1>
-            <p class="subtitle">Добро пожаловать на передовую. Выбери свою сторону, снаряди бойца и докажи превосходство в тактическом бою.</p>
+            <span class="dev-tag">// СТАТУС: БОЕВАЯ ГОТОВНОСТЬ // РАЗРАБОТЧИК: NiksOnGame</span>
+            <h1>TEAMS <span>WAR</span></h1>
+            <p style="color: #ccc; font-size: 18px;">Твой путь к славе начинается здесь. Сражайся на лучших картах, собирай редкие скины и стань легендой.</p>
             
             <div class="btn-container">
-                <a href="#" class="btn btn-primary">ВСТУПИТЬ В БОЙ</a>
+                <a href="https://vkplay.ru/play/game/teams-war/?mt_link_id=yud5e0" target="_blank" class="btn">ВСТУПИТЬ В БОЙ</a>
                 <a href="profile.html" class="btn btn-secondary">ЛИЧНЫЙ КАБИНЕТ</a>
             </div>
         </div>
     </section>
 
-    <script src="app.js"></script>
 </body>
 </html>
