@@ -3,92 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | TACTICAL v2</title> <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700;900&display=swap" rel="stylesheet">
+    <title>TEAMS WAR | FINAL TACTICAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0a0a0a; --red: #D32F2F; --green: #388E3C; --text: #fff; }
         body {
             margin: 0; padding: 0; background-color: var(--bg); color: var(--text);
-            font-family: 'Chakra Petch', sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-image: linear-gradient(rgba(0,0,0,0.96), rgba(0,0,0,0.98)), url('https://images.alphacoders.com/133/1331242.png');
             background-size: cover; background-position: center; background-attachment: fixed;
             overflow: hidden; position: relative;
         }
 
-        /* ГИЛЬЗЫ */
-        .shell-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: hidden; }
+        /* --- ГИЛЬЗЫ (ТВОЯ КАРТИНКА) --- */
+        .shell-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 5; overflow: hidden;
+        }
         .shell {
-            position: absolute; width: 45px; height: 30px; 
-            background-image: url('shell.png'); /* ТВОЙ ФАЙЛ */
+            position: absolute;
+            width: 45px; height: 30px; 
+            background-image: url('shell.png'); /* Путь к твоему файлу */
             background-size: contain; background-repeat: no-repeat;
-            top: -100px; opacity: 0; animation: falling-shell linear infinite;
+            top: -100px; opacity: 0;
+            animation: falling-shell linear infinite;
         }
         @keyframes falling-shell {
             0% { opacity: 0; transform: translateY(-100px) rotate(0deg); }
             10% { opacity: 1; }
             100% { opacity: 0; transform: translateY(115vh) rotate(1440deg); }
         }
-        .s1 { left: 15%; animation-duration: 4s; }
-        .s2 { left: 40%; animation-duration: 6s; animation-delay: 2s; }
-        .s3 { left: 70%; animation-duration: 5s; animation-delay: 1s; }
-        .s4 { left: 90%; animation-duration: 7s; animation-delay: 3.5s; }
+        /* Больше гильз для динамики */
+        .s1 { left: 10%; animation-duration: 4s; }
+        .s2 { left: 25%; animation-duration: 6s; animation-delay: 2s; }
+        .s3 { left: 45%; animation-duration: 3.5s; animation-delay: 1s; }
+        .s4 { left: 65%; animation-duration: 5.5s; animation-delay: 3s; }
+        .s5 { left: 85%; animation-duration: 4.8s; animation-delay: 0.5s; }
 
-        /* ИНТЕРФЕЙС */
+        /* --- ИНТЕРФЕЙС --- */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: rgba(0, 0, 0, 0.98); border-bottom: 2px solid var(--red); position: relative; z-index: 100; }
-        .logo { font-size: 28px; font-weight: 700; letter-spacing: 2px; }
+        .logo { font-family: 'Chakra Petch', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 2px; }
         .logo span { color: var(--red); }
 
         .hero { height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
         
         .bg-neon-text {
             position: absolute; top: 82%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 14vw; font-weight: 900; color: transparent; -webkit-text-stroke: 2px var(--red);
-            text-transform: uppercase; white-space: nowrap; z-index: 0; animation: flicker-red 2.5s infinite linear;
+            font-family: 'Chakra Petch', sans-serif; font-size: 14vw; font-weight: 900;
+            color: transparent; -webkit-text-stroke: 2px var(--red);
+            text-transform: uppercase; white-space: nowrap; z-index: 0;
+            animation: flicker-red 2.5s infinite linear;
         }
 
         .dev-tag {
-            font-size: 16px; font-weight: 900; color: transparent; -webkit-text-stroke: 1px var(--green);
-            text-transform: uppercase; animation: flicker-green 3s infinite linear; margin-bottom: 15px; display: block;
+            font-family: 'Chakra Petch', sans-serif; font-size: 16px; font-weight: 900;
+            color: transparent; -webkit-text-stroke: 1px var(--green);
+            text-transform: uppercase; animation: flicker-green 3s infinite linear;
+            margin-bottom: 15px; display: block;
         }
 
         @keyframes flicker-red {
             0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 0.25; filter: drop-shadow(0 0 5px var(--red)); }
-            20%, 24%, 55% { opacity: 0.8; filter: drop-shadow(0 0 15px var(--red)); }
+            20%, 24%, 55% { opacity: 0.9; filter: drop-shadow(0 0 15px var(--red)); }
         }
         @keyframes flicker-green { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; filter: drop-shadow(0 0 10px var(--green)); } }
 
+        /* ВЕРНУЛИ ШИРИНУ ОКНА */
         .hero-content {
             background: rgba(10, 10, 10, 0.15); backdrop-filter: blur(1px);
             padding: 50px; border-radius: 40px; border: 1px solid rgba(211, 47, 47, 0.3);
-            max-width: 750px; position: relative; z-index: 10; margin-top: -240px; 
+            max-width: 750px; /* Вернули 750px */
+            position: relative; z-index: 10; margin-top: -240px; 
         }
 
-        h1 { font-size: 60px; margin: 15px 0; }
+        h1 { font-family: 'Chakra Petch', sans-serif; font-size: 60px; margin: 15px 0; }
         h1 span { color: var(--red); }
+        p { text-shadow: 0 2px 10px rgba(0,0,0,1); font-size: 18px; color: #eee; }
 
         .btn-container { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
+        
+        /* ВЕРНУЛИ СТИЛЬ КНОПОК */
         .btn {
-            padding: 16px 35px; font-size: 18px; font-weight: 700; text-decoration: none; text-transform: uppercase; 
-            border-radius: 20px; border: 3px solid var(--red); color: var(--text); background: rgba(0,0,0,0.6);
+            padding: 16px 35px; font-family: 'Chakra Petch', sans-serif; font-size: 18px; font-weight: 700;
+            text-decoration: none; text-transform: uppercase; border-radius: 20px;
+            border: 3px solid var(--red); color: var(--text); background: rgba(0,0,0,0.6);
             transition: 0.3s; box-shadow: 0 0 15px rgba(211, 47, 47, 0.2);
         }
         .btn:hover { background: var(--red); color: #000; box-shadow: 0 0 35px var(--red); transform: scale(1.05); }
+        .btn-secondary { border-color: var(--red); color: var(--green); }
     </style>
 </head>
 <body>
+
     <div class="shell-container">
-        <div class="shell s1"></div><div class="shell s2"></div><div class="shell s3"></div><div class="shell s4"></div>
+        <div class="shell s1"></div><div class="shell s2"></div>
+        <div class="shell s3"></div><div class="shell s4"></div>
+        <div class="shell s5"></div>
     </div>
-    <nav><div class="logo">TEAMS <span>WAR</span></div></nav>
+
+    <nav>
+        <div class="logo">TEAMS <span>WAR</span></div>
+        <div style="display: flex; gap: 25px;">
+            <a href="profile.html" style="color: white; text-decoration: none; font-weight: bold;">ПРОФИЛЬ</a>
+            <a href="shop.html" style="color: white; text-decoration: none; font-weight: bold;">МАГАЗИН</a>
+        </div>
+    </nav>
+
     <section class="hero">
         <div class="bg-neon-text">TEAMS WAR</div>
         <div class="hero-content">
             <span class="dev-tag">РАЗРАБОТЧИК NIKSONGAME</span>
             <h1>TEAMS <span>WAR</span></h1>
-            <p>Глобальное противостояние в разгаре.</p>
+            <p>Глобальное противостояние в разгаре. Ссылка на сервер верифицирована. Подключайся и покажи свой скилл.</p>
             <div class="btn-container">
                 <a href="https://vkplay.ru/play/game/teams-war/?mt_link_id=yud5e0" target="_blank" class="btn">ВСТУПИТЬ В БОЙ</a>
-            </div>
+                <a href="profile.html" class="btn btn-secondary">ЛИЧНЫЙ КАБИНЕТ</a> </div>
         </div>
     </section>
+
 </body>
 </html>
