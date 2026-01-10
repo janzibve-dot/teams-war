@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>МАГАЗИН | TEAMS WAR</title>
+    <style>
+        body { background-color: #000; color: #0ff; font-family: Arial, sans-serif; padding: 20px; text-transform: uppercase; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0ff; padding-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .card { border: 1px solid #0ff; padding: 15px; text-align: center; background: rgba(0, 255, 255, 0.05); }
+        .card img { width: 100%; height: auto; margin-bottom: 10px; border: 1px solid #333; }
+        .price { color: #f0f; font-weight: bold; display: block; margin: 10px 0; }
+        .buy-btn { border: 1px solid #f0f; color: #f0f; background: none; padding: 5px 15px; cursor: pointer; text-transform: uppercase; }
+        .buy-btn:hover { background: #f0f; color: #000; }
+        .back { display: block; text-align: center; margin-top: 30px; color: #0ff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ОРУЖЕЙНАЯ ЛАВКА</h1>
+    </div>
+    <div class="grid">
+        <div class="card">
+            <h3>AK-47 | NEON</h3>
+            <span class="price">2500 КРЕДИТОВ</span>
+            <button class="buy-btn">КУПИТЬ</button>
+        </div>
+        <div class="card">
+            <h3>AWP | DRAGON</h3>
+            <span class="price">5000 КРЕДИТОВ</span>
+            <button class="buy-btn">КУПИТЬ</button>
+        </div>
+        <div class="card">
+            <h3>M4A4 | CYBER</h3>
+            <span class="price">3000 КРЕДИТОВ</span>
+            <button class="buy-btn">КУПИТЬ</button>
+        </div>
+    </div>
+    <a href="index.html" class="back">← НАЗАД НА ГЛАВНУЮ</a>
+</body>
+</html>
