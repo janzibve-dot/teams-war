@@ -1,207 +1,34 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Teams War | Tactical Hub</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-      window.tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'dark-bg': '#0B0E11',
-              'dark-surface': '#15191C',
-              'accent-cyan': '#00F0FF',
-              'accent-red': '#FF0055',
-            },
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              display: ['Rajdhani', 'sans-serif'],
-            },
-          }
-        }
-      }
-    </script>
+<head>
+    <meta charset="UTF-8">
+    <title>TEAMS WAR | NiksOnGame</title>
     <style>
-      :root {
-        --accent-cyan: #00F0FF;
-        --accent-red: #FF0055;
-        --dark-bg: #0B0E11;
-      }
-
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: var(--dark-bg);
-        color: #ffffff;
-        margin: 0;
-        overflow-x: hidden;
-      }
-
-      /* CRT Scanline Effect */
-      .bg-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -2;
-        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.02), rgba(0, 255, 0, 0.02));
-        background-size: 100% 4px, 4px 100%;
-        background-color: var(--dark-bg);
-        pointer-events: none;
-      }
-
-      .hero-bg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -3;
-        background-image: linear-gradient(to bottom, rgba(11, 14, 17, 0.85), rgba(11, 14, 17, 1)), url('https://images.unsplash.com/photo-1552824734-802c5ad11942?q=80&w=2070');
-        background-size: cover;
-        background-position: center;
-      }
-
-      .font-gaming {
-        font-family: 'Rajdhani', sans-serif;
-      }
-
-      ::-webkit-scrollbar {
-        width: 6px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #0B0E11;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--accent-cyan);
-        border-radius: 0px;
-      }
-
-      .glass {
-        background: rgba(21, 25, 28, 0.85);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-      }
-
-      @keyframes neon-glow {
-        0%, 100% { text-shadow: 0 0 10px var(--accent-cyan); }
-        50% { text-shadow: 0 0 20px var(--accent-cyan), 0 0 30px var(--accent-cyan); }
-      }
-
-      .neon-glow {
-        animation: neon-glow 3s infinite;
-      }
-
-      .hud-corners {
-        position: relative;
-      }
-      .hud-corners::before, .hud-corners::after {
-        content: "";
-        position: absolute;
-        width: 12px;
-        height: 12px;
-        pointer-events: none;
-      }
-      .hud-corners::before {
-        top: -1px; left: -1px;
-        border-top: 2px solid var(--accent-cyan);
-        border-left: 2px solid var(--accent-cyan);
-      }
-      .hud-corners::after {
-        bottom: -1px; right: -1px;
-        border-bottom: 2px solid var(--accent-red);
-        border-right: 2px solid var(--accent-red);
-      }
-
-      .skew-btn {
-        transform: skewX(-12deg);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .skew-btn > * {
-        transform: skewX(12deg);
-      }
-      .skew-btn:hover {
-        transform: skewX(-12deg) translateY(-2px);
-        box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-      }
-
-      .online-pulse {
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-        animation: pulse 2s infinite;
-      }
-      @keyframes pulse {
-        70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-      }
-
-      /* Forum Specific Styles from Snippet */
-      .forum-row:hover { background: rgba(0, 240, 255, 0.03); border-left: 4px solid #00F0FF !important; }
-      .badge-bug { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
-      .badge-idea { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
-      .glass-panel { background: rgba(21, 25, 28, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-
-      /* --- СТИЛИ ДЛЯ НЕОНОВОЙ ВЫВЕСКИ РАЗРАБОТЧИКА --- */
-      @keyframes flicker {
-          0%, 18%, 22%, 25%, 53%, 57%, 100% {
-              opacity: 1;
-              box-shadow: 0 0 15px #00F0FF, 0 0 30px #00F0FF, inset 0 0 10px #00F0FF;
-              text-shadow: 0 0 5px #fff, 0 0 15px #fff, 0 0 30px #00F0FF;
-          }
-          20%, 24%, 55% {
-              opacity: 0.4;
-              box-shadow: none;
-              text-shadow: none;
-          }
-      }
-
-      .dev-neon-sign {
-          display: inline-block;
-          padding: 12px 32px;
-          border: 3px solid #00F0FF;
-          color: #fff;
-          font-family: 'Rajdhani', sans-serif;
-          text-transform: uppercase;
-          font-weight: 900;
-          font-size: 20px;
-          letter-spacing: 4px;
-          border-radius: 4px;
-          background: rgba(0, 240, 255, 0.08);
-          animation: flicker 4s infinite alternate;
-          transform: skewX(-10deg);
-          box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-      }
-
-      .dev-neon-sign span {
-          display: inline-block;
-          transform: skewX(10deg);
-      }
-
+        body {
+            background-color: #000; /* Черный фон */
+            color: #0ff; /* Неоновый голубой текст */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+        }
+        .neon-box {
+            border: 4px solid #0ff;
+            padding: 40px;
+            box-shadow: 0 0 20px #0ff, inset 0 0 20px #0ff;
+            text-align: center;
+        }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom": "https://esm.sh/react-dom@^19.2.3"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div class="hero-bg"></div>
-    <div class="bg-overlay"></div>
-    <div id="root"></div>
-    <div id="notification-container" class="fixed bottom-6 right-6 z-[200] space-y-4 w-80"></div>
-  <script type="module" src="/index.tsx"></script>
+<body>
+    <div class="neon-box">
+        <h1>TEAMS WAR</h1>
+        <p>Разработчик: NiksOnGame</p>
+        <p style="color: #f0f;">САЙТ УСПЕШНО ЗАПУЩЕН!</p>
+    </div>
+    <script src="app.js"></script>
 </body>
 </html>
