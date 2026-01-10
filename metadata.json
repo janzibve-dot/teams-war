@@ -1,0 +1,7 @@
+{
+  "name": "Teams War - Official Game Hub",
+  "description": "A modern gaming portal for Teams War featuring real-time AI-powered global chat, news, and immersive community features.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
