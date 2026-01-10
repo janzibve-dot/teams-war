@@ -2,40 +2,62 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>МАГАЗИН | TEAMS WAR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АРСЕНАЛ | TEAMS WAR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #000; color: #0ff; font-family: Arial, sans-serif; padding: 20px; text-transform: uppercase; }
-        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0ff; padding-bottom: 10px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .card { border: 1px solid #0ff; padding: 15px; text-align: center; background: rgba(0, 255, 255, 0.05); }
-        .card img { width: 100%; height: auto; margin-bottom: 10px; border: 1px solid #333; }
-        .price { color: #f0f; font-weight: bold; display: block; margin: 10px 0; }
-        .buy-btn { border: 1px solid #f0f; color: #f0f; background: none; padding: 5px 15px; cursor: pointer; text-transform: uppercase; }
-        .buy-btn:hover { background: #f0f; color: #000; }
-        .back { display: block; text-align: center; margin-top: 30px; color: #0ff; text-decoration: none; }
+        body { background: #0a0a0a; color: #fff; font-family: sans-serif; margin: 0; padding: 40px; }
+        h1 { font-family: 'Chakra Petch', sans-serif; color: #fff; border-left: 5px solid #D32F2F; padding-left: 15px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 40px; }
+        .item-card {
+            background: #141414; border: 1px solid #222; border-radius: 20px; padding: 25px;
+            transition: 0.3s; text-align: center;
+        }
+        .item-card:hover { border-color: #388E3C; transform: translateY(-5px); }
+        
+        .weapon-img { font-size: 60px; margin-bottom: 15px; display: block; }
+        .price { color: #388E3C; font-size: 22px; font-weight: bold; margin: 15px 0; display: block; }
+
+        /* Та самая заметная кнопка */
+        .btn-buy {
+            width: 100%; padding: 12px 0; background: transparent;
+            border: 2px solid #D32F2F; /* Красная рамка */
+            color: #fff; font-family: 'Chakra Petch', sans-serif;
+            border-radius: 12px; /* Закругленные края */
+            cursor: pointer; font-weight: bold; transition: 0.3s;
+        }
+        .btn-buy:hover {
+            background: #D32F2F;
+            box-shadow: 0 0 15px rgba(211, 47, 47, 0.5);
+        }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #666; text-decoration: none; font-weight: bold; }
+        .back-link:hover { color: #D32F2F; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>ОРУЖЕЙНАЯ ЛАВКА</h1>
-    </div>
+    <a href="index.html" class="back-link">← ВЕРНУТЬСЯ НА БАЗУ</a>
+    <h1>АРСЕНАЛ И СНАРЯЖЕНИЕ</h1>
+    
     <div class="grid">
-        <div class="card">
-            <h3>AK-47 | NEON</h3>
-            <span class="price">2500 КРЕДИТОВ</span>
-            <button class="buy-btn">КУПИТЬ</button>
+        <div class="item-card">
+            <span class="weapon-img">🔫</span>
+            <h3>AK-47 | КРАСНЫЙ ЛОТОС</h3>
+            <span class="price">4,500$</span>
+            <button class="btn-buy">ПРИОБРЕСТИ</button>
         </div>
-        <div class="card">
-            <h3>AWP | DRAGON</h3>
-            <span class="price">5000 КРЕДИТОВ</span>
-            <button class="buy-btn">КУПИТЬ</button>
+        <div class="item-card">
+            <span class="weapon-img">🔪</span>
+            <h3>КЕРАМБИТ | ИЗУМРУД</h3>
+            <span class="price">12,000$</span>
+            <button class="btn-buy">ПРИОБРЕСТИ</button>
         </div>
-        <div class="card">
-            <h3>M4A4 | CYBER</h3>
-            <span class="price">3000 КРЕДИТОВ</span>
-            <button class="buy-btn">КУПИТЬ</button>
+        <div class="item-card">
+            <span class="weapon-img">🎯</span>
+            <h3>AWP | ФЕНИКС</h3>
+            <span class="price">8,200$</span>
+            <button class="btn-buy">ПРИОБРЕСТИ</button>
         </div>
     </div>
-    <a href="index.html" class="back">← НАЗАД НА ГЛАВНУЮ</a>
 </body>
 </html>
