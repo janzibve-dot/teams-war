@@ -11,6 +11,8 @@
             --red: #D32F2F;
             --green: #388E3C;
             --text: #fff;
+            --brass-light: #f5d78e; /* Цвет светлой латуни */
+            --brass-dark: #bfa372;  /* Цвет темной латуни */
         }
 
         body {
@@ -18,25 +20,76 @@
             font-family: 'Roboto', sans-serif;
             background-image: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.98)), url('https://images.alphacoders.com/133/1331242.png');
             background-size: cover; background-position: center; background-attachment: fixed;
+            overflow: hidden; position: relative;
+        }
+
+        /* --- СТИЛИ ДЛЯ ПАДАЮЩИХ ГИЛЬЗ --- */
+        .shell-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; /* Чтобы сквозь них можно было кликать */
+            z-index: 5; /* Слой между фоновым неоном и главным окном */
             overflow: hidden;
         }
 
+        .shell {
+            position: absolute;
+            width: 6px;  /* Ширина гильзы */
+            height: 20px; /* Высота гильзы */
+            /* Градиент для имитации металлического блеска золота/латуни */
+            background: linear-gradient(90deg, var(--brass-dark), var(--brass-light), var(--brass-dark));
+            border-radius: 1px;
+            /* Имитация донца гильзы */
+            border-bottom: 2px solid #8c744c;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5); /* Легкая тень */
+            top: -50px; /* Начальная позиция за экраном */
+            opacity: 0;
+            animation: falling-shell linear infinite;
+        }
+
+        /* Анимация падения и вращения */
+        @keyframes falling-shell {
+            0% {
+                opacity: 1;
+                transform: translateY(-100px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0; /* Исчезают внизу */
+                /* Падают вниз на 110% высоты экрана и хаотично вращаются */
+                transform: translateY(110vh) rotateX(360deg) rotateY(180deg) rotateZ(90deg);
+            }
+        }
+
+        /* Настройка каждой гильзы индивидуально (позиция, скорость, задержка) */
+        .s1 { left: 10%; animation-duration: 5s; animation-delay: 0s; }
+        .s2 { left: 25%; animation-duration: 7s; animation-delay: 2s; width: 7px; height: 24px; } /* Чуть другой калибр */
+        .s3 { left: 40%; animation-duration: 4s; animation-delay: 1s; }
+        .s4 { left: 55%; animation-duration: 6s; animation-delay: 3s; }
+        .s5 { left: 70%; animation-duration: 5s; animation-delay: 0.5s; width: 7px; height: 24px; }
+        .s6 { left: 85%; animation-duration: 8s; animation-delay: 4s; }
+        .s7 { left: 5%; animation-duration: 6.5s; animation-delay: 1.5s; }
+        .s8 { left: 95%; animation-duration: 5.5s; animation-delay: 2.5s; }
+        .s9 { left: 20%; animation-duration: 4.5s; animation-delay: 3.5s; }
+        .s10 { left: 60%; animation-duration: 7.5s; animation-delay: 0.8s; }
+        .s11 { left: 33%; animation-duration: 5s; animation-delay: 5s; }
+        .s12 { left: 77%; animation-duration: 6s; animation-delay: 1.2s; }
+
+
+        /* --- ОСТАЛЬНЫЕ СТИЛИ (БЕЗ ИЗМЕНЕНИЙ) --- */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 50px; background: rgba(0, 0, 0, 0.98);
             border-bottom: 2px solid var(--red);
             position: relative; z-index: 100;
         }
-
         .logo { font-family: 'Chakra Petch', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 2px; }
         .logo span { color: var(--red); }
-
         .hero {
             height: 90vh; display: flex; flex-direction: column; align-items: center; 
             justify-content: center; text-align: center; position: relative;
         }
-
-        /* --- ФОНОВЫЙ КРАСНЫЙ НЕОН (ВНИЗУ) --- */
         .bg-neon-text {
             position: absolute; top: 80%; left: 50%; transform: translate(-50%, -50%);
             font-family: 'Chakra Petch', sans-serif; font-size: 14vw; font-weight: 900;
@@ -44,48 +97,29 @@
             text-transform: uppercase; white-space: nowrap; z-index: 0; pointer-events: none;
             animation: flicker-neon-red 2.5s infinite linear;
         }
-
-        /* --- ТЭГ РАЗРАБОТЧИКА (ЗЕЛЕНЫЙ НЕОН) --- */
         .dev-tag {
-            font-family: 'Chakra Petch', sans-serif;
-            font-size: 16px; /* Немного увеличили размер */
-            font-weight: 900; /* Жирный для контура */
+            font-family: 'Chakra Petch', sans-serif; font-size: 16px; font-weight: 900;
             letter-spacing: 2px; margin-bottom: 15px; display: block;
-            
-            /* Стиль полого неона */
-            color: transparent;
-            -webkit-text-stroke: 0.8px var(--green); /* Тонкий зеленый контур */
-            text-transform: uppercase;
-            
-            /* Анимация зеленого мерцания */
+            color: transparent; -webkit-text-stroke: 0.8px var(--green); text-transform: uppercase;
             animation: flicker-neon-green 3s infinite linear;
         }
-
-        /* Анимация для КРАСНОГО фона */
         @keyframes flicker-neon-red {
             0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 0.2; filter: drop-shadow(0 0 5px var(--red)); }
             20%, 24%, 55% { opacity: 0.8; filter: drop-shadow(0 0 20px var(--red)) drop-shadow(0 0 40px var(--red)); }
         }
-
-        /* Новая анимация для ЗЕЛЕНОГО тэга */
         @keyframes flicker-neon-green {
             0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 0.3; filter: drop-shadow(0 0 0px var(--green)); }
             20%, 24%, 55% { opacity: 1; filter: drop-shadow(0 0 5px var(--green)) drop-shadow(0 0 15px var(--green)); }
         }
-
-        /* --- ЦЕНТРАЛЬНОЕ ОКНО --- */
         .hero-content {
             background: rgba(10, 10, 10, 0.15); backdrop-filter: blur(1px);
             padding: 50px; border-radius: 40px; border: 1px solid rgba(211, 47, 47, 0.3);
             max-width: 750px; position: relative; z-index: 10; margin-top: -120px;
         }
-
         h1 { font-family: 'Chakra Petch', sans-serif; font-size: 60px; margin: 15px 0; text-shadow: 0 4px 15px rgba(0,0,0,1); }
         h1 span { color: var(--red); }
         p { text-shadow: 0 2px 10px rgba(0,0,0,1); font-size: 18px; color: #eee; }
-
         .btn-container { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
-        
         .btn {
             padding: 16px 35px; font-family: 'Chakra Petch', sans-serif; font-size: 18px; font-weight: 700;
             text-decoration: none; text-transform: uppercase;
@@ -98,6 +132,21 @@
     </style>
 </head>
 <body>
+
+    <div class="shell-container">
+        <div class="shell s1"></div>
+        <div class="shell s2"></div>
+        <div class="shell s3"></div>
+        <div class="shell s4"></div>
+        <div class="shell s5"></div>
+        <div class="shell s6"></div>
+        <div class="shell s7"></div>
+        <div class="shell s8"></div>
+        <div class="shell s9"></div>
+        <div class="shell s10"></div>
+        <div class="shell s11"></div>
+        <div class="shell s12"></div>
+    </div>
 
     <nav>
         <div class="logo">TEAMS <span>WAR</span></div>
@@ -112,7 +161,6 @@
 
         <div class="hero-content">
             <span class="dev-tag">РАЗРАБОТЧИК NIKSONGAME</span>
-            
             <h1>TEAMS <span>WAR</span></h1>
             <p>Глобальное противостояние в разгаре. Ссылка на сервер верифицирована. Подключайся и покажи свой скилл.</p>
             
