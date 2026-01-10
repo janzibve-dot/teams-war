@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | TACTICAL v4.0</title>
+    <title>TEAMS WAR | TACTICAL v4.5</title>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0a0a0a; --red: #D32F2F; --green: #388E3C; --text: #fff; }
@@ -30,63 +30,57 @@
         }
         .s1 { left: 10%; animation-duration: 4s; }
         .s2 { left: 40%; animation-duration: 6s; animation-delay: 2s; }
-        .s3 { left: 70%; animation-duration: 5s; animation-delay: 1s; }
 
-        /* --- НАВИГАЦИЯ --- */
+        /* --- ИНТЕРФЕЙС --- */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: rgba(0, 0, 0, 0.98); border-bottom: 2px solid var(--red); position: relative; z-index: 100; }
         .logo { font-size: 28px; font-weight: 900; letter-spacing: 2px; }
         .logo span { color: var(--red); }
 
-        /* --- ОКНО РЕГИСТРАЦИИ (ПРАВЫЙ ВЕРХНИЙ УГОЛ) --- */
-        .reg-box {
-            position: absolute; top: 100px; right: 50px; width: 280px;
-            background: rgba(10, 10, 10, 0.2); backdrop-filter: blur(5px);
-            border: 2px solid var(--green); border-radius: 15px; padding: 25px;
-            z-index: 110; box-shadow: 0 0 20px rgba(56, 142, 60, 0.2);
-        }
-        .reg-box h3 { margin: 0 0 20px; font-size: 16px; color: var(--green); text-align: center; letter-spacing: 2px; }
-        
-        .reg-input {
-            width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(56, 142, 60, 0.5); border-radius: 8px; color: #fff;
-            font-family: 'Chakra Petch', sans-serif; box-sizing: border-box;
-        }
-        .reg-input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 10px var(--green); }
-        
-        .reg-btn {
-            width: 100%; padding: 12px; background: transparent; border: 2px solid var(--green);
-            color: var(--green); font-weight: 900; border-radius: 10px; cursor: pointer;
-            transition: 0.3s; text-transform: uppercase;
-        }
-        .reg-btn:hover { background: var(--green); color: #000; box-shadow: 0 0 20px var(--green); }
-
-        /* --- ЦЕНТРАЛЬНОЕ ОКНО --- */
+        /* --- ГЛАВНЫЙ ЭКРАН --- */
         .hero { height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; }
         .hero-content {
             background: rgba(10, 10, 10, 0.15); backdrop-filter: blur(2px);
             padding: 50px; border-radius: 40px; border: 1px solid rgba(211, 47, 47, 0.3);
-            max-width: 750px; position: relative; z-index: 10; margin-top: -240px; 
+            max-width: 750px; position: relative; z-index: 10; margin-top: -200px; 
         }
 
-        .bg-neon-text {
-            position: absolute; top: 82%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 14vw; font-weight: 900; color: transparent; -webkit-text-stroke: 2px var(--red);
-            text-transform: uppercase; white-space: nowrap; z-index: 0; animation: flicker-red 2.5s infinite linear;
-        }
-        @keyframes flicker-red { 0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 0.25; } 20%, 24%, 55% { opacity: 0.8; } }
-
+        /* --- КНОПКИ --- */
+        .btn-container { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
         .btn {
-            display: inline-block; padding: 16px 35px; font-size: 18px; font-weight: 700;
-            text-decoration: none; border-radius: 20px; border: 3px solid var(--red);
-            color: var(--text); background: rgba(0,0,0,0.6); transition: 0.3s;
+            display: inline-block; padding: 15px 30px; font-size: 16px; font-weight: 700;
+            text-decoration: none; border-radius: 15px; border: 3px solid var(--red);
+            color: var(--text); background: rgba(0,0,0,0.6); transition: 0.3s; cursor: pointer;
         }
         .btn:hover { background: var(--red); color: #000; box-shadow: 0 0 35px var(--red); }
+        .btn-info { border-color: var(--green); color: var(--green); }
+        .btn-info:hover { background: var(--green); color: #000; box-shadow: 0 0 35px var(--green); }
+
+        /* --- ОКНО ИНФОРМАЦИИ (MODAL) --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: none; /* Скрыто по умолчанию */
+            justify-content: center; align-items: center; z-index: 2000;
+        }
+        .modal-content {
+            background: rgba(15, 15, 15, 0.95); border: 2px solid var(--green);
+            padding: 40px; border-radius: 20px; max-width: 600px; width: 90%;
+            position: relative; box-shadow: 0 0 50px rgba(56, 142, 60, 0.3);
+            max-height: 80vh; overflow-y: auto;
+        }
+        .modal-content h2 { color: var(--green); border-bottom: 1px solid var(--green); padding-bottom: 10px; margin-top: 0; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; margin-top: 20px; font-size: 14px; }
+        .info-label { color: var(--green); font-weight: bold; }
+        .close-modal { position: absolute; top: 20px; right: 20px; color: var(--red); cursor: pointer; font-size: 24px; }
+
+        /* СКРОЛЛБАР ДЛЯ ОКНА */
+        .modal-content::-webkit-scrollbar { width: 5px; }
+        .modal-content::-webkit-scrollbar-thumb { background: var(--green); border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <div class="shell-container">
-        <div class="shell s1"></div><div class="shell s2"></div><div class="shell s3"></div>
+        <div class="shell s1"></div><div class="shell s2"></div>
     </div>
 
     <nav>
@@ -97,21 +91,52 @@
         </div>
     </nav>
 
-    <div class="reg-box">
-        <h3>// РЕГИСТРАЦИЯ //</h3>
-        <input type="email" class="reg-input" placeholder="EMAIL">
-        <input type="password" class="reg-input" placeholder="ПАРОЛЬ">
-        <button class="reg-btn">СОЗДАТЬ АККАУНТ</button>
-    </div>
-
     <section class="hero">
-        <div class="bg-neon-text">TEAMS WAR</div>
         <div class="hero-content">
             <h1>TEAMS <span>WAR</span></h1>
             <p>Глобальное противостояние. Подключайся и покажи свой скилл.</p>
-            <a href="https://vkplay.ru/play/game/teams-war/?mt_link_id=yud5e0" target="_blank" class="btn">ВСТУПИТЬ В БОЙ</a>
+            <div class="btn-container">
+                <a href="https://vkplay.ru/play/game/teams-war/?mt_link_id=yud5e0" target="_blank" class="btn">ВСТУПИТЬ В БОЙ</a>
+                <div class="btn btn-info" onclick="toggleModal(true)">ОБ ИГРЕ</div>
+            </div>
         </div>
     </section>
+
+    <div class="modal-overlay" id="infoModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal(false)">✖</span>
+            <h2>// ТЕХНИЧЕСКОЕ ДОСЬЕ //</h2>
+            <div class="info-grid">
+                <div class="info-label">Жанр:</div><div>Многопользовательский шутер</div>
+                <div class="info-label">Издатель:</div><div>NiksOnGame</div>
+                <div class="info-label">Разработчик:</div><div>Александров Н.А.</div>
+                <div class="info-label">Дата выхода:</div><div>01.08.2025</div>
+                <div class="info-label">Версия:</div><div>0.7.8.1 (от 08.01.2026)</div>
+                <div class="info-label">Возраст:</div><div>6+ (Рекомендовано от 6 лет)</div>
+                <div class="info-label">Тип игры:</div><div>Клиентская, Онлайн</div>
+                <div class="info-label">Модель:</div><div>Бесплатная</div>
+                <div class="info-label">Дистрибутив:</div><div>19.9 ГБ</div>
+            </div>
+            <p style="margin-top: 25px; font-size: 13px; color: #aaa; text-align: left;">
+                * Содержит материалы, не рекомендуемые к просмотру лицам младше 6 лет. Требуется стабильное интернет-соединение.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(show) {
+            const modal = document.getElementById('infoModal');
+            modal.style.display = show ? 'flex' : 'none';
+        }
+
+        // Закрытие при клике вне окна
+        window.onclick = function(event) {
+            const modal = document.getElementById('infoModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>
