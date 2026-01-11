@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | TACTICAL v10.0</title>
+    <title>TEAMS WAR | OFFICIAL v10.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #050505; --red: #D32F2F; --green: #388E3C; --text: #fff; }
@@ -12,88 +12,121 @@
             margin: 0; padding: 0; background-color: var(--bg); color: var(--text);
             font-family: 'Chakra Petch', sans-serif;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* --- БЛЮР ФОНА (Твоя картинка bg.jpg.png) --- */
+        /* ФОН С БЛЮРОМ */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)), url('bg.jpg.png');
+            z-index: -2; /* Увеличен приоритет заднего плана */
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('bg.jpg.png');
             background-size: cover; background-position: center;
             filter: blur(5px);
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
 
-        /* --- ГИЛЬЗЫ --- */
-        .shell-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: hidden; }
+        /* ГИЛЬЗЫ */
+        .shell-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
         .shell {
             position: absolute; width: 45px; height: 30px; 
             background-image: url('shell.png'); background-size: contain; background-repeat: no-repeat;
-            top: -100px; opacity: 0; mix-blend-mode: screen;
-            animation: falling-shell 3s cubic-bezier(0.2, 0.8, 0.3, 1) infinite;
+            top: -100px; opacity: 0; animation: falling-shell 3s infinite;
         }
         @keyframes falling-shell {
             0% { opacity: 0; transform: translateY(-100px) rotate(0deg); }
-            10% { opacity: 1; } 90% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(115vh) rotate(1080deg); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(110vh) rotate(720deg); }
         }
-        .s1 { left: 8%; animation-delay: 0s; } .s2 { left: 45%; animation-delay: 1.3s; } .s3 { left: 82%; animation-delay: 0.6s; }
 
-        /* --- НАВИГАЦИЯ --- */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: rgba(0, 0, 0, 0.98); border-bottom: 1px solid rgba(211, 47, 47, 0.3); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 26px; font-weight: 900; letter-spacing: 2px; text-decoration: none; color: white; }
+        /* НАВИГАЦИЯ */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--red); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 26px; font-weight: 900; text-decoration: none; color: white; }
         .logo span { color: var(--red); }
-        .nav-right { display: flex; align-items: center; gap: 15px; }
-
         .nav-links a, .reg-trigger {
-            color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; font-weight: bold;
-            border: 1px solid rgba(211, 47, 47, 0.3); border-radius: 8px; padding: 8px 18px;
-            transition: 0.3s; animation: nav-flicker 4s infinite ease-in-out; background: transparent; cursor: pointer; font-family: 'Chakra Petch';
+            color: white; text-decoration: none; font-size: 13px; font-weight: bold;
+            border: 1px solid var(--red); border-radius: 8px; padding: 8px 18px; margin-left: 10px;
+            background: transparent; cursor: pointer; font-family: 'Chakra Petch'; transition: 0.3s;
         }
-        .nav-links a:hover, .reg-trigger:hover { background: rgba(211, 47, 47, 0.15); color: #fff; border-color: var(--red); box-shadow: 0 0 15px rgba(211, 47, 47, 0.4); }
+        .nav-links a:hover { background: var(--red); color: black; }
 
-        /* --- ГЛАВНЫЙ ЭКРАН --- */
-        .hero { position: relative; height: 95vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 80px; width: 100%; }
-
-        /* ЭФФЕКТ СЛОМАННОЙ НЕОНОВОЙ ВЫВЕСКИ (СТРОГО ПО ЦЕНТРУ) */
-        .bg-neon-text {
-            position: absolute; 
-            bottom: 10%; 
-            left: 50%; 
-            transform: translateX(-50%); /* Центровка */
-            z-index: 1; 
-            font-size: 15vw; 
-            font-weight: 900; 
-            color: transparent; 
-            -webkit-text-stroke: 2px var(--red); 
-            text-transform: uppercase; 
-            white-space: nowrap; 
-            pointer-events: none; 
-            filter: drop-shadow(0 0 10px var(--red));
-            animation: broken-neon 3s infinite; /* Анимация поломки */
-        }
-
-        /* Анимация "дребезжащего" неона */
-        @keyframes broken-neon {
-            0%, 18%, 22%, 25%, 53%, 57%, 100% {
-                opacity: 0.8;
-                filter: drop-shadow(0 0 10px var(--red)) drop-shadow(0 0 20px var(--red));
-                transform: translateX(-50%) scale(1.02);
-            }
-            20%, 24%, 55% {
-                opacity: 0.1; /* Почти гаснет */
-                filter: none;
-                transform: translateX(-50%) scale(1);
-            }
-            80% {
-                opacity: 0.6;
-                transform: translateX(-50%) scale(1.01);
-            }
-        }
-
-        .hero-content { position: relative; z-index: 10; background: transparent; text-align: center; max-width: 800px; }
-        h1 { font-size: 85px; margin: 0; letter-spacing: 10px; text-transform: uppercase; line-height: 1; }
+        /* ГЛАВНЫЙ ЭКРАН */
+        .hero { position: relative; height: 85vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 10; }
+        
+        /* ЦЕНТРАЛЬНЫЙ ТЕКСТ */
+        h1 { font-size: 80px; margin: 0; letter-spacing: 5px; text-shadow: 0 0 20px black; }
         h1 span { color: var(--red); }
+        .tagline { font-size: 18px; margin-bottom: 40px; color: var(--red); letter-spacing: 2px; }
+
+        /* КНОПКИ */
+        .btn-container { display: flex; flex-direction: column; gap: 15px; }
+        .btn {
+            width: 350px; padding: 18px; font-size: 18px; font-weight: 900; text-decoration: none;
+            border-radius: 10px; border: 2px solid var(--red); color: white;
+            background: rgba(0,0,0,0.8); transition: 0.3s; cursor: pointer; text-align: center;
+        }
+        .btn:hover { background: var(--red); color: black; box-shadow: 0 0 30px var(--red); }
+
+        /* СЛОМАННЫЙ НЕОН (СТРОГО ЦЕНТР) */
+        .bg-neon-text {
+            position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%);
+            z-index: -1; font-size: 14vw; font-weight: 900; color: transparent;
+            -webkit-text-stroke: 1px var(--red); white-space: nowrap; pointer-events: none;
+            animation: broken-neon 4s infinite;
+        }
+        @keyframes broken-neon {
+            0%, 18%, 22%, 53%, 100% { opacity: 0.4; filter: drop-shadow(0 0 10px var(--red)); }
+            20%, 55% { opacity: 0.05; filter: none; }
+        }
+
+        /* ОКНО АВТОРИЗАЦИИ */
+        .auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .auth-modal { background: #0a0a0a; border: 1px solid var(--red); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
+        .auth-input { width: 100%; background: #000; border: 1px solid #333; padding: 12px; color: white; margin-bottom: 15px; border-radius: 5px; box-sizing: border-box; }
+        .auth-submit { width: 100%; background: var(--red); color: black; border: none; padding: 15px; font-weight: 900; cursor: pointer; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="shell-container">
+        <div class="shell" style="left:10%"></div>
+        <div class="shell" style="left:50%; animation-delay:1s"></div>
+        <div class="shell" style="left:80%; animation-delay:2s"></div>
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">TEAMS <span>WAR</span></a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="news.html">НОВОСТИ</a>
+                <a href="forum.html">ФОРУМ</a>
+                <a href="profile.html">ПРОФИЛЬ</a>
+            </div>
+            <button class="reg-trigger" onclick="document.getElementById('authOverlay').style.display='flex'">РЕГИСТРАЦИЯ</button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="bg-neon-text">TEAMS WAR</div>
+        <div class="hero-content">
+            <h1>TEAMS <span>WAR</span></h1>
+            <p class="tagline">// ОЖИДАНИЕ ПРИКАЗА //</p>
+            <div class="btn-container">
+                <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="btn">ИГРАТЬ</a>
+                <div class="btn" style="border-color:var(--green); color:var(--green)" onclick="alert('Версия 10.1 закатана!')">СТАТУС: ОК</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-modal">
+            <h2 style="color:var(--red)">АВТОРИЗАЦИЯ</h2>
+            <input type="email" class="auth-input" placeholder="EMAIL">
+            <input type="password" class="auth-input" placeholder="ПАРОЛЬ">
+            <button class="auth-submit" onclick="location.href='lobby.html'">ВХОД</button>
+            <p onclick="document.getElementById('authOverlay').style.display='none'" style="margin-top:15px; cursor:pointer; font-size:12px; color:#555">ЗАКРЫТЬ</p>
+        </div>
+    </div>
+
+</body>
+</html>
