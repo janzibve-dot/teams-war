@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
     <style>
-        /* Шрифт Sangyo */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -67,53 +66,44 @@
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
-            align-items: flex-start; /* СМЕЩЕНИЕ ВЛЕВО */
-            text-align: left;        /* ТЕКСТ СЛЕВА */
-            padding-left: 80px;      /* ОТСТУП СЛЕВА */
-            /* Важно для абсолютного позиционирования линии */
+            align-items: flex-start; 
+            padding-left: 80px; 
         }
         .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.4; }
         .video-bg video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ПЕРСОНАЖ (СТАТИЧНЫЙ, УМЕНЬШЕННЫЙ, ПРИЖАТЫЙ ВПРАВО) */
-        .hero-char {
-            position: absolute;
-            bottom: 0;
-            height: 88vh; /* Немного меньше (было 92vh) */
-            z-index: -1;
-            pointer-events: none;
-            /* Анимация удалена */
-        }
-        .right-char { 
-            right: 0; /* Строго по правому краю (было -2%) */
-            filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); 
-        }
+        /* ПЕРСОНАЖ (СТАТИЧНЫЙ) */
+        .hero-char { position: absolute; bottom: 0; height: 88vh; z-index: -1; pointer-events: none; right: 0; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); }
 
-        .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; animation: text-pulse 4s infinite ease-in-out; }
-        .main-title .t { color: var(--custom-green); } .main-title .w { color: var(--custom-red); }
+        /* ГРУППИРОВКА НАЗВАНИЯ И КНОПКИ */
+        .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         
-        /* КНОПКА (ПРЯМОУГОЛЬНАЯ) */
-        .battle-btn { 
-            margin-top: 40px; display: inline-block; padding: 30px 120px; 
-            background: var(--custom-red); color: white; font-size: 32px; font-weight: 700; 
-            text-decoration: none; 
-            clip-path: none; 
-            transition: 0.3s; z-index: 10; 
-            margin-bottom: 60px; /* Добавлен отступ снизу до линии */
-        }
-        .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); transform: scale(1.05); }
+        .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
+        .main-title .t { color: var(--custom-green); }
+        
+        /* ГРУППА WAR + КНОПКА (ОДИНАКОВАЯ ШИРИНА) */
+        .war-btn-wrap { display: flex; flex-direction: column; align-items: center; width: min-content; }
+        .main-title .w { color: var(--custom-red); }
 
-        /* ТОНКАЯ КРАСНАЯ ЛИНИЯ (АБСОЛЮТНОЕ ПОЗИЦИОНИРОВАНИЕ ПО НИЗУ) */
-        .red-boundary-line {
-            position: absolute;    /* Абсолютное позиционирование */
-            bottom: 0;             /* Прижата к самому низу секции #play */
-            left: 0;
-            width: 100%;          
-            height: 1.5mm;         /* ТОЛЩИНА 1.5 ММ */
-            background: var(--custom-red);
-            z-index: 5;
-            box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); 
+        .battle-btn { 
+            width: 100%;           /* РАСТЯГИВАЕТСЯ ПО ШИРИНЕ СЛОВА WAR */
+            margin-top: 30px; 
+            display: block; 
+            padding: 25px 0;       /* Только вертикальный отступ */
+            background: var(--custom-red); 
+            color: white; 
+            font-size: 30px; 
+            font-weight: 700; 
+            text-decoration: none; 
+            text-align: center;
+            clip-path: none;       /* ПРЯМОУГОЛЬНИК */
+            transition: 0.3s; 
+            z-index: 10; 
         }
+        .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
+
+        /* ЛИНИЯ ПО КРАЮ КАРТИНКИ */
+        .red-boundary-line { position: absolute; bottom: 0; left: 0; width: 100%; height: 1.5mm; background: var(--custom-red); z-index: 5; box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); }
 
         /* --- СЕКЦИИ --- */
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
@@ -124,14 +114,7 @@
         .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; color: white; background: rgba(255,255,255,0.02); text-decoration: none; }
         .stat-num { font-size: 32px; font-weight: 700; display: block; color: var(--custom-red); }
 
-        .teams-row { display: flex; gap: 40px; margin: 50px 0; }
-        .team-card { flex: 1; border: 1px solid #222; padding: 40px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); }
-        .team-card.alpha { border-left: 6px solid var(--custom-green); }
-        .team-card.terror { border-left: 6px solid var(--custom-red); }
-        .team-name { font-size: 36px; font-weight: 700; margin-bottom: 20px; display: block; }
-        .op-img { position: absolute; right: -10px; bottom: -10px; height: 130%; opacity: 0.6; pointer-events: none; }
-
-        /* FAQ */
+        /* FAQ (7 ВКЛАДОК ВОССТАНОВЛЕНО) */
         #faq { display: flex; gap: 80px; }
         .faq-title-vert { font-size: 100px; writing-mode: vertical-lr; transform: rotate(180deg); color: white; border-right: 6px solid var(--custom-red); padding-right: 30px; }
         .faq-list { flex: 1; }
@@ -140,9 +123,7 @@
         .faq-question.active { color: var(--custom-red); border-left: 6px solid var(--custom-red); }
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); }
         .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
-        .faq-answer a { color: var(--custom-red); text-decoration: none; border-bottom: 1px dashed; }
 
-        /* ФУТЕР */
         footer { padding: 100px 40px; border-top: 4px solid var(--custom-red); background: #000; }
         .footer-nav { display: flex; gap: 30px; margin-bottom: 60px; }
         .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 25px; color: #777; text-decoration: none; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
@@ -160,7 +141,7 @@
             <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
             <a href="#community" class="nav-btn">СООБЩЕСТВА</a>
             <a href="#faq" class="nav-btn">FAQ</a>
-            <div class="nav-btn reg-btn" onclick="alert('ЛИЧНЫЙ СОСТАВ...')">ЛИЧНЫЙ СОСТАВ</div>
+            <div class="nav-btn reg-btn" onclick="alert('РЕГИСТРАЦИЯ...')">ЛИЧНЫЙ СОСТАВ</div>
         </div>
         <div class="age-limit">6+</div>
     </header>
@@ -169,11 +150,17 @@
 
     <section id="play">
         <div class="video-bg"><video autoplay muted loop playsinline><source src="hero_bg.mp4" type="video/mp4"></video></div>
-        
-        <img src="new-right-char.png" class="hero-char right-char" alt="Боевик">
+        <img src="new-right-char.png" class="hero-char" alt="Боец">
 
-        <h1 class="main-title"><span class="t">TEAMS</span><br><span class="w">WAR</span></h1>
-        <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
+        <div class="hero-content-group">
+            <div class="main-title">
+                <span class="t">TEAMS</span>
+                <div class="war-btn-wrap">
+                    <span class="w">WAR</span>
+                    <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
+                </div>
+            </div>
+        </div>
         
         <div class="red-boundary-line"></div>
     </section>
