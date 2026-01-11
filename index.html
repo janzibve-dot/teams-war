@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
     <style>
-        /* Подключение твоего шрифта Sangyo */
+        /* Шрифт Sangyo */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -36,13 +36,12 @@
             background-size: cover; background-position: center; filter: brightness(0.2) blur(6px);
         }
 
-        /* --- ХЕДЕР (ЛИПКИЙ И НА ВСЮ ШИРИНУ) --- */
+        /* --- ХЕДЕР --- */
         header {
             position: sticky; top: 0; z-index: 1500;
             padding: 20px 40px; background: #050505;
             border-bottom: 3px solid var(--custom-red);
             display: flex; align-items: center; justify-content: space-between;
-            margin-left: 0; margin-right: 0;
         }
 
         .nav-container { display: flex; align-items: center; flex: 1; gap: 20px; margin-right: 40px; }
@@ -56,12 +55,12 @@
 
         .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; flex-shrink: 0; }
 
-        /* --- ГИЛЬЗЫ (ОТ БОРДЕРА) --- */
+        /* --- ГИЛЬЗЫ --- */
         #shells-container { position: fixed; top: 90px; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 100; }
         .shell { position: absolute; width: 4px; height: 12px; background: linear-gradient(to bottom, #d4af37, #b8860b); border-radius: 1px; opacity: 0.8; }
         @keyframes shell-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        /* --- ГЛАВНЫЙ ЭКРАН (ЦЕНТР + ПЕРСОНАЖИ) --- */
+        /* --- ГЛАВНЫЙ ЭКРАН --- */
         #play { 
             position: relative; 
             height: 100vh; 
@@ -75,17 +74,34 @@
         .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.4; }
         .video-bg video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* СТИЛЬ ПЕРСОНАЖЕЙ ПО БОКАМ */
+        /* НАСТРОЙКИ ПЕРСОНАЖЕЙ */
         .hero-char {
             position: absolute;
             bottom: 0;
-            height: 90vh; /* Масштаб бойцов */
+            height: 92vh; /* Базовый размер */
             z-index: -1;
-            pointer-events: none; /* Пропускают клики к кнопке */
-            filter: drop-shadow(0 0 30px rgba(0,0,0,0.9));
+            pointer-events: none;
+            transform-origin: bottom; /* Пульсация от пола вверх */
+            animation: hero-breathing 5s infinite ease-in-out;
         }
-        .left-char { left: 0; }
-        .right-char { right: 0; }
+
+        /* ЛЕВЫЙ: Зеленое свечение + Край */
+        .left-char { 
+            left: -3%; 
+            filter: drop-shadow(0 0 30px rgba(119, 124, 78, 0.4)); 
+        }
+
+        /* ПРАВЫЙ: Красное свечение + Край */
+        .right-char { 
+            right: -3%; 
+            filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); 
+            animation-delay: 0.5s; /* Небольшая задержка для естественности */
+        }
+
+        @keyframes hero-breathing {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); } /* Медленное приближение */
+        }
 
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; animation: text-pulse 4s infinite ease-in-out; }
         .main-title .t { color: var(--custom-green); } 
@@ -93,17 +109,16 @@
         .battle-btn { margin-top: 60px; display: inline-block; padding: 35px 140px; background: var(--custom-red); color: white; font-size: 36px; font-weight: 700; text-decoration: none; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); transition: 0.3s; z-index: 10; }
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 60px var(--custom-red); transform: scale(1.05); }
 
-        /* --- ОБ ИГРЕ --- */
+        /* --- СЕКЦИИ --- */
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
         .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 10px; display: block; }
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 50px; line-height: 1; }
 
-        /* ПАНЕЛЬ СТАТИСТИКИ (НАД ЗАГОЛОВКОМ) */
         .stats-grid { display: flex; gap: 20px; margin-bottom: 50px; }
         .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; color: white; background: rgba(255,255,255,0.02); }
         .stat-num { font-size: 32px; font-weight: 700; display: block; color: var(--custom-red); }
 
-        /* FAQ (7 ВКЛАДОК) */
+        /* FAQ */
         #faq { display: flex; gap: 80px; }
         .faq-title-vert { font-size: 100px; writing-mode: vertical-lr; transform: rotate(180deg); color: white; border-right: 6px solid var(--custom-red); padding-right: 30px; }
         .faq-list { flex: 1; }
@@ -126,7 +141,7 @@
             <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
             <a href="#community" class="nav-btn">СООБЩЕСТВА</a>
             <a href="#faq" class="nav-btn">FAQ</a>
-            <div class="nav-btn reg-btn" onclick="alert('РЕГИСТРАЦИЯ...')">ЛИЧНЫЙ СОСТАВ</div>
+            <div class="nav-btn reg-btn" onclick="alert('ТЕРМИНАЛ...')">ЛИЧНЫЙ СОСТАВ</div>
         </div>
         <div class="age-limit">6+</div>
     </header>
