@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
     <style>
-        /* Шрифт Sangyo */
+        /* Подключение твоего шрифта Sangyo */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -14,8 +14,8 @@
 
         :root { 
             --bg: #050505; 
-            --custom-green: #777c4e; /* TEAMS */
-            --custom-red: #bc0000;   /* WAR */
+            --custom-green: #777c4e; 
+            --custom-red: #bc0000;   
             --text-white: #ffffff; 
             --font-main: 'Sangyo', 'Oswald', sans-serif;
         }
@@ -42,6 +42,7 @@
             padding: 20px 40px; background: #050505;
             border-bottom: 3px solid var(--custom-red);
             display: flex; align-items: center; justify-content: space-between;
+            margin-left: 0; margin-right: 0;
         }
 
         .nav-container { display: flex; align-items: center; flex: 1; gap: 20px; margin-right: 40px; }
@@ -55,37 +56,52 @@
 
         .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; flex-shrink: 0; }
 
-        /* --- ГИЛЬЗЫ (СПАВН ОТ БОРДЕРА) --- */
-        #shells-container { position: fixed; top: 90px; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 5; }
+        /* --- ГИЛЬЗЫ (ОТ БОРДЕРА) --- */
+        #shells-container { position: fixed; top: 90px; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 100; }
         .shell { position: absolute; width: 4px; height: 12px; background: linear-gradient(to bottom, #d4af37, #b8860b); border-radius: 1px; opacity: 0.8; }
         @keyframes shell-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        /* --- СЕКЦИИ (РАСТЯНУТЫЕ) --- */
-        section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
-        .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 10px; display: block; }
-        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 50px; line-height: 1; }
-
-        /* ГЛАВНЫЙ ЭКРАН (СТРОГО ЦЕНТР) */
-        #play { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-top: none; }
-        .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
+        /* --- ГЛАВНЫЙ ЭКРАН (ЦЕНТР + ПЕРСОНАЖИ) --- */
+        #play { 
+            position: relative; 
+            height: 100vh; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center;
+        }
+        .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.4; }
         .video-bg video { width: 100%; height: 100%; object-fit: cover; }
+
+        /* СТИЛЬ ПЕРСОНАЖЕЙ ПО БОКАМ */
+        .hero-char {
+            position: absolute;
+            bottom: 0;
+            height: 90vh; /* Масштаб бойцов */
+            z-index: -1;
+            pointer-events: none; /* Пропускают клики к кнопке */
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.9));
+        }
+        .left-char { left: 0; }
+        .right-char { right: 0; }
+
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; animation: text-pulse 4s infinite ease-in-out; }
         .main-title .t { color: var(--custom-green); } 
         .main-title .w { color: var(--custom-red); }
         .battle-btn { margin-top: 60px; display: inline-block; padding: 35px 140px; background: var(--custom-red); color: white; font-size: 36px; font-weight: 700; text-decoration: none; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); transition: 0.3s; z-index: 10; }
+        .battle-btn:hover { background: white; color: black; box-shadow: 0 0 60px var(--custom-red); transform: scale(1.05); }
 
-        /* ПАНЕЛЬ СТАТИСТИКИ (ИЗ IMAGE_3DE078.PNG) */
+        /* --- ОБ ИГРЕ --- */
+        section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
+        .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 10px; display: block; }
+        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 50px; line-height: 1; }
+
+        /* ПАНЕЛЬ СТАТИСТИКИ (НАД ЗАГОЛОВКОМ) */
         .stats-grid { display: flex; gap: 20px; margin-bottom: 50px; }
-        .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; text-decoration: none; color: white; background: rgba(255,255,255,0.02); }
-        .stat-num { font-size: 32px; font-weight: 700; display: block; color: var(--custom-red); margin-bottom: 5px; }
-
-        /* ОБ ИГРЕ */
-        .teams-row { display: flex; gap: 40px; margin: 50px 0; }
-        .team-card { flex: 1; border: 1px solid #222; padding: 40px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); }
-        .team-card.alpha { border-left: 6px solid var(--custom-green); }
-        .team-card.terror { border-left: 6px solid var(--custom-red); }
-        .team-name { font-size: 36px; font-weight: 700; margin-bottom: 20px; display: block; }
-        .op-img { position: absolute; right: -10px; bottom: -10px; height: 130%; opacity: 0.6; pointer-events: none; }
+        .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; color: white; background: rgba(255,255,255,0.02); }
+        .stat-num { font-size: 32px; font-weight: 700; display: block; color: var(--custom-red); }
 
         /* FAQ (7 ВКЛАДОК) */
         #faq { display: flex; gap: 80px; }
@@ -98,10 +114,7 @@
         .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
 
         @keyframes text-pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 30px rgba(188, 0, 0, 0.5); } 50% { opacity: 0.8; text-shadow: 0 0 60px rgba(188, 0, 0, 0.8); } }
-
         footer { padding: 100px 40px; border-top: 4px solid var(--custom-red); background: #000; }
-        .footer-nav { display: flex; gap: 30px; margin-bottom: 60px; }
-        .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 25px; color: #777; text-decoration: none; font-size: 16px; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body id="top">
@@ -113,22 +126,25 @@
             <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
             <a href="#community" class="nav-btn">СООБЩЕСТВА</a>
             <a href="#faq" class="nav-btn">FAQ</a>
-            <div class="nav-btn reg-btn" onclick="alert('ТЕРМИНАЛ РЕГИСТРАЦИИ ПОДКЛЮЧАЕТСЯ...')">ЛИЧНЫЙ СОСТАВ</div>
+            <div class="nav-btn reg-btn" onclick="alert('РЕГИСТРАЦИЯ...')">ЛИЧНЫЙ СОСТАВ</div>
         </div>
         <div class="age-limit">6+</div>
     </header>
 
     <div id="shells-container"></div>
 
-    <section id="play" class="full-section">
+    <section id="play">
         <div class="video-bg"><video autoplay muted loop playsinline><source src="hero_bg.mp4" type="video/mp4"></video></div>
+        
+        <img src="left-char.png.png" class="hero-char left-char" alt="Боец Альфа">
+        <img src="right-char.png.png" class="hero-char right-char" alt="Боец Боевик">
+
         <h1 class="main-title"><span class="t">TEAMS</span><br><span class="w">WAR</span></h1>
         <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
     </section>
 
     <section id="about" class="full-section">
         <span class="section-label">01 // АРХИВ ДАННЫХ</span>
-        
         <div class="stats-grid">
             <div class="stat-btn"><span class="stat-num">2</span>КОМАНДЫ</div>
             <div class="stat-btn"><span class="stat-num">7+</span>РЕЖИМОВ</div>
@@ -136,28 +152,17 @@
             <div class="stat-btn"><span class="stat-num">127+</span>БОЙЦОВ</div>
             <div class="stat-btn"><span class="stat-num">10+</span>КАРТ</div>
         </div>
-
         <h2 class="big-title">ТАКТИКА БОЯ</h2>
         <p style="font-size: 24px; color: #ddd; border-left: 6px solid var(--custom-red); padding-left: 40px; max-width: 1100px;">
-            Испытайте настоящий адреналин в динамичных боях против реальных игроков.
+            Испытайте настоящий адреналин в динамичных боях против реальных игроков. 
         </p>
-
-        <div class="teams-row">
-            <div class="team-card alpha"><span class="team-name" style="color:var(--custom-green)">КОМАНДА АЛЬФА</span><img src="alpha.png" class="op-img"></div>
-            <div class="team-card terror"><span class="team-name" style="color:var(--custom-red)">БОЕВИКИ</span><img src="terrorist.png" class="op-img"></div>
-        </div>
     </section>
 
     <section id="faq" class="full-section">
         <div class="faq-title-vert">FAQ</div>
         <div class="faq-list">
             <div class="faq-item"><div class="faq-question"><span>01 // Системные требования</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/">ПРОВЕРЬТЕ НА VK PLAY</a></div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>02 // Как скачать?</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ЛАУНЧЕР VK PLAY.</div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>03 // Не запускается</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">В ТЕХПОДДЕРЖКУ.</div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>04 // Баг</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">В ТЕХПОДДЕРЖКУ.</div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>05 // Жалоба</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">В ТЕХПОДДЕРЖКУ.</div></div></div>
             <div class="faq-item"><div class="faq-question"><span>06 // Поддержка</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ТЕЛЕГРАМ: @niks_on_game</div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>07 // Новости</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/devblog/">ДНЕВНИКИ</a></div></div></div>
         </div>
     </section>
 
@@ -181,6 +186,7 @@
             setTimeout(() => shell.remove(), duration * 1000);
         }
         setInterval(createShell, 400);
+
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
                 const answer = q.nextElementSibling, isActive = q.classList.contains('active');
