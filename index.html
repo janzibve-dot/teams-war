@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | INDUSTRIAL TERMINAL</title>
+    <title>TEAMS WAR | OFFICIAL TERMINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -17,25 +17,28 @@
 
         body {
             margin: 0; 
-            padding: 0 4cm; /* ТВОИ ВВОДНЫЕ: ОТСТУПЫ ПО 4 СМ */
+            padding: 0 4cm; /* ОТСТУПЫ ПО 4 СМ СЛЕВА И СПРАВА */
             background-color: var(--bg); 
             color: var(--text);
             font-family: var(--font-main); 
             font-weight: 400;
-            text-transform: uppercase; /* ТОЛЬКО ЗАГЛАВНЫЕ */
+            text-transform: uppercase; /* ТОЛЬКО ЗАГЛАВНЫЕ БУКВЫ */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            line-height: 1.4;
-            font-size: 18px; /* МИНИМУМ 15px */
+            line-height: 1.2;
+            font-size: 18px; /* МИНИМАЛЬНЫЙ ШРИФТ 15px */
         }
 
-        /* Адаптивность для мобилок (чтобы 4см не съели весь экран на телефоне) */
-        @media (max-width: 1024px) {
+        /* Адаптивность: на маленьких экранах уменьшаем отступы, чтобы контент влез */
+        @media (max-width: 1200px) {
+            body { padding: 0 2cm; }
+        }
+        @media (max-width: 768px) {
             body { padding: 0 20px; }
         }
 
-        /* ФОН С БЛЮРОМ */
+        /* ФОН С БЛЮРОМ (Используем твой bg.jpg.png) */
         .bg-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2; 
@@ -44,55 +47,57 @@
             filter: blur(6px); transform: scale(1.1);
         }
 
-        /* ШАПКА */
+        /* ШАПКА САЙТА */
         nav { 
             display: flex; justify-content: space-between; align-items: center; 
             padding: 40px 0; border-bottom: 2px solid var(--atomic-red); 
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
         .logo { font-size: 32px; font-weight: 700; letter-spacing: 5px; }
         .logo span { color: var(--atomic-red); }
 
-        .nav-links { display: flex; gap: 30px; }
+        .nav-links { display: flex; gap: 35px; }
         .nav-links a { 
             color: white; text-decoration: none; font-size: 16px; 
             letter-spacing: 2px; transition: 0.3s;
         }
         .nav-links a:hover { color: var(--atomic-red); }
 
-        /* КОНТЕНТ */
+        /* ЦЕНТРАЛЬНЫЙ БЛОК */
         .hero { 
             flex: 1; display: flex; flex-direction: column; 
             justify-content: center; align-items: flex-start; 
         }
         
+        /* ГЛАВНЫЙ ЗАГОЛОВОК (ИСПРАВЛЕНО) */
         h1 { 
-            font-size: 90px; margin: 0; letter-spacing: 10px; line-height: 0.9;
-            max-width: 800px;
+            font-size: 110px; margin: 0; letter-spacing: 12px; font-weight: 700;
+            line-height: 1;
         }
         h1 span { color: var(--atomic-red); }
 
         .tagline { 
-            font-size: 22px; margin: 30px 0 60px; color: #888; 
-            letter-spacing: 5px; border-left: 5px solid var(--atomic-red); padding-left: 20px;
+            font-size: 22px; margin: 40px 0 60px; color: #aaa; 
+            letter-spacing: 6px; border-left: 6px solid var(--atomic-red); padding-left: 25px;
         }
 
-        /* КНОПКИ (В СТИЛЕ ATOMIC HEART) */
-        .btn-container { display: flex; gap: 20px; }
+        /* КНОПКИ */
+        .btn-container { display: flex; gap: 25px; }
         .atomic-btn {
-            padding: 20px 40px; font-size: 20px; font-weight: 700;
+            padding: 22px 50px; font-size: 20px; font-weight: 700;
             background: var(--atomic-red); color: black; border: none; cursor: pointer;
             text-decoration: none; transition: 0.3s;
             clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
-        .atomic-btn:hover { background: white; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 61, 0, 0.4); }
+        .atomic-btn:hover { background: white; transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255, 61, 0, 0.5); }
         
         .btn-secondary { background: transparent; border: 2px solid white; color: white; }
 
-        /* ПОДВАЛ */
+        /* ПОДВАЛ (МИНИМУМ 15PX) */
         footer {
-            padding: 40px 0; border-top: 1px solid #222; margin-top: 100px;
-            display: flex; justify-content: space-between; font-size: 15px; color: #555;
+            padding: 50px 0; border-top: 1px solid #222; margin-top: 80px;
+            display: flex; justify-content: space-between; font-size: 15px; color: #444;
+            letter-spacing: 2px;
         }
     </style>
 </head>
@@ -106,19 +111,24 @@
             <a href="news.html">НОВОСТИ</a>
             <a href="forum.html">ФОРУМ</a>
             <a href="profile.html">ПРОФИЛЬ</a>
-            <a href="#" onclick="alert('ВХОД В СИСТЕМУ...')">ВХОД</a>
+            <a href="#" onclick="alert('ДОСТУП ЗАПРЕЩЕН: ТРЕБУЕТСЯ АВТОРИЗАЦИЯ')">ВХОД</a>
         </div>
     </nav>
 
     <section class="hero">
-        <h1>UNIT <span>76</span><br>SYSTEM ACTIVE</h1>
-        <p class="tagline">ПРОТОКОЛ: ТАКТИЧЕСКОЕ ПРЕВОСХОДСТВО</p>
+        <h1>TEAMS <span>WAR</span></h1>
+        <p class="tagline">ОБЪЕКТ 3826 // СТАТУС: АКТИВЕН</p>
         
         <div class="btn-container">
             <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="atomic-btn">ВСТУПИТЬ В БОЙ</a>
-            <a href="#" class="atomic-btn btn-secondary">ИНФОРМАЦИЯ</a>
+            <a href="#" class="atomic-btn btn-secondary" onclick="alert('ЗАГРУЗКА ДАННЫХ...')">ДОСЬЕ</a>
         </div>
     </section>
 
     <footer>
-        <div>© 20
+        <div>© 2026 TEAMS WAR // DEVELOPER: NIKSONGAME</div>
+        <div>СЕКТОР: RU // СИСТЕМА: СТАБИЛЬНА</div>
+    </footer>
+
+</body>
+</html>
