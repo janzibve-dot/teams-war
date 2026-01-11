@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
     <style>
-        /* Шрифт Sangyo */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -21,10 +20,10 @@
         }
         
         * { box-sizing: border-box; scroll-behavior: smooth; }
-        html { scroll-padding-top: 100px; }
+        html { scroll-padding-top: 100px; } /* Отступ для липкого хедера */
 
         body {
-            margin: 0; padding: 0 4cm; /* ТВОИ ПРАВИЛА: 4 СМ */
+            margin: 0; padding: 0 4cm; 
             background-color: var(--bg); color: var(--text-white);
             font-family: var(--font-main); text-transform: uppercase;
             font-size: 18px; line-height: 1.4; overflow-x: hidden;
@@ -39,85 +38,52 @@
             background-size: cover; background-position: center; filter: brightness(0.2) blur(6px);
         }
 
-        /* --- ХЕДЕР (ЗАФИКСИРОВАННЫЙ ВИД) --- */
+        /* --- ХЕДЕР (ВСЕГДА СВЕРХУ) --- */
         header {
             position: sticky; top: 0; z-index: 1000;
-            padding: 20px 0; background: rgba(5, 5, 5, 1);
+            padding: 20px 0; background: #050505; /* Сплошной фон, чтобы контент не просвечивал */
             border-bottom: 2px solid var(--custom-red);
-            display: flex; align-items: center;
-            position: relative; /* Для позиционирования 6+ */
+            display: flex; align-items: center; position: relative;
         }
 
-        .nav-container { 
-            display: flex; align-items: center; width: 100%; gap: 15px; 
-            margin-right: 70px; /* Чтобы не наезжать на 6+ */
-        }
-        
+        .nav-container { display: flex; align-items: center; width: 100%; gap: 15px; margin-right: 70px; }
         .logo-static { font-size: 26px; font-weight: 700; letter-spacing: 2px; padding-right: 30px; white-space: nowrap; }
-        .logo-static span.t { color: var(--custom-green); }
-        .logo-static span.w { color: var(--custom-red); }
+        .logo-static .t { color: var(--custom-green); }
+        .logo-static .w { color: var(--custom-red); }
 
-        .nav-btn { 
-            flex: 1; text-align: center; padding: 12px 0; color: white; 
-            text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); 
-            font-size: 15px; transition: 0.3s; 
-        }
-        .nav-btn:hover { background: var(--custom-red); color: white; }
+        .nav-btn { flex: 1; text-align: center; padding: 12px 0; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); font-size: 15px; transition: 0.3s; }
+        .nav-btn:hover { background: var(--custom-red); }
 
-        .age-limit { 
-            position: absolute; right: 0; top: 50%; transform: translateY(-50%); 
-            font-size: 16px; font-weight: 700; color: var(--custom-red); 
-            border: 4px solid var(--custom-red); width: 50px; height: 50px; 
-            display: flex; align-items: center; justify-content: center; 
-            border-radius: 50%; background: #050505; z-index: 2; 
-        }
+        .age-limit { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 16px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; z-index: 2; }
 
-        /* --- ГЛАВНЫЙ ЭКРАН --- */
-        #play {
-            position: relative; height: 95vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
-            overflow: hidden;
-        }
+        /* --- СЕКЦИИ --- */
+        #play { position: relative; height: 95vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; overflow: hidden; }
         .video-bg { position: absolute; top: 0; left: -4cm; width: calc(100% + 8cm); height: 100%; z-index: -1; opacity: 0.5; }
         .video-bg video { width: 100%; height: 100%; object-fit: cover; }
         
-        .main-title { 
-            font-size: clamp(60px, 10vw, 120px); font-weight: 700; line-height: 0.85; margin: 0; 
-            animation: text-pulse 4s infinite ease-in-out; z-index: 10; 
-        }
-        .main-title .t { color: var(--custom-green); } 
-        .main-title .w { color: var(--custom-red); }
+        .main-title { font-size: clamp(60px, 10vw, 120px); font-weight: 700; line-height: 0.85; margin: 0; animation: text-pulse 4s infinite ease-in-out; }
+        .main-title .t { color: var(--custom-green); } .main-title .w { color: var(--custom-red); }
+        .battle-btn { margin-top: 50px; display: inline-block; padding: 25px 100px; background: var(--custom-red); color: white; font-size: 30px; font-weight: 700; text-decoration: none; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); transition: 0.3s; }
+        @keyframes text-pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(188, 0, 0, 0.4); } 50% { opacity: 0.8; text-shadow: 0 0 50px rgba(188, 0, 0, 0.7); } }
 
-        .battle-btn { 
-            margin-top: 50px; display: inline-block; padding: 25px 100px; 
-            background: var(--custom-red); color: white; font-size: 30px; font-weight: 700; 
-            text-decoration: none; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); 
-            transition: 0.3s; z-index: 10; 
-        }
-        .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); transform: scale(1.05); }
-
-        @keyframes text-pulse { 
-            0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(188, 0, 0, 0.4); } 
-            50% { opacity: 0.8; text-shadow: 0 0 50px rgba(188, 0, 0, 0.7); } 
-        }
-
-        /* ГИЛЬЗЫ */
-        .shell {
-            position: absolute; width: 4px; height: 12px;
-            background: linear-gradient(to bottom, #d4af37, #b8860b);
-            border-radius: 1px; z-index: 5; pointer-events: none; opacity: 0.8;
-        }
-        @keyframes shell-fall {
-            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.8; }
-            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-        }
-
-        /* СЕКЦИИ */
         section.content-section { padding: 120px 0; border-top: 1px solid #1a1a1a; position: relative; z-index: 10; }
+        .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 15px; display: block; }
         .big-title { font-size: 85px; color: var(--custom-red); margin: 0 0 45px; line-height: 1; }
 
-        /* ФУТЕР */
+        /* FAQ АККОРДЕОН */
+        #faq { display: flex; gap: 80px; }
+        .faq-title-vert { font-size: 80px; writing-mode: vertical-lr; transform: rotate(180deg); color: white; border-right: 5px solid var(--custom-red); padding-right: 25px; }
+        .faq-list { flex: 1; }
+        .faq-item { border-bottom: 1px solid #222; margin-bottom: 10px; }
+        .faq-question { padding: 25px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); }
+        .faq-question.active { color: var(--custom-red); border-left: 4px solid var(--custom-red); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); padding: 0 25px; }
+        .faq-answer-inner { padding: 30px 0; font-size: 16px; color: #aaa; text-transform: none; }
+        .faq-answer a { color: var(--custom-red); text-decoration: none; border-bottom: 1px dashed; }
+
+        .shell { position: absolute; width: 4px; height: 12px; background: linear-gradient(to bottom, #d4af37, #b8860b); border-radius: 1px; z-index: 5; pointer-events: none; opacity: 0.8; }
+        @keyframes shell-fall { 0% { transform: translateY(-50px) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+
         footer { padding: 80px 0 40px; border-top: 3px solid var(--custom-red); background: #000; margin-top: 100px; }
         .footer-nav { display: flex; gap: 20px; margin-bottom: 60px; }
         .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 22px 10px; color: #777; text-decoration: none; font-size: 15px; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
@@ -131,7 +97,6 @@
             <div class="logo-static"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
             <a href="#top" class="nav-btn">ИГРАТЬ</a>
             <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
-            <a href="#media" class="nav-btn">МЕДИА</a>
             <a href="#community" class="nav-btn">СООБЩЕСТВА</a>
             <a href="#faq" class="nav-btn">FAQ</a>
         </div>
@@ -146,8 +111,25 @@
     </section>
 
     <section id="about" class="content-section">
-        <h2 class="big-title">ТАКТИКА<br>ПРЕВОСХОДСТВА</h2>
-        <p>ВЕРСТКА ВОССТАНОВЛЕНА И ЗАБЛОКИРОВАНА.</p>
+        <span class="section-label">01 // АРХИВ</span>
+        <h2 class="big-title">ОБ ИГРЕ</h2>
+        <p style="font-size: 22px; color: #ddd; border-left: 5px solid var(--custom-red); padding-left: 35px; max-width: 900px;">
+            ДАННЫЕ ЗАГРУЖЕНЫ. ПРОВЕРЬТЕ СООТВЕТСТВИЕ ПАРАМЕТРАМ.
+        </p>
+    </section>
+
+    <section id="faq" class="content-section">
+        <div class="faq-title-vert">FAQ</div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question"><span>01 // Какие системные требования у игры?</span><span>▼</span></div>
+                <div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/#:~:text=%D0%A1%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%BD%D1%8B%D0%B5%20%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F" target="_blank">СИСТЕМНЫЕ ТРЕБОВАНИЯ НА VK PLAY</a></div></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question"><span>02 // Как скачать игру?</span><span>▼</span></div>
+                <div class="faq-answer"><div class="faq-answer-inner">ПОСЕТИТЕ СТРАНИЦУ <a href="https://vkplay.ru/play/game/teams-war">VK PLAY</a>.</div></div>
+            </div>
+        </div>
     </section>
 
     <footer>
@@ -159,6 +141,7 @@
     </footer>
 
     <script>
+        // ГИЛЬЗЫ
         function createShell() {
             const container = document.getElementById('shells-container');
             const shell = document.createElement('div');
@@ -170,7 +153,20 @@
             setTimeout(() => { shell.remove(); }, duration * 1000);
         }
         setInterval(createShell, 450);
-    </script>
 
+        // FAQ АККОРДЕОН
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const answer = q.nextElementSibling;
+                const isActive = q.classList.contains('active');
+                document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = '0');
+                document.querySelectorAll('.faq-question').forEach(btn => btn.classList.remove('active'));
+                if (!isActive) {
+                    q.classList.add('active');
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                }
+            });
+        });
+    </script>
 </body>
 </html>
