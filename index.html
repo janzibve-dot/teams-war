@@ -73,7 +73,6 @@
         .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.4; }
         .video-bg video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ПЕРСОНАЖ (ОПУЩЕН НА 2.6СМ) */
         .hero-char { 
             position: absolute; 
             bottom: 2.6cm; 
@@ -102,7 +101,7 @@
         }
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
 
-        /* КРАСНАЯ ЛИНИЯ (ОПУЩЕНА НА 2.6СМ) */
+        /* КРАСНАЯ ЛИНИЯ (2.6СМ) */
         .red-boundary-line { 
             position: absolute; 
             bottom: 2.6cm; 
@@ -114,19 +113,23 @@
             box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); 
         }
 
-        /* --- ОБЕРТКА КОНТЕНТА (СМЕЩЕНА ВВЕРХ К ЛИНИИ) --- */
+        /* --- ОБЕРТКА КОНТЕНТА (OPACITY 0.9) --- */
         .site-content-wrapper {
             background: rgba(5, 5, 5, 0.9); 
             position: relative;
             z-index: 10;
-            margin-top: -2.6cm; /* ЕДИНСТВЕННОЕ ИЗМЕНЕНИЕ: Подтягиваем фон к линии */
+            margin-top: -2.6cm; 
         }
 
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
+        
+        /* ЕДИНСТВЕННОЕ ИЗМЕНЕНИЕ: Секция "ОБ ИГРЕ" теперь начинается от линии */
+        #about { padding-top: 0; }
+
         .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 10px; display: block; }
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 50px; line-height: 1; }
 
-        /* ОБ ИГРЕ */
+        /* ОБ ИГРЕ (Контент) */
         .stats-grid { display: flex; gap: 20px; margin-top: 60px; }
         .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; text-decoration: none; color: white; transition: 0.3s; }
         .stat-btn:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.1); }
@@ -259,7 +262,7 @@
             <div class="faq-title-vert">FAQ</div>
             <div class="faq-list">
                 <div class="faq-item"><div class="faq-question"><span>01 // Системные требования</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/">ПРОВЕРЬТЕ НА VK PLAY</a></div></div></div>
-                <div class="faq-item"><div class="faq-question"><span>02 // Как скачать и обновить?</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ИСПОЛЬЗУЙТЕ ЛАУНЧЕР <a href="https://vkplay.ru/play/game/teams-war">VK PLAY</a>.</div></div></div>
+                <div class="faq-item"><div class="faq-question"><span>02 // Как скачать и обновить?</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ИСПОЛЬЗУЙТЕ ЛАУНЧЕР VK PLAY.</div></div></div>
                 <div class="faq-item"><div class="faq-question"><span>03 // Игра не запускается</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОБРАТИТЕСЬ В ТЕХПОДДЕРЖКУ.</div></div></div>
                 <div class="faq-item"><div class="faq-question"><span>04 // Обнаружен баг</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">СООБЩИТЕ В СЛУЖБУ ТЕХНИЧЕСКОЙ ПОДДЕРЖКИ.</div></div></div>
                 <div class="faq-item"><div class="faq-question"><span>05 // Жалоба на игрока</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОТПРАВЬТЕ ЖАЛОБУ В ТЕХПОДДЕРЖКУ.</div></div></div>
