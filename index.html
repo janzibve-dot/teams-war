@@ -51,7 +51,6 @@
 
         .nav-btn { flex: 1; text-align: center; padding: 12px 0; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); font-size: 14px; transition: 0.3s; cursor: pointer; }
         .nav-btn:hover { background: var(--custom-red); color: white; }
-        .reg-btn { border-color: var(--custom-green); color: var(--custom-green); }
 
         .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; flex-shrink: 0; }
 
@@ -60,23 +59,21 @@
         .shell { position: absolute; width: 4px; height: 12px; background: linear-gradient(to bottom, #d4af37, #b8860b); border-radius: 1px; opacity: 0.8; }
         @keyframes shell-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        /* --- ГЛАВНЫЙ ЭКРАН (ПРАВОЕ СМЕЩЕНИЕ) --- */
+        /* --- ГЛАВНЫЙ ЭКРАН (ЛЕВОЕ СМЕЩЕНИЕ) --- */
         #play { 
             position: relative; 
-            min-height: 100vh; /* Используем min-height чтобы вместить линию */
+            min-height: 100vh; 
             overflow: hidden; 
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
-            align-items: flex-end; /* Смещение вправо */
-            text-align: right;     /* Текст по правому краю */
-            padding-right: 80px;   /* Отступ от правого края */
-            padding-bottom: 0;     /* Убираем нижний отступ для линии */
+            align-items: flex-start; /* СМЕЩЕНИЕ ВЛЕВО */
+            text-align: left;        /* ТЕКСТ СЛЕВА */
+            padding-left: 80px;      /* ОТСТУП СЛЕВА */
         }
         .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.4; }
         .video-bg video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ПРАВЫЙ ПЕРСОНАЖ */
         .hero-char { position: absolute; bottom: 0; height: 92vh; z-index: -1; pointer-events: none; transform-origin: bottom; animation: hero-breathing 5s infinite ease-in-out; }
         .right-char { right: -2%; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); }
         @keyframes hero-breathing { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
@@ -86,23 +83,23 @@
         
         /* КНОПКА (ПРЯМОУГОЛЬНАЯ) */
         .battle-btn { 
-            margin-top: 40px; display: inline-block; padding: 35px 140px; 
-            background: var(--custom-red); color: white; font-size: 36px; font-weight: 700; 
+            margin-top: 40px; display: inline-block; padding: 30px 120px; 
+            background: var(--custom-red); color: white; font-size: 32px; font-weight: 700; 
             text-decoration: none; 
-            clip-path: none; /* УБРАН СКОС, ТЕПЕРЬ ПРЯМОУГОЛЬНИК */
+            clip-path: none; /* ПРЯМОУГОЛЬНИК */
             transition: 0.3s; z-index: 10; 
         }
-        .battle-btn:hover { background: white; color: black; box-shadow: 0 0 60px var(--custom-red); transform: scale(1.05); }
+        .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); transform: scale(1.05); }
 
-        /* НОВАЯ КРАСНАЯ ЛИНИЯ-ГРАНИЦА */
+        /* ТОНКАЯ КРАСНАЯ ЛИНИЯ (1.5 ММ) */
         .red-boundary-line {
-            width: 100vw;          /* На всю ширину экрана */
-            height: 3cm;           /* Высота ровно 3 см */
+            width: 100vw;          
+            height: 1.5mm;         /* ТОЛЩИНА 1.5 ММ */
             background: var(--custom-red);
-            margin-top: 30px;      /* Отступ от кнопки */
-            margin-right: -80px;   /* Компенсация паддинга секции */
-            flex-shrink: 0;        /* Чтобы не сжималась */
-            box-shadow: 0 -10px 30px rgba(188, 0, 0, 0.3); /* Легкое свечение вверх */
+            margin-top: 45px;      
+            margin-left: -80px;    
+            flex-shrink: 0;        
+            box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); 
         }
 
         /* --- СЕКЦИИ --- */
@@ -110,11 +107,9 @@
         .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 10px; display: block; }
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 50px; line-height: 1; }
 
-        /* ОБ ИГРЕ */
         .stats-grid { display: flex; gap: 20px; margin-bottom: 50px; }
-        .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; color: white; background: rgba(255,255,255,0.02); text-decoration: none; transition: 0.3s; }
-        .stat-btn:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.1); }
-        .stat-num { font-size: 32px; font-weight: 700; display: block; color: var(--custom-red); margin-bottom: 5px; }
+        .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; color: white; background: rgba(255,255,255,0.02); text-decoration: none; }
+        .stat-num { font-size: 32px; font-weight: 700; display: block; color: var(--custom-red); }
 
         .teams-row { display: flex; gap: 40px; margin: 50px 0; }
         .team-card { flex: 1; border: 1px solid #222; padding: 40px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); }
@@ -123,7 +118,7 @@
         .team-name { font-size: 36px; font-weight: 700; margin-bottom: 20px; display: block; }
         .op-img { position: absolute; right: -10px; bottom: -10px; height: 130%; opacity: 0.6; pointer-events: none; }
 
-        /* FAQ */
+        /* FAQ (7 ВКЛАДОК) */
         #faq { display: flex; gap: 80px; }
         .faq-title-vert { font-size: 100px; writing-mode: vertical-lr; transform: rotate(180deg); color: white; border-right: 6px solid var(--custom-red); padding-right: 30px; }
         .faq-list { flex: 1; }
@@ -132,10 +127,9 @@
         .faq-question.active { color: var(--custom-red); border-left: 6px solid var(--custom-red); }
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); }
         .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
-        .faq-answer a { color: var(--custom-red); text-decoration: none; border-bottom: 1px dashed; }
 
         /* ФУТЕР */
-        footer { padding: 100px 40px; border-top: 4px solid var(--custom-red); background: #000; margin-top: 0; }
+        footer { padding: 100px 40px; border-top: 4px solid var(--custom-red); background: #000; }
         .footer-nav { display: flex; gap: 30px; margin-bottom: 60px; }
         .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 25px; color: #777; text-decoration: none; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
         .footer-btn:hover { color: white; border-color: var(--custom-red); }
@@ -162,7 +156,7 @@
     <section id="play">
         <div class="video-bg"><video autoplay muted loop playsinline><source src="hero_bg.mp4" type="video/mp4"></video></div>
         
-        <img src="new-right-char.png" class="hero-char right-char" alt="Новый боец">
+        <img src="right-char.png.png" class="hero-char right-char" alt="Боевик">
 
         <h1 class="main-title"><span class="t">TEAMS</span><br><span class="w">WAR</span></h1>
         <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
@@ -183,22 +177,18 @@
         <p style="font-size: 24px; color: #ddd; border-left: 6px solid var(--custom-red); padding-left: 40px; max-width: 1100px;">
             Испытайте настоящий адреналин в динамичных боях против реальных игроков. 
         </p>
-        <div class="teams-row">
-            <div class="team-card alpha"><span class="team-name" style="color:var(--custom-green)">КОМАНДА АЛЬФА</span><img src="alpha.png" class="op-img"></div>
-            <div class="team-card terror"><span class="team-name" style="color:var(--custom-red)">БОЕВИКИ</span><img src="terrorist.png" class="op-img"></div>
-        </div>
     </section>
 
     <section id="faq" class="full-section">
         <div class="faq-title-vert">FAQ</div>
         <div class="faq-list">
-            <div class="faq-item"><div class="faq-question"><span>01 // СИСТЕМНЫЕ ТРЕБОВАНИЯ</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/">ПРОВЕРЬТЕ НА VK PLAY</a></div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>02 // КАК СКАЧАТЬ?</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ИСПОЛЬЗУЙТЕ ЛАУНЧЕР VK PLAY.</div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>03 // НЕ ЗАПУСКАЕТСЯ</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОБРАТИТЕСЬ В ТЕХПОДДЕРЖКУ.</div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>04 // БАГ</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">СООБЩИТЕ О БАГЕ В СЛУЖБУ ПОДДЕРЖКИ.</div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>05 // ЖАЛОБА</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОТПРАВЬТЕ ЖАЛОБУ НА ИГРОКА.</div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>06 // ПОДДЕРЖКА</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ТЕЛЕГРАМ: @niks_on_game</div></div></div>
-            <div class="faq-item"><div class="faq-question"><span>07 // НОВОСТИ</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/devblog/">ДНЕВНИКИ РАЗРАБОТКИ</a></div></div></div>
+            <div class="faq-item"><div class="faq-question"><span>01 // Системные требования</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/">ПРОВЕРЬТЕ НА VK PLAY</a></div></div></div>
+            <div class="faq-item"><div class="faq-question"><span>02 // Как скачать?</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ЛАУНЧЕР VK PLAY.</div></div></div>
+            <div class="faq-item"><div class="faq-question"><span>03 // Не запускается</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">В ТЕХПОДДЕРЖКУ.</div></div></div>
+            <div class="faq-item"><div class="faq-question"><span>04 // Баг</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">В ТЕХПОДДЕРЖКУ.</div></div></div>
+            <div class="faq-item"><div class="faq-question"><span>05 // Жалоба</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">В ТЕХПОДДЕРЖКУ.</div></div></div>
+            <div class="faq-item"><div class="faq-question"><span>06 // Поддержка</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ТЕЛЕГРАМ: @niks_on_game</div></div></div>
+            <div class="faq-item"><div class="faq-question"><span>07 // Новости</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/devblog/">ДНЕВНИКИ</a></div></div></div>
         </div>
     </section>
 
