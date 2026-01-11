@@ -40,34 +40,23 @@
             background-size: cover; background-position: center; filter: brightness(0.25) blur(6px);
         }
 
-        /* --- ХЕДЕР (ИСПРАВЛЕН НАХЛЕСТ) --- */
+        /* --- ХЕДЕР (ЗАФИКСИРОВАН) --- */
         header {
             position: sticky; top: 0; z-index: 1000;
             padding: 20px 0; background: rgba(5, 5, 5, 0.98);
             border-bottom: 2px solid var(--custom-red);
-            /* Чтобы значок 6+ позиционировался относительно хедера */
-            position: relative; 
-            display: flex; align-items: center;
+            position: relative; display: flex; align-items: center;
         }
 
         .age-limit {
-            position: absolute; 
-            right: 0; /* Прижат к правому краю контента (с учетом 4см отступа body) */
-            top: 50%; transform: translateY(-50%); /* Центрирование по вертикали */
+            position: absolute; right: 0; top: 50%; transform: translateY(-50%);
             font-size: 16px; font-weight: 700; color: var(--custom-red);
-            /* ИСПРАВЛЕНО: ЖИРНЫЙ КОНТУР 4PX */
-            border: 4px solid var(--custom-red); 
-            width: 50px; height: 50px;
+            border: 4px solid var(--custom-red); width: 50px; height: 50px;
             display: flex; align-items: center; justify-content: center; border-radius: 50%;
-            background: #050505; /* Фон чтобы не просвечивало */
-            z-index: 2;
+            background: #050505; z-index: 2;
         }
 
-        .nav-container { 
-            display: flex; align-items: center; width: 100%; gap: 15px;
-            /* ИСПРАВЛЕНО: ОТСТУП СПРАВА, ЧТОБЫ НЕ НАЕЗЖАТЬ НА 6+ */
-            margin-right: 70px; 
-        }
+        .nav-container { display: flex; align-items: center; width: 100%; gap: 15px; margin-right: 70px; }
         .logo-static { font-size: 26px; font-weight: 700; letter-spacing: 2px; padding-right: 30px; white-space: nowrap; }
         .logo-static span { color: var(--custom-red); }
 
@@ -78,60 +67,71 @@
         }
         .nav-btn:hover { background: var(--custom-red); color: white; }
 
-        /* --- ГЛАВНЫЙ ЭКРАН --- */
-        #play {
-            position: relative; height: 95vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
-        }
-
-        .hero-bg {
-            position: absolute; top: 0; left: -4cm; width: calc(100% + 8cm); height: 100%;
-            z-index: -1; background-image: url('hero_bg.jpg.png');
-            background-size: cover; background-position: center;
-            opacity: 0.45; animation: breathe 12s infinite ease-in-out;
-        }
-
-        /* НОВАЯ АНИМАЦИЯ ПУЛЬСАЦИИ ТЕКСТА */
+        /* --- ГЛАВНЫЙ ЭКРАН (ПУЛЬСАЦИЯ) --- */
+        #play { position: relative; height: 95vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+        .hero-bg { position: absolute; top: 0; left: -4cm; width: calc(100% + 8cm); height: 100%; z-index: -1; background-image: url('hero_bg.jpg.png'); background-size: cover; background-position: center; opacity: 0.45; animation: breathe 12s infinite ease-in-out; }
+        
         @keyframes text-pulse {
             0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(188, 0, 0, 0.3); }
             50% { opacity: 0.8; text-shadow: 0 0 40px rgba(188, 0, 0, 0.6); }
         }
 
-        .main-title { 
-            font-size: 115px; font-weight: 700; line-height: 0.85; margin: 0;
-            /* ИСПРАВЛЕНО: ДОБАВЛЕНА ПУЛЬСАЦИЯ НАЗВАНИЯ */
-            animation: text-pulse 4s infinite ease-in-out;
-        }
+        .main-title { font-size: 115px; font-weight: 700; line-height: 0.85; margin: 0; animation: text-pulse 4s infinite ease-in-out; }
         .main-title .t { color: var(--custom-green); } 
         .main-title .w { color: var(--custom-red); }   
 
-        .battle-btn {
-            margin-top: 50px; display: inline-block; padding: 25px 100px;
-            background: var(--custom-red); color: white; font-size: 30px; font-weight: 700;
-            text-decoration: none; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
-            transition: 0.3s;
-        }
+        .battle-btn { margin-top: 50px; display: inline-block; padding: 25px 100px; background: var(--custom-red); color: white; font-size: 30px; font-weight: 700; text-decoration: none; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); transition: 0.3s; }
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); transform: scale(1.05); }
 
-        /* --- ОСТАЛЬНЫЕ СЕКЦИИ (БЕЗ ИЗМЕНЕНИЙ) --- */
+        /* --- СЕКЦИИ --- */
         section.content-section { padding: 100px 0; border-top: 1px solid #1a1a1a; }
-        .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 10px; display: block; opacity: 0.8; }
         .big-title { font-size: 85px; color: var(--custom-red); margin: 0 0 45px; line-height: 1; }
         .about-text { font-size: 22px; color: #ddd; border-left: 5px solid var(--custom-red); padding-left: 35px; max-width: 900px; }
 
-        /* FAQ */
-        #faq { display: flex; gap: 80px; }
-        .faq-title-vert { font-size: 80px; writing-mode: vertical-lr; transform: rotate(180deg); color: white; border-right: 5px solid var(--custom-red); padding-right: 25px; }
-        .faq-list { flex: 1; }
-        .faq-item { border: 1px solid #222; margin-bottom: 15px; padding: 25px; display: flex; justify-content: space-between; cursor: pointer; transition: 0.3s; }
-        .faq-item:hover { border-color: var(--custom-red); background: rgba(188, 0, 0, 0.08); }
+        /* --- ФУТЕР (ТВОЁ ТЗ) --- */
+        footer {
+            padding: 80px 0 40px; 
+            border-top: 3px solid var(--custom-red); 
+            background: #000;
+            margin-top: 100px;
+        }
 
-        /* ФУТЕР */
-        footer { padding: 80px 0 40px; border-top: 3px solid var(--custom-red); background: #000; }
-        .footer-nav { display: flex; gap: 20px; margin-bottom: 60px; }
-        .footer-link { flex: 1; text-align: center; border: 1px solid #222; padding: 22px; color: #777; text-decoration: none; font-size: 15px; transition: 0.3s; }
-        .footer-link:hover { color: white; border-color: var(--custom-red); }
-        .footer-bottom { display: flex; justify-content: space-between; color: #444; font-size: 14px; }
+        .footer-nav {
+            display: flex;
+            width: 100%;
+            gap: 20px; /* Расстояние между кнопками */
+            margin-bottom: 60px;
+        }
+
+        /* КНОПКИ ФУТЕРА — ОДИНАКОВО ПРОПОРЦИОНАЛЬНЫ */
+        .footer-btn {
+            flex: 1; /* РАВНАЯ ШИРИНА ДЛЯ ВСЕХ ТРЕХ */
+            text-align: center;
+            border: 1px solid #222;
+            padding: 22px 10px;
+            color: #777;
+            text-decoration: none;
+            font-size: 15px; /* МИНИМУМ 15PX */
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 1px;
+        }
+
+        .footer-btn:hover {
+            color: white;
+            border-color: var(--custom-red);
+            background: rgba(188, 0, 0, 0.05);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            color: #444;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
 
         @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.04); opacity: 0.6; } }
     </style>
@@ -158,30 +158,21 @@
     </section>
 
     <section id="about" class="content-section">
-        <span class="section-label">01 // ОБЪЕКТ 3826</span>
         <h2 class="big-title">ТАКТИКА<br>ПРЕВОСХОДСТВА</h2>
         <div class="about-text">
-            Испытайте настоящий адреналин в динамичных боях против реальных игроков на уникальных картах в стиле индустриального будущего.
-        </div>
-    </section>
-
-    <section id="faq" class="content-section">
-        <div class="faq-title-vert">FAQ</div>
-        <div class="faq-list">
-            <div class="faq-item"><span>01 // КАКИЕ СИСТЕМНЫЕ ТРЕБОВАНИЯ?</span><span>▼</span></div>
-            <div class="faq-item"><span>02 // КАК НАЧАТЬ ИГРАТЬ В TEAMS WAR?</span><span>▼</span></div>
+            Испытайте настоящий адреналин в динамичных боях против реальных игроков на уникальных картах Объекта 3826.
         </div>
     </section>
 
     <footer>
         <div class="footer-nav">
-            <a href="privacy.html" class="footer-link">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
-            <a href="terms.html" class="footer-link">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
-            <a href="rules.html" class="footer-link">ПРАВИЛА</a>
+            <a href="privacy.html" class="footer-btn">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
+            <a href="terms.html" class="footer-btn">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
+            <a href="rules.html" class="footer-btn">ПРАВИЛА</a>
         </div>
         <div class="footer-bottom">
             <div>© 2026 TEAMS WAR // ВСЕ ПРАВА ЗАЩИЩЕНЫ</div>
-            <div>DEVELOPER: NIKSONGAME // СЕКТОР: RU</div>
+            <div>DEVELOPER: NIKSONGAME // СТАТУС: ОНЛАЙН</div>
         </div>
     </footer>
 
