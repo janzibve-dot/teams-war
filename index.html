@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
     <style>
+        /* Подключение твоего шрифта Sangyo */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -14,9 +15,8 @@
 
         :root { 
             --bg: #050505; 
-            --custom-green: #777c4e; /* ТВОЙ КОД ЗЕЛЕНОГО */
-            --custom-red: #bc0000;   /* ТВОЙ КОД КРАСНОГО */
-            --atomic-red: #FF3D00;   /* Акцентный красный для линий и кнопок */
+            --custom-green: #777c4e; /* ТВОЙ HEX ЗЕЛЕНЫЙ */
+            --custom-red: #bc0000;   /* ТВОЙ HEX КРАСНЫЙ */
             --text-white: #ffffff; 
             --font-main: 'Sangyo', 'Oswald', sans-serif;
         }
@@ -33,29 +33,42 @@
         @media (max-width: 1600px) { body { padding: 0 2cm; } }
         @media (max-width: 1000px) { body { padding: 0 20px; } }
 
-        /* ФОН САЙТА */
+        /* ФОН САЙТА (Блюр 6px) */
         body::before {
             content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -5; background-image: url('bg.jpg.png');
-            background-size: cover; background-position: center; filter: brightness(0.25) blur(10px);
+            background-size: cover; background-position: center; filter: brightness(0.25) blur(6px);
         }
 
-        /* --- ХЕДЕР (ЗАФИКСИРОВАН) --- */
+        /* --- ХЕДЕР (ИСПРАВЛЕН НАХЛЕСТ) --- */
         header {
             position: sticky; top: 0; z-index: 1000;
             padding: 20px 0; background: rgba(5, 5, 5, 0.98);
             border-bottom: 2px solid var(--custom-red);
+            /* Чтобы значок 6+ позиционировался относительно хедера */
+            position: relative; 
+            display: flex; align-items: center;
         }
 
         .age-limit {
-            position: absolute; right: 0; top: 15px;
+            position: absolute; 
+            right: 0; /* Прижат к правому краю контента (с учетом 4см отступа body) */
+            top: 50%; transform: translateY(-50%); /* Центрирование по вертикали */
             font-size: 16px; font-weight: 700; color: var(--custom-red);
-            border: 2px solid var(--custom-red); width: 45px; height: 45px;
+            /* ИСПРАВЛЕНО: ЖИРНЫЙ КОНТУР 4PX */
+            border: 4px solid var(--custom-red); 
+            width: 50px; height: 50px;
             display: flex; align-items: center; justify-content: center; border-radius: 50%;
+            background: #050505; /* Фон чтобы не просвечивало */
+            z-index: 2;
         }
 
-        .nav-container { display: flex; align-items: center; width: 100%; gap: 15px; }
-        .logo-static { font-size: 26px; font-weight: 700; letter-spacing: 2px; padding-right: 30px; }
+        .nav-container { 
+            display: flex; align-items: center; width: 100%; gap: 15px;
+            /* ИСПРАВЛЕНО: ОТСТУП СПРАВА, ЧТОБЫ НЕ НАЕЗЖАТЬ НА 6+ */
+            margin-right: 70px; 
+        }
+        .logo-static { font-size: 26px; font-weight: 700; letter-spacing: 2px; padding-right: 30px; white-space: nowrap; }
         .logo-static span { color: var(--custom-red); }
 
         .nav-btn {
@@ -78,10 +91,19 @@
             opacity: 0.45; animation: breathe 12s infinite ease-in-out;
         }
 
-        /* ТВОИ НОВЫЕ HEX-ЦВЕТА ТУТ */
-        .main-title { font-size: 115px; font-weight: 700; line-height: 0.85; margin: 0; }
-        .main-title .t { color: var(--custom-green); } /* #777c4e */
-        .main-title .w { color: var(--custom-red); }   /* #bc0000 */
+        /* НОВАЯ АНИМАЦИЯ ПУЛЬСАЦИИ ТЕКСТА */
+        @keyframes text-pulse {
+            0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(188, 0, 0, 0.3); }
+            50% { opacity: 0.8; text-shadow: 0 0 40px rgba(188, 0, 0, 0.6); }
+        }
+
+        .main-title { 
+            font-size: 115px; font-weight: 700; line-height: 0.85; margin: 0;
+            /* ИСПРАВЛЕНО: ДОБАВЛЕНА ПУЛЬСАЦИЯ НАЗВАНИЯ */
+            animation: text-pulse 4s infinite ease-in-out;
+        }
+        .main-title .t { color: var(--custom-green); } 
+        .main-title .w { color: var(--custom-red); }   
 
         .battle-btn {
             margin-top: 50px; display: inline-block; padding: 25px 100px;
@@ -91,7 +113,7 @@
         }
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); transform: scale(1.05); }
 
-        /* --- СЕКЦИИ --- */
+        /* --- ОСТАЛЬНЫЕ СЕКЦИИ (БЕЗ ИЗМЕНЕНИЙ) --- */
         section.content-section { padding: 100px 0; border-top: 1px solid #1a1a1a; }
         .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 10px; display: block; opacity: 0.8; }
         .big-title { font-size: 85px; color: var(--custom-red); margin: 0 0 45px; line-height: 1; }
@@ -117,7 +139,6 @@
 <body id="top">
 
     <header>
-        <div class="age-limit">6+</div>
         <div class="nav-container">
             <div class="logo-static">TEAMS <span>WAR</span></div>
             <a href="#top" class="nav-btn">ИГРАТЬ</a>
@@ -126,6 +147,7 @@
             <a href="#community" class="nav-btn">СООБЩЕСТВА</a>
             <a href="#faq" class="nav-btn">FAQ</a>
         </div>
+        <div class="age-limit">6+</div>
     </header>
 
     <section id="play">
@@ -146,4 +168,22 @@
     <section id="faq" class="content-section">
         <div class="faq-title-vert">FAQ</div>
         <div class="faq-list">
-            <div class="faq-item"><span>01 // КАКИЕ СИСТЕМНЫЕ ТРЕ
+            <div class="faq-item"><span>01 // КАКИЕ СИСТЕМНЫЕ ТРЕБОВАНИЯ?</span><span>▼</span></div>
+            <div class="faq-item"><span>02 // КАК НАЧАТЬ ИГРАТЬ В TEAMS WAR?</span><span>▼</span></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-nav">
+            <a href="privacy.html" class="footer-link">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
+            <a href="terms.html" class="footer-link">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
+            <a href="rules.html" class="footer-link">ПРАВИЛА</a>
+        </div>
+        <div class="footer-bottom">
+            <div>© 2026 TEAMS WAR // ВСЕ ПРАВА ЗАЩИЩЕНЫ</div>
+            <div>DEVELOPER: NIKSONGAME // СЕКТОР: RU</div>
+        </div>
+    </footer>
+
+</body>
+</html>
