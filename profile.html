@@ -21,18 +21,14 @@
         .chat-side { flex: 2; display: flex; flex-direction: column; border-color: var(--green); }
 
         /* АВАТАР И РАНГ */
-        .avatar-box { text-align: center; margin-bottom: 15px; }
-        .avatar-img { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--green); object-fit: cover; background: #222; }
+        .avatar-box { text-align: center; margin-bottom: 15px; cursor: pointer; position: relative; }
+        .avatar-box:hover .avatar-img { opacity: 0.7; }
+        .avatar-img { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--green); object-fit: cover; background: #222; transition: 0.3s; }
         .rank-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin-top: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--green); color: var(--green); font-weight: bold; }
 
-        /* ЧАТ (ИСПРАВЛЕННЫЕ ВКЛАДКИ) */
+        /* ЧАТ */
         .chat-nav { display: flex; gap: 10px; margin-bottom: 15px; position: relative; z-index: 1000; }
-        .tab { 
-            flex: 1; padding: 12px; text-align: center; border: 1px solid var(--green); 
-            cursor: pointer; border-radius: 8px; font-size: 14px; font-weight: bold;
-            transition: 0.3s; background: rgba(0,0,0,0.5); color: var(--green);
-            user-select: none;
-        }
+        .tab { flex: 1; padding: 12px; text-align: center; border: 1px solid var(--green); cursor: pointer; border-radius: 8px; font-size: 14px; font-weight: bold; transition: 0.3s; background: rgba(0,0,0,0.5); color: var(--green); user-select: none; }
         .tab:hover { background: rgba(56, 142, 60, 0.2); }
         .tab.active { background: var(--green); color: #000; box-shadow: 0 0 15px var(--green); }
         
@@ -41,101 +37,4 @@
         .msg.me { align-self: flex-end; border: 1px solid var(--green); background: rgba(56, 142, 60, 0.1); }
         .msg.other { align-self: flex-start; border: 1px solid #444; background: rgba(255,255,255,0.05); }
 
-        .chat-input-area { display: flex; gap: 10px; margin-top: 15px; }
-        input[type="text"], textarea { width: 100%; background: rgba(0,0,0,0.8); border: 1px solid var(--red); color: white; padding: 12px; border-radius: 8px; font-family: 'Chakra Petch'; }
-        .send-btn { padding: 0 25px; background: var(--green); border: none; cursor: pointer; border-radius: 8px; font-weight: bold; transition: 0.3s; }
-        .send-btn:hover { box-shadow: 0 0 15px var(--green); transform: scale(1.05); }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="logo"><a href="index.html" style="color:white; text-decoration:none;">TEAMS <span>WAR</span></a></div>
-    <div class="nav-links">
-        <a href="index.html">ГЛАВНАЯ</a>
-        <a href="news.html">НОВОСТИ</a>
-        <a href="forum.html">ФОРУМ</a>
-        <a href="shop.html">МАГАЗИН</a>
-    </div>
-</nav>
-
-<div class="main-container">
-    <div class="profile-side">
-        <div class="card" style="text-align: center;">
-            <div class="avatar-box">
-                <img src="https://via.placeholder.com/150" class="avatar-img" id="myAvatar">
-                <div id="userRankDisplay" class="rank-badge">РАНГ: НОВИЧОК</div>
-            </div>
-            <h2 id="myNick" style="color: var(--green); margin: 10px 0;">NiksOnGame</h2>
-            <input type="text" id="changeNick" placeholder="ИЗМЕНИТЬ НИК" style="margin-bottom: 10px;">
-            <textarea id="changeBio" placeholder="ИНФОРМАЦИЯ О БОЙЦЕ..."></textarea>
-            <button onclick="updateProfile()" style="width:100%; margin-top:15px; padding:12px; background: var(--green); border:none; color:#000; font-weight:bold; cursor:pointer; border-radius:8px;">ОБНОВИТЬ ДАННЫЕ</button>
-        </div>
-    </div>
-
-    <div class="card chat-side">
-        <div class="chat-nav">
-            <div class="tab active" onclick="switchChat(this, 'global')">ОБЩИЙ ЧАТ</div>
-            <div class="tab" onclick="switchChat(this, 'private')">ЛИЧНЫЕ СООБЩЕНИЯ</div>
-        </div>
-        
-        <div class="messages" id="chatWindow">
-            <div class="msg other"><b>Система:</b> Канал связи установлен. Ожидание сообщений...</div>
-        </div>
-
-        <div class="chat-input-area">
-            <input type="text" id="imsg" placeholder="Введите сообщение..." onkeypress="if(event.key === 'Enter') send()">
-            <button class="send-btn" onclick="send()">ОТПРАВИТЬ</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Загрузка данных при старте
-    window.onload = function() {
-        const savedRank = localStorage.getItem('userRank') || 'НОВИЧОК';
-        const savedColor = localStorage.getItem('rankColor') || '#388E3C';
-        const rankDisplay = document.getElementById('userRankDisplay');
-        
-        rankDisplay.innerText = 'РАНГ: ' + savedRank;
-        rankDisplay.style.borderColor = savedColor;
-        rankDisplay.style.color = savedColor;
-    }
-
-    // Исправленная функция переключения вкладок
-    function switchChat(element, type) {
-        // 1. Убираем класс active у всех вкладок
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(t => t.classList.remove('active'));
-        
-        // 2. Добавляем класс active той, на которую нажали
-        element.classList.add('active');
-        
-        // 3. Меняем содержимое окна чата
-        const chatWin = document.getElementById('chatWindow');
-        chatWin.innerHTML = `<div class="msg other"><b>Система:</b> Вы переключились на <b>${type === 'global' ? 'ОБЩИЙ КАНАЛ' : 'ЛИЧНЫЕ СООБЩЕНИЯ'}</b>.</div>`;
-    }
-
-    function updateProfile() {
-        const nick = document.getElementById('changeNick').value;
-        if(nick) {
-            document.getElementById('myNick').innerText = nick;
-            alert('Позывной изменен на: ' + nick);
-        }
-    }
-
-    function send() {
-        const input = document.getElementById('imsg');
-        const txt = input.value;
-        const nick = document.getElementById('myNick').innerText;
-        const rank = localStorage.getItem('userRank') || 'НОВИЧОК';
-        
-        if(!txt.trim()) return;
-
-        const chatWin = document.getElementById('chatWindow');
-        const m = document.createElement('div');
-        m.className = 'msg me';
-        m.innerHTML = `<small style="font-size:10px; opacity:0.6;">[${rank}]</small><br><b>${nick}:</b> ${txt}`;
-        
-        chatWin.appendChild(m);
-        input
+        .chat-input-area { display: flex; gap: 10px; margin-top
