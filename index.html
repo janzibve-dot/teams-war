@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | BATTLE TERMINAL</title>
+    <title>TEAMS WAR | OFFICIAL TERMINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #030303; /* ТЗ: Цвета потемнее */
-            --dark-red: #8B0000; /* ТЗ: Темно-красный */
-            --dark-green: #1B5E20; /* ТЗ: Темно-зеленый */
+            --bg: #030303; 
+            --dark-red: #8B0000; 
+            --dark-green: #1B5E20; 
             --text: #ffffff; 
             --font-main: 'Sangyo-Regular', 'Oswald', sans-serif;
         }
@@ -17,110 +17,113 @@
         * { box-sizing: border-box; }
 
         body {
-            margin: 0; 
-            padding: 0 4cm; /* ТЗ: ОТСТУПЫ ПО 4 СМ */
-            background-color: var(--bg); 
-            color: var(--text);
-            font-family: var(--font-main); 
-            text-transform: uppercase; /* ТЗ: ТОЛЬКО ЗАГЛАВНЫЕ */
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            font-size: 18px; /* ТЗ: МИНИМУМ 15PX */
+            margin: 0; padding: 0 4cm;
+            background-color: var(--bg); color: var(--text);
+            font-family: var(--font-main); text-transform: uppercase;
         }
 
-        /* Адаптивность отступов */
+        /* ОБЩИЙ ФОН САЙТА */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -3;
+            /* ИСПРАВЛЕНО ПО СКРИНШОТУ ГИТХАБА */
+            background-image: linear-gradient(rgba(3,3,3,0.9), rgba(3,3,3,0.95)), url('bg.jpg.png');
+            background-size: cover; background-position: center; filter: blur(8px);
+        }
+
         @media (max-width: 1400px) { body { padding: 0 2cm; } }
         @media (max-width: 1000px) { body { padding: 0 20px; } }
 
-        /* --- СЕКЦИЯ ИГРАТЬ (САМЫЙ ВЕРХ) --- */
+        /* --- ВЕРХНЯЯ СЕКЦИЯ --- */
         #play-top {
-            position: relative;
-            height: 100vh; /* На весь экран */
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            margin-left: -4cm; /* Компенсация падинга body для видео на весь экран */
-            width: calc(100% + 8cm);
+            position: relative; height: 100vh;
+            width: calc(100% + 8cm); margin-left: -4cm;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            overflow: hidden; background: #000; border-bottom: 3px solid var(--dark-red);
         }
 
-        /* ЗАЦИКЛЕННОЕ ВИДЕО НА ФОНЕ */
-        .video-bg {
-            position: absolute;
-            top: 50%; left: 50%;
-            min-width: 100%; min-height: 100%;
-            width: auto; height: auto;
-            transform: translate(-50%, -50%);
-            z-index: -2;
-            object-fit: cover;
+        /* ПУЛЬСИРУЮЩАЯ КАРТИНКА */
+        .hero-pulse-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            /* ИСПРАВЛЕНО: ТЕПЕРЬ СОВПАДАЕТ С ТВОИМ ФАЙЛОМ */
+            background-image: url('hero_bg.jpg.png'); 
+            background-size: cover; background-position: center;
+            z-index: 1; opacity: 0.6;
+            animation: hero-breathe 8s infinite ease-in-out;
         }
 
-        /* Затемнение видео для читаемости текста */
-        .video-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: -1;
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2; background: linear-gradient(135deg, rgba(27, 94, 32, 0.4), rgba(139, 0, 0, 0.4));
+            mix-blend-mode: multiply;
         }
 
-        /* ЛОГОТИП В ЦЕНТРЕ */
+        .hero-content { position: relative; z-index: 10; text-align: center; }
+
         .main-title {
-            font-size: 120px;
-            font-weight: 700;
-            letter-spacing: 15px;
-            margin-bottom: 50px;
-            text-align: center;
+            font-size: clamp(50px, 12vw, 130px); font-weight: 700; 
+            letter-spacing: 12px; margin-bottom: 50px;
         }
-        .main-title .teams { color: var(--dark-green); } /* ТЗ: TEAMS ЗЕЛЕНЫЙ */
-        .main-title .war { color: var(--dark-red); } /* ТЗ: WAR КРАСНЫЙ */
+        .main-title .teams { color: var(--dark-green); }
+        .main-title .war { color: var(--dark-red); }
 
-        /* КРУПНАЯ КНОПКА "В БОЙ" */
         .battle-btn {
-            display: inline-block;
-            padding: 30px 100px;
-            font-size: 32px;
-            font-weight: 700;
-            color: black;
-            background-color: var(--dark-red);
-            text-decoration: none;
-            transition: 0.3s;
-            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
-            border: none;
-            cursor: pointer;
+            display: inline-block; padding: 30px 100px; font-size: 32px; font-weight: 700;
+            color: white; background-color: var(--dark-red);
+            text-decoration: none; transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
-        .battle-btn:hover {
-            background-color: white;
-            box-shadow: 0 0 50px var(--dark-red);
-            transform: scale(1.05);
+        .battle-btn:hover { background-color: white; color: black; box-shadow: 0 0 50px var(--dark-red); transform: scale(1.05); }
+
+        @keyframes hero-breathe {
+            0%, 100% { transform: scale(1); filter: brightness(0.8); }
+            50% { transform: scale(1.05); filter: brightness(1.1); }
         }
 
-        /* --- ХЕДЕР (ПОД СЕКЦИЕЙ ИГРАТЬ) --- */
+        /* ХЕДЕР */
         header {
-            padding: 30px 0;
-            background: var(--bg);
+            padding: 30px 0; background: var(--bg);
             border-bottom: 2px solid var(--dark-red);
             position: sticky; top: 0; z-index: 100;
         }
-
-        .age-limit {
-            position: absolute; right: 0; top: 15px;
-            font-size: 18px; font-weight: 700; color: var(--dark-red);
-            border: 2px solid var(--dark-red); 
-            width: 50px; height: 50px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 50%;
-        }
-
         .nav-container { display: flex; align-items: center; width: 100%; gap: 10px; }
         .nav-btn {
             flex: 1; text-align: center; padding: 12px 0;
             color: white; text-decoration: none; border: 1px solid rgba(255, 61, 0, 0.2);
-            font-size: 15px; transition: 0.3s;
+            font-size: 14px; transition: 0.3s;
         }
         .nav-btn:hover { background: var(--dark-red); color: black; }
+    </style>
+</head>
+<body>
 
-        section { padding: 100px 0; min-height: 80vh; }
-        .section-title { font-size: 60px; color: var(--dark-red); margin-bottom:
+    <section id="play-top">
+        <div class="hero-pulse-bg"></div>
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+            <div class="main-title">
+                <span class="teams">TEAMS</span> <span class="war">WAR</span>
+            </div>
+            <a href="https://vkplay.ru/play/game/teams-war" class="battle-btn">В БОЙ</a>
+        </div>
+    </section>
+
+    <header>
+        <div class="nav-container">
+            <div style="font-size: 24px; font-weight: 700; padding: 0 20px;">TEAMS <span style="color:var(--dark-red)">WAR</span></div>
+            <a href="#play-top" class="nav-btn">ИГРАТЬ</a>
+            <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
+            <a href="#media" class="nav-btn">МЕДИА</a>
+            <a href="#community" class="nav-btn">СООБЩЕСТВА</a>
+            <a href="#faq" class="nav-btn">FAQ</a>
+        </div>
+    </header>
+
+    <section id="about" style="padding: 100px 0; min-height: 80vh;">
+        <h2 style="font-size: 60px; color: var(--dark-red);">ОБ ИГРЕ</h2>
+        <p>ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ.</p>
+    </section>
+
+</body>
+</html>
