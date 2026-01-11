@@ -14,21 +14,22 @@
 
         :root { 
             --bg: #050505; 
-            --atomic-red: #FF3D00; 
-            --text-white: #ffffff; /* ТЗ: ЦВЕТ ДЛЯ TEAMS */
+            --custom-green: #777c4e; /* ТВОЙ КОД ЗЕЛЕНОГО */
+            --custom-red: #bc0000;   /* ТВОЙ КОД КРАСНОГО */
+            --atomic-red: #FF3D00;   /* Акцентный красный для линий и кнопок */
+            --text-white: #ffffff; 
             --font-main: 'Sangyo', 'Oswald', sans-serif;
         }
         
         * { box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
-            margin: 0; padding: 0 4cm; /* ТЗ: ОТСТУПЫ 4 СМ */
+            margin: 0; padding: 0 4cm; /* СТРОГО 4 СМ ОТСТУПЫ */
             background-color: var(--bg); color: var(--text-white);
             font-family: var(--font-main); text-transform: uppercase;
             font-size: 18px; line-height: 1.4;
         }
 
-        /* Адаптивность отступов */
         @media (max-width: 1600px) { body { padding: 0 2cm; } }
         @media (max-width: 1000px) { body { padding: 0 20px; } }
 
@@ -43,32 +44,28 @@
         header {
             position: sticky; top: 0; z-index: 1000;
             padding: 20px 0; background: rgba(5, 5, 5, 0.98);
-            border-bottom: 2px solid var(--atomic-red);
+            border-bottom: 2px solid var(--custom-red);
         }
 
-        /* Знак 6+ в круге */
         .age-limit {
             position: absolute; right: 0; top: 15px;
-            font-size: 16px; font-weight: 700; color: var(--atomic-red);
-            border: 2px solid var(--atomic-red); width: 45px; height: 45px;
+            font-size: 16px; font-weight: 700; color: var(--custom-red);
+            border: 2px solid var(--custom-red); width: 45px; height: 45px;
             display: flex; align-items: center; justify-content: center; border-radius: 50%;
         }
 
         .nav-container { display: flex; align-items: center; width: 100%; gap: 15px; }
-        
-        /* ЛОГО В ХЕДЕРЕ (НЕ КЛИКАБЕЛЬНО) */
         .logo-static { font-size: 26px; font-weight: 700; letter-spacing: 2px; padding-right: 30px; }
-        .logo-static span { color: var(--atomic-red); }
+        .logo-static span { color: var(--custom-red); }
 
-        /* ПРОПОРЦИОНАЛЬНЫЕ КНОПКИ */
         .nav-btn {
             flex: 1; text-align: center; padding: 12px 0;
-            color: white; text-decoration: none; border: 1px solid rgba(255, 61, 0, 0.15);
+            color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2);
             font-size: 15px; transition: 0.3s;
         }
-        .nav-btn:hover { background: var(--atomic-red); color: black; }
+        .nav-btn:hover { background: var(--custom-red); color: white; }
 
-        /* --- ГЛАВНЫЙ ЭКРАН (ПО СКРИНУ 231e10) --- */
+        /* --- ГЛАВНЫЙ ЭКРАН --- */
         #play {
             position: relative; height: 95vh;
             display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
@@ -81,39 +78,37 @@
             opacity: 0.45; animation: breathe 12s infinite ease-in-out;
         }
 
-        /* ТВОЙ НОВЫЙ ЦВЕТ ЛОГОТИПА */
+        /* ТВОИ НОВЫЕ HEX-ЦВЕТА ТУТ */
         .main-title { font-size: 115px; font-weight: 700; line-height: 0.85; margin: 0; }
-        .main-title .t { color: var(--text-white); } /* TEAMS ТЕПЕРЬ БЕЛЫЙ */
-        .main-title .w { color: var(--atomic-red); } /* WAR КРАСНЫЙ */
+        .main-title .t { color: var(--custom-green); } /* #777c4e */
+        .main-title .w { color: var(--custom-red); }   /* #bc0000 */
 
         .battle-btn {
             margin-top: 50px; display: inline-block; padding: 25px 100px;
-            background: var(--atomic-red); color: black; font-size: 30px; font-weight: 700;
+            background: var(--custom-red); color: white; font-size: 30px; font-weight: 700;
             text-decoration: none; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
             transition: 0.3s;
         }
-        .battle-btn:hover { background: white; transform: scale(1.05); box-shadow: 0 0 50px var(--atomic-red); }
+        .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); transform: scale(1.05); }
 
-        /* --- СЕКЦИИ САЙТА --- */
+        /* --- СЕКЦИИ --- */
         section.content-section { padding: 100px 0; border-top: 1px solid #1a1a1a; }
-        .section-label { color: var(--atomic-red); font-size: 16px; margin-bottom: 10px; display: block; opacity: 0.8; }
-        .big-title { font-size: 85px; color: var(--atomic-red); margin: 0 0 45px; line-height: 1; }
-        
-        .about-text { font-size: 22px; color: #ddd; border-left: 5px solid var(--atomic-red); padding-left: 35px; max-width: 900px; }
+        .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 10px; display: block; opacity: 0.8; }
+        .big-title { font-size: 85px; color: var(--custom-red); margin: 0 0 45px; line-height: 1; }
+        .about-text { font-size: 22px; color: #ddd; border-left: 5px solid var(--custom-red); padding-left: 35px; max-width: 900px; }
 
-        /* FAQ (АККОРДЕОН ПО СКРИНУ 24ec48) */
+        /* FAQ */
         #faq { display: flex; gap: 80px; }
-        .faq-title-vert { font-size: 80px; writing-mode: vertical-lr; transform: rotate(180deg); color: white; border-right: 5px solid var(--atomic-red); padding-right: 25px; }
+        .faq-title-vert { font-size: 80px; writing-mode: vertical-lr; transform: rotate(180deg); color: white; border-right: 5px solid var(--custom-red); padding-right: 25px; }
         .faq-list { flex: 1; }
         .faq-item { border: 1px solid #222; margin-bottom: 15px; padding: 25px; display: flex; justify-content: space-between; cursor: pointer; transition: 0.3s; }
-        .faq-item:hover { border-color: var(--atomic-red); background: rgba(255, 61, 0, 0.08); }
+        .faq-item:hover { border-color: var(--custom-red); background: rgba(188, 0, 0, 0.08); }
 
-        /* --- ФУТЕР (ПО СКРИНУ 24ef13) --- */
-        footer { padding: 80px 0 40px; border-top: 3px solid var(--atomic-red); background: #000; }
+        /* ФУТЕР */
+        footer { padding: 80px 0 40px; border-top: 3px solid var(--custom-red); background: #000; }
         .footer-nav { display: flex; gap: 20px; margin-bottom: 60px; }
         .footer-link { flex: 1; text-align: center; border: 1px solid #222; padding: 22px; color: #777; text-decoration: none; font-size: 15px; transition: 0.3s; }
-        .footer-link:hover { color: white; border-color: var(--atomic-red); background: rgba(255, 61, 0, 0.05); }
-        
+        .footer-link:hover { color: white; border-color: var(--custom-red); }
         .footer-bottom { display: flex; justify-content: space-between; color: #444; font-size: 14px; }
 
         @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.04); opacity: 0.6; } }
@@ -136,39 +131,19 @@
     <section id="play">
         <div class="hero-bg"></div>
         <h1 class="main-title"><span class="t">TEAMS</span><br><span class="w">WAR</span></h1>
-        <p style="font-size: 20px; color: #555; margin-top: 25px; letter-spacing: 6px;">// СИНХРОНИЗАЦИЯ ЗАВЕРШЕНА //</p>
+        <p style="font-size: 18px; color: #444; margin-top: 25px; letter-spacing: 6px;">// ТЕРМИНАЛ: АКТИВИРОВАН //</p>
         <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
     </section>
 
     <section id="about" class="content-section">
-        <span class="section-label">01 // АРХИВ ДАННЫХ</span>
+        <span class="section-label">01 // ОБЪЕКТ 3826</span>
         <h2 class="big-title">ТАКТИКА<br>ПРЕВОСХОДСТВА</h2>
         <div class="about-text">
-            МАСШТАБНЫЙ КОНФЛИКТ МЕЖДУ ЭЛИТНЫМИ ПОДРАЗДЕЛЕНИЯМИ. ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ НА УНИКАЛЬНЫХ КАРТАХ ОБЪЕКТА 3826.
+            Испытайте настоящий адреналин в динамичных боях против реальных игроков на уникальных картах в стиле индустриального будущего.
         </div>
     </section>
 
     <section id="faq" class="content-section">
         <div class="faq-title-vert">FAQ</div>
         <div class="faq-list">
-            <div class="faq-item"><span>01 // КАКИЕ СИСТЕМНЫЕ ТРЕБОВАНИЯ?</span><span>▼</span></div>
-            <div class="faq-item"><span>02 // КАК НАЧАТЬ ИГРАТЬ В TEAMS WAR?</span><span>▼</span></div>
-            <div class="faq-item"><span>03 // КТО ЗАНИМАЕТСЯ РАЗРАБОТКОЙ ИГРЫ?</span><span>▼</span></div>
-            <div class="faq-item"><span>04 // КАК СООБЩИТЬ ОБ ОШИБКЕ?</span><span>▼</span></div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-nav">
-            <a href="privacy.html" class="footer-link">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
-            <a href="terms.html" class="footer-link">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
-            <a href="rules.html" class="footer-link">ПРАВИЛА</a>
-        </div>
-        <div class="footer-bottom">
-            <div>© 2026 TEAMS WAR // ВСЕ ПРАВА ЗАЩИЩЕНЫ</div>
-            <div>DEVELOPER: NIKSONGAME // СТАТУС: АКТИВЕН</div>
-        </div>
-    </footer>
-
-</body>
-</html>
+            <div class="faq-item"><span>01 // КАКИЕ СИСТЕМНЫЕ ТРЕ
