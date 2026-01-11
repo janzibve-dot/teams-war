@@ -10,7 +10,6 @@
             --bg: #050505; 
             --atomic-red: #FF3D00; 
             --text: #ffffff; 
-            /* Используем Sangyo Regular 400 по твоему запросу */
             --font-main: 'Sangyo-Regular', 'Oswald', sans-serif;
         }
         
@@ -23,111 +22,156 @@
             color: var(--text);
             font-family: var(--font-main); 
             font-weight: 400;
-            text-transform: uppercase; /* ТОЛЬКО ЗАГЛАВНЫЕ БУКВЫ */
+            text-transform: uppercase; /* ТОЛЬКО ЗАГЛАВНЫЕ */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            line-height: 1.3;
-            font-size: 18px; /* МИНИМАЛЬНЫЙ ШРИФТ ВЫШЕ 15px */
+            font-size: 18px; /* МИНИМУМ 15PX */
         }
 
-        /* Адаптивность для узких экранов */
-        @media (max-width: 1300px) { body { padding: 0 2cm; } }
-        @media (max-width: 900px) { body { padding: 0 30px; } }
+        /* Адаптивность для разных экранов */
+        @media (max-width: 1400px) { body { padding: 0 2cm; } }
+        @media (max-width: 1000px) { body { padding: 0 20px; } }
 
-        /* ФОН С БЛЮРОМ (Твой файл bg.jpg.png) */
+        /* ФОН (Твой файл bg.jpg.png) */
         .bg-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2; 
-            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)), url('bg.jpg.png');
+            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), url('bg.jpg.png');
             background-size: cover; background-position: center; 
             filter: blur(6px); transform: scale(1.1);
         }
 
-        /* НАВИГАЦИЯ */
-        nav { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 40px 0; border-bottom: 2px solid var(--atomic-red); 
-            margin-bottom: 60px;
-        }
-        .logo { font-size: 32px; font-weight: 700; letter-spacing: 5px; }
-        .logo span { color: var(--atomic-red); }
-
-        .nav-links { display: flex; gap: 35px; }
-        .nav-links a { 
-            color: white; text-decoration: none; font-size: 16px; 
-            letter-spacing: 2px; transition: 0.3s;
-        }
-        .nav-links a:hover { color: var(--atomic-red); }
-
-        /* ГЛАВНЫЙ КОНТЕНТ */
-        .hero { 
-            flex: 1; display: flex; flex-direction: column; 
-            justify-content: center; align-items: flex-start; 
-        }
-        
-        h1 { 
-            font-size: 110px; margin: 0; letter-spacing: 12px; font-weight: 700;
-            line-height: 1;
-        }
-        h1 span { color: var(--atomic-red); }
-
-        /* ТВОЙ НОВЫЙ ТЕКСТ */
-        .tagline { 
-            font-size: 22px; margin: 40px 0 60px; color: #ccc; 
-            letter-spacing: 4px; border-left: 6px solid var(--atomic-red); 
-            padding-left: 25px; max-width: 900px;
-            font-weight: 400;
+        /* --- ХЕДЕР --- */
+        header {
+            position: sticky; top: 0; z-index: 1000;
+            padding: 30px 0;
+            background: var(--bg);
+            border-bottom: 2px solid var(--atomic-red);
         }
 
-        /* КНОПКИ */
-        .btn-container { display: flex; gap: 25px; }
-        .atomic-btn {
-            padding: 22px 50px; font-size: 20px; font-weight: 700;
-            background: var(--atomic-red); color: black; border: none; cursor: pointer;
-            text-decoration: none; transition: 0.3s;
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        /* Иконка 18+ в углу */
+        .age-limit {
+            position: absolute; right: 0; top: 10px;
+            font-size: 20px; font-weight: 700; color: var(--atomic-red);
+            border: 2px solid var(--atomic-red); padding: 5px; line-height: 1;
         }
-        .atomic-btn:hover { background: white; transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255, 61, 0, 0.5); }
-        
-        .btn-secondary { background: transparent; border: 2px solid white; color: white; }
 
-        /* ПОДВАЛ */
+        .nav-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        /* ЛОГО (НЕ КЛИКАБЕЛЬНО) */
+        .logo-static {
+            font-size: 24px; font-weight: 700; letter-spacing: 3px;
+            padding: 10px 20px; white-space: nowrap;
+            color: var(--text);
+        }
+        .logo-static span { color: var(--atomic-red); }
+
+        /* КНОПКИ ХЕДЕРА (ОДИНАКОВО ПРОПОРЦИОНАЛЬНЫ) */
+        .nav-btn {
+            flex: 1; /* Все кнопки одной ширины */
+            text-align: center;
+            padding: 12px 0;
+            color: white;
+            text-decoration: none;
+            border: 1px solid rgba(255, 61, 0, 0.2);
+            transition: 0.3s;
+            font-size: 15px;
+        }
+        .nav-btn:hover { background: var(--atomic-red); color: black; border-color: var(--atomic-red); }
+
+        /* --- СЕКЦИИ САЙТА --- */
+        section {
+            min-height: 80vh;
+            padding: 100px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .section-title { font-size: 60px; color: var(--atomic-red); margin-bottom: 30px; letter-spacing: 5px; }
+
+        /* --- ФУТЕР --- */
         footer {
-            padding: 50px 0; border-top: 1px solid #222; margin-top: 80px;
-            display: flex; justify-content: space-between; font-size: 15px; color: #444;
-            letter-spacing: 2px;
+            margin-top: auto;
+            padding: 60px 0;
+            border-top: 2px solid #222;
         }
+
+        .footer-container {
+            display: flex;
+            width: 100%;
+            gap: 15px;
+        }
+
+        /* КНОПКИ ФУТЕРА (ОДИНАКОВО ПРОПОРЦИОНАЛЬНЫ) */
+        .footer-btn {
+            flex: 1; /* Все три кнопки одной ширины */
+            text-align: center;
+            padding: 20px 0;
+            color: #888;
+            text-decoration: none;
+            border: 1px solid #333;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+        .footer-btn:hover { color: white; border-color: var(--atomic-red); background: rgba(255, 61, 0, 0.05); }
+
     </style>
 </head>
-<body>
+<body id="top">
 
     <div class="bg-layer"></div>
 
-    <nav>
-        <div class="logo">TEAMS <span>WAR</span></div>
-        <div class="nav-links">
-            <a href="news.html">НОВОСТИ</a>
-            <a href="forum.html">ФОРУМ</a>
-            <a href="profile.html">ПРОФИЛЬ</a>
-            <a href="#" onclick="alert('ТРЕБУЕТСЯ АВТОРИЗАЦИЯ')">ВХОД</a>
+    <header>
+        <div class="age-limit">18+</div>
+        <div class="nav-container">
+            <div class="logo-static">TEAMS <span>WAR</span></div>
+            <a href="#top" class="nav-btn">ИГРАТЬ</a>
+            <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
+            <a href="#media" class="nav-btn">МЕДИА</a>
+            <a href="#community" class="nav-btn">СООБЩЕСТВА</a>
+            <a href="#faq" class="nav-btn">FAQ</a>
         </div>
-    </nav>
+    </header>
 
-    <section class="hero">
-        <h1>TEAMS <span>WAR</span></h1>
-        <p class="tagline">Испытайте настоящий адреналин в динамичных боях против реальных игроков.</p>
-        
-        <div class="btn-container">
-            <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="atomic-btn">ВСТУПИТЬ В БОЙ</a>
-            <a href="#" class="atomic-btn btn-secondary" onclick="alert('СИНХРОНИЗАЦИЯ ДАННЫХ...')">ПОДРОБНЕЕ</a>
-        </div>
+    <section id="hero">
+        <h1 style="font-size: 100px; margin: 0;">TEAMS <span>WAR</span></h1>
+        <p style="font-size: 22px; color: #ccc; margin: 40px 0; border-left: 6px solid var(--atomic-red); padding-left: 20px; max-width: 900px;">
+            ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ.
+        </p>
+        <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" 
+           style="background: var(--atomic-red); color: black; padding: 25px 60px; text-decoration: none; font-weight: 700; width: fit-content; clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);">
+           ВСТУПИТЬ В БОЙ
+        </a>
+    </section>
+
+    <section id="about">
+        <div class="section-title">ОБ ИГРЕ</div>
+        <p>ЗДЕСЬ БУДЕТ ОПИСАНИЕ ТВОЕЙ ИГРЫ И ЕЕ ОСОБЕННОСТЕЙ.</p>
+    </section>
+
+    <section id="media">
+        <div class="section-title">МЕДИА</div>
+        <p>ЗДЕСЬ БУДУТ СКРИНШОТЫ И ВИДЕО ГЕЙМПЛЕЯ.</p>
+    </section>
+
+    <section id="community">
+        <div class="section-title">СООБЩЕСТВА</div>
+        <p>ССЫЛКИ НА ВКОНТАКТЕ, ТЕЛЕГРАМ И ДИСКОРД.</p>
+    </section>
+
+    <section id="faq">
+        <div class="section-title">FAQ</div>
+        <p>ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ И ОТВЕТЫ НА НИХ.</p>
     </section>
 
     <footer>
-        <div>© 2026 TEAMS WAR // DEVELOPER: NIKSONGAME</div>
-        <div>ОБЪЕКТ: 3826 // СТАТУС: АКТИВЕН</div>
-    </footer>
-
-</body>
-</html>
+        <div class="footer-container">
+            <a href="privacy.html" class="footer-btn">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
+            <a href="terms.html" class="footer-btn">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
+            <a href="rules.html" class="footer-btn">ПРАВИЛА</a>
