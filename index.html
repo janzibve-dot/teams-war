@@ -3,120 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | OFFICIAL v10.2</title>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700;900&display=swap" rel="stylesheet">
+    <title>TEAMS WAR | INDUSTRIAL TERMINAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #050505; --red: #D32F2F; --green: #388E3C; --text: #fff; }
+        :root { 
+            --bg: #050505; 
+            --atomic-red: #FF3D00; 
+            --text: #ffffff; 
+            --font-main: 'Sangyo-Regular', 'Oswald', sans-serif;
+        }
         
+        * { box-sizing: border-box; }
+
         body {
-            margin: 0; padding: 0; background-color: var(--bg); color: var(--text);
-            font-family: 'Chakra Petch', sans-serif; overflow-x: hidden;
+            margin: 0; 
+            padding: 0 4cm; /* ТВОИ ВВОДНЫЕ: ОТСТУПЫ ПО 4 СМ */
+            background-color: var(--bg); 
+            color: var(--text);
+            font-family: var(--font-main); 
+            font-weight: 400;
+            text-transform: uppercase; /* ТОЛЬКО ЗАГЛАВНЫЕ */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.4;
+            font-size: 18px; /* МИНИМУМ 15px */
+        }
+
+        /* Адаптивность для мобилок (чтобы 4см не съели весь экран на телефоне) */
+        @media (max-width: 1024px) {
+            body { padding: 0 20px; }
         }
 
         /* ФОН С БЛЮРОМ */
-        body::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2; background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('bg.jpg.png');
-            background-size: cover; background-position: center; filter: blur(5px); transform: scale(1.1);
+        .bg-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2; 
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)), url('bg.jpg.png');
+            background-size: cover; background-position: center; 
+            filter: blur(6px); transform: scale(1.1);
         }
 
-        /* НАВИГАЦИЯ (ИСПРАВЛЕНО: Все в один ряд) */
+        /* ШАПКА */
         nav { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 10px 30px; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--red); 
-            position: sticky; top: 0; z-index: 1000; 
+            padding: 40px 0; border-bottom: 2px solid var(--atomic-red); 
+            margin-bottom: 50px;
         }
-        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; min-width: 150px; }
-        .logo span { color: var(--red); }
+        .logo { font-size: 32px; font-weight: 700; letter-spacing: 5px; }
+        .logo span { color: var(--atomic-red); }
 
-        .nav-right { display: flex; align-items: center; gap: 10px; } /* Контейнер для всех кнопок */
-        
-        .nav-links { display: flex; gap: 8px; align-items: center; } /* Ссылки в ряд */
-        
-        .nav-links a, .reg-trigger {
-            color: white; text-decoration: none; font-size: 12px; font-weight: bold;
-            border: 1px solid var(--red); border-radius: 6px; padding: 6px 12px;
-            background: transparent; cursor: pointer; font-family: 'Chakra Petch'; 
-            transition: 0.3s; white-space: nowrap; /* Запрет переноса текста */
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { 
+            color: white; text-decoration: none; font-size: 16px; 
+            letter-spacing: 2px; transition: 0.3s;
         }
-        .nav-links a:hover, .reg-trigger:hover { background: var(--red); color: black; box-shadow: 0 0 10px var(--red); }
+        .nav-links a:hover { color: var(--atomic-red); }
 
-        /* ГЛАВНЫЙ ЭКРАН (ИСПРАВЛЕНО: Кнопки выше) */
+        /* КОНТЕНТ */
         .hero { 
-            position: relative; height: 80vh; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; text-align: center; 
+            flex: 1; display: flex; flex-direction: column; 
+            justify-content: center; align-items: flex-start; 
         }
         
-        h1 { font-size: 75px; margin: 0; letter-spacing: 5px; text-shadow: 0 0 20px black; line-height: 1; }
-        h1 span { color: var(--red); }
-        .tagline { font-size: 16px; margin: 10px 0 30px; color: var(--red); letter-spacing: 2px; font-weight: bold; }
-
-        /* КНОПКИ (ИСПРАВЛЕНО: Отцентрованы и вытянуты) */
-        .btn-container { display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%; }
-        .btn {
-            width: 320px; padding: 15px; font-size: 16px; font-weight: 900; text-decoration: none;
-            border-radius: 8px; border: 2px solid var(--red); color: white;
-            background: rgba(0,0,0,0.8); transition: 0.3s; cursor: pointer; text-align: center;
-            text-transform: uppercase;
+        h1 { 
+            font-size: 90px; margin: 0; letter-spacing: 10px; line-height: 0.9;
+            max-width: 800px;
         }
-        .btn:hover { background: var(--red); color: black; box-shadow: 0 0 25px var(--red); transform: scale(1.02); }
-        .btn-info { border-color: var(--green); color: var(--green); }
-        .btn-info:hover { background: var(--green); color: black; box-shadow: 0 0 25px var(--green); }
+        h1 span { color: var(--atomic-red); }
 
-        /* СЛОМАННЫЙ НЕОН (СТРОГО ВНИЗУ ПО ЦЕНТРУ) */
-        .bg-neon-text {
-            position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%);
-            z-index: -1; font-size: 12vw; font-weight: 900; color: transparent;
-            -webkit-text-stroke: 1px var(--red); white-space: nowrap; pointer-events: none;
-            animation: broken-neon 4s infinite;
-        }
-        @keyframes broken-neon {
-            0%, 18%, 22%, 53%, 100% { opacity: 0.3; filter: drop-shadow(0 0 10px var(--red)); }
-            20%, 55% { opacity: 0.05; filter: none; }
+        .tagline { 
+            font-size: 22px; margin: 30px 0 60px; color: #888; 
+            letter-spacing: 5px; border-left: 5px solid var(--atomic-red); padding-left: 20px;
         }
 
-        /* МОДАЛКА */
-        .auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .auth-modal { background: #0a0a0a; border: 1px solid var(--red); padding: 30px; border-radius: 20px; width: 320px; text-align: center; }
-        .auth-input { width: 100%; background: #000; border: 1px solid #333; padding: 12px; color: white; margin-bottom: 15px; border-radius: 8px; box-sizing: border-box; font-family: 'Chakra Petch'; }
-        .auth-submit { width: 100%; background: var(--red); color: black; border: none; padding: 14px; font-weight: 900; cursor: pointer; border-radius: 8px; text-transform: uppercase; }
+        /* КНОПКИ (В СТИЛЕ ATOMIC HEART) */
+        .btn-container { display: flex; gap: 20px; }
+        .atomic-btn {
+            padding: 20px 40px; font-size: 20px; font-weight: 700;
+            background: var(--atomic-red); color: black; border: none; cursor: pointer;
+            text-decoration: none; transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        }
+        .atomic-btn:hover { background: white; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 61, 0, 0.4); }
+        
+        .btn-secondary { background: transparent; border: 2px solid white; color: white; }
+
+        /* ПОДВАЛ */
+        footer {
+            padding: 40px 0; border-top: 1px solid #222; margin-top: 100px;
+            display: flex; justify-content: space-between; font-size: 15px; color: #555;
+        }
     </style>
 </head>
 <body>
 
+    <div class="bg-layer"></div>
+
     <nav>
-        <a href="index.html" class="logo">TEAMS <span>WAR</span></a>
-        <div class="nav-right">
-            <div class="nav-links">
-                <a href="news.html">НОВОСТИ</a>
-                <a href="forum.html">ФОРУМ</a>
-                <a href="profile.html">ПРОФИЛЬ</a>
-                <button class="reg-trigger" onclick="document.getElementById('authOverlay').style.display='flex'">РЕГИСТРАЦИЯ</button>
-            </div>
+        <div class="logo">TEAMS <span>WAR</span></div>
+        <div class="nav-links">
+            <a href="news.html">НОВОСТИ</a>
+            <a href="forum.html">ФОРУМ</a>
+            <a href="profile.html">ПРОФИЛЬ</a>
+            <a href="#" onclick="alert('ВХОД В СИСТЕМУ...')">ВХОД</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="bg-neon-text">TEAMS WAR</div>
-        <div class="hero-content">
-            <h1>TEAMS <span>WAR</span></h1>
-            <p class="tagline">// ОЖИДАНИЕ ПРИКАЗА //</p>
-            <div class="btn-container">
-                <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="btn">ИГРАТЬ</a>
-                <div class="btn btn-info" onclick="alert('Связь установлена!')">СТАТУС: OK</div>
-            </div>
+        <h1>UNIT <span>76</span><br>SYSTEM ACTIVE</h1>
+        <p class="tagline">ПРОТОКОЛ: ТАКТИЧЕСКОЕ ПРЕВОСХОДСТВО</p>
+        
+        <div class="btn-container">
+            <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="atomic-btn">ВСТУПИТЬ В БОЙ</a>
+            <a href="#" class="atomic-btn btn-secondary">ИНФОРМАЦИЯ</a>
         </div>
     </section>
 
-    <div class="auth-overlay" id="authOverlay">
-        <div class="auth-modal">
-            <h2 style="color:var(--red); margin-top:0;">ВХОД В СИСТЕМУ</h2>
-            <input type="email" class="auth-input" placeholder="EMAIL БОЙЦА">
-            <input type="password" class="auth-input" placeholder="ПАРОЛЬ">
-            <button class="auth-submit" onclick="location.href='lobby.html'">АВТОРИЗАЦИЯ</button>
-            <p onclick="document.getElementById('authOverlay').style.display='none'" style="margin-top:15px; cursor:pointer; font-size:12px; color:#555">ЗАКРЫТЬ</p>
-        </div>
-    </div>
-
-</body>
-</html>
+    <footer>
+        <div>© 20
