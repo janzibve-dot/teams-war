@@ -73,7 +73,16 @@
         .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.4; }
         .video-bg video { width: 100%; height: 100%; object-fit: cover; }
 
-        .hero-char { position: absolute; bottom: 0; height: 88vh; z-index: -1; pointer-events: none; right: 0; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); }
+        /* ПЕРСОНАЖ (ПОДНЯТ НА 3CM) */
+        .hero-char { 
+            position: absolute; 
+            bottom: 3cm; /* ИЗМЕНЕНО: Поднят на 3см от низа */
+            height: 88vh; 
+            z-index: -1; 
+            pointer-events: none; 
+            right: 0; 
+            filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); 
+        }
 
         .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
@@ -93,7 +102,17 @@
         }
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
 
-        .red-boundary-line { position: absolute; bottom: 0; left: 0; width: 100%; height: 1.5mm; background: var(--custom-red); z-index: 5; box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); }
+        /* КРАСНАЯ ЛИНИЯ (ПОДНЯТА НА 3CM) */
+        .red-boundary-line { 
+            position: absolute; 
+            bottom: 3cm; /* ИЗМЕНЕНО: Поднята на 3см от низа */
+            left: 0; 
+            width: 100%; 
+            height: 1.5mm; 
+            background: var(--custom-red); 
+            z-index: 5; 
+            box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); 
+        }
 
         /* --- СЕКЦИИ --- */
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
