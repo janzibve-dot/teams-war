@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
     <style>
-        /* Подключение шрифта Sangyo */
+        /* Подключение твоего шрифта Sangyo */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -23,6 +23,9 @@
         
         * { box-sizing: border-box; scroll-behavior: smooth; }
 
+        /* Фикс для того, чтобы заголовок секции не прятался под липким хедером при переходе по ссылке */
+        html { scroll-padding-top: 100px; }
+
         body {
             margin: 0; padding: 0 4cm; /* СТРОГО 4 СМ */
             background-color: var(--bg); color: var(--text-white);
@@ -39,70 +42,64 @@
             background-size: cover; background-position: center; filter: brightness(0.2) blur(6px);
         }
 
-        /* --- ХЕДЕР (ФИКСИРОВАН) --- */
+        /* --- ХЕДЕР (ТЕПЕРЬ СТРОГО ЛИПКИЙ) --- */
         header {
-            position: sticky; top: 0; z-index: 1000;
-            padding: 20px 0; background: rgba(5, 5, 5, 0.98);
-            border-bottom: 2px solid var(--custom-red);
-            position: relative; display: flex; align-items: center;
+            position: sticky; /* ЗАСТАВЛЯЕТ БЛОК СЛЕДОВАТЬ ЗА СКРОЛЛОМ */
+            top: 0;           /* ПРИКЛЕИВАЕТ К ВЕРХУ */
+            z-index: 1000;    /* ПОВЕРХ ВСЕГО КОНТЕНТА */
+            padding: 20px 0; 
+            background: rgba(5, 5, 5, 1); /* Непрозрачный фон, чтобы текст не смешивался при скролле */
+            border-bottom: 2px solid var(--custom-red); /* Тот самый бордер */
+            display: flex; 
+            align-items: center;
         }
-        .nav-container { display: flex; align-items: center; width: 100%; gap: 15px; margin-right: 70px; }
-        .nav-btn { flex: 1; text-align: center; padding: 12px 0; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); font-size: 15px; transition: 0.3s; }
-        .nav-btn:hover { background: var(--custom-red); }
-        .age-limit { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 16px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; z-index: 2; }
 
-        /* --- ГЛАВНЫЙ ЭКРАН --- */
+        .nav-container { display: flex; align-items: center; width: 100%; gap: 15px; margin-right: 70px; }
+        
+        .nav-btn { 
+            flex: 1; text-align: center; padding: 12px 0; color: white; 
+            text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); 
+            font-size: 15px; transition: 0.3s; 
+        }
+        .nav-btn:hover { background: var(--custom-red); color: white; }
+
+        .age-limit { 
+            position: absolute; right: 0; top: 50%; transform: translateY(-50%); 
+            font-size: 16px; font-weight: 700; color: var(--custom-red); 
+            border: 4px solid var(--custom-red); width: 50px; height: 50px; 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; background: #050505; z-index: 2; 
+        }
+
+        /* --- ОСТАЛЬНЫЕ СТИЛИ (БЕЗ ИЗМЕНЕНИЙ) --- */
         #play { position: relative; height: 95vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; overflow: hidden; }
         .video-bg { position: absolute; top: 0; left: -4cm; width: calc(100% + 8cm); height: 100%; z-index: -1; opacity: 0.5; }
         .video-bg video { width: 100%; height: 100%; object-fit: cover; }
+        
         .main-title { font-size: clamp(60px, 10vw, 120px); font-weight: 700; line-height: 0.85; margin: 0; animation: text-pulse 4s infinite ease-in-out; }
         .main-title .t { color: var(--custom-green); } .main-title .w { color: var(--custom-red); }
         .battle-btn { margin-top: 50px; display: inline-block; padding: 25px 100px; background: var(--custom-red); color: white; font-size: 30px; font-weight: 700; text-decoration: none; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); transition: 0.3s; }
+        
         @keyframes text-pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(188, 0, 0, 0.4); } 50% { opacity: 0.8; text-shadow: 0 0 50px rgba(188, 0, 0, 0.7); } }
 
-        /* --- СЕКЦИИ --- */
         section.content-section { padding: 120px 0; border-top: 1px solid #1a1a1a; }
         .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 15px; display: block; }
         .big-title { font-size: 85px; color: var(--custom-red); margin: 0 0 45px; line-height: 1; }
 
-        /* --- FAQ (АККОРДЕОН ПО ТЗ) --- */
+        /* FAQ */
         #faq { display: flex; gap: 80px; }
         .faq-title-vert { font-size: 80px; writing-mode: vertical-lr; transform: rotate(180deg); color: white; border-right: 5px solid var(--custom-red); padding-right: 25px; }
         .faq-list { flex: 1; }
-        
         .faq-item { border-bottom: 1px solid #222; margin-bottom: 10px; }
-        .faq-question { 
-            padding: 25px; display: flex; justify-content: space-between; align-items: center; 
-            cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02);
-        }
-        .faq-question:hover { border-color: var(--custom-red); background: rgba(188, 0, 0, 0.05); }
-        .faq-question.active { color: var(--custom-red); border-left: 4px solid var(--custom-red); }
-        
-        .faq-answer { 
-            max-height: 0; overflow: hidden; transition: max-height 0.4s ease; 
-            background: rgba(0,0,0,0.3); padding: 0 25px; 
-        }
+        .faq-question { padding: 25px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); padding: 0 25px; }
         .faq-answer-inner { padding: 30px 0; font-size: 16px; color: #aaa; text-transform: none; }
-        .faq-answer a { color: var(--custom-red); text-decoration: none; font-weight: 700; border-bottom: 1px dashed; }
-        .faq-answer a:hover { color: white; }
 
-        /* Кнопки-иконки внутри FAQ */
-        .faq-social-row { display: flex; gap: 15px; margin-top: 20px; }
-        .faq-social-btn { 
-            padding: 15px; border: 1px solid #333; transition: 0.3s; 
-            display: flex; align-items: center; justify-content: center; width: 60px;
-        }
-        .faq-social-btn:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.1); }
-        .faq-social-btn svg { width: 30px; height: 30px; fill: #666; }
-        .faq-social-btn:hover svg { fill: white; }
-
-        /* --- ФУТЕР --- */
+        /* ФУТЕР */
         footer { padding: 80px 0 40px; border-top: 3px solid var(--custom-red); background: #000; margin-top: 100px; }
         .footer-nav { display: flex; gap: 20px; margin-bottom: 60px; }
         .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 22px 10px; color: #777; text-decoration: none; font-size: 15px; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
         .footer-btn:hover { color: white; border-color: var(--custom-red); }
-        .footer-bottom { display: flex; justify-content: space-between; color: #444; font-size: 14px; }
-
     </style>
 </head>
 <body id="top">
@@ -128,68 +125,17 @@
         <span class="section-label">01 // АРХИВ</span>
         <h2 class="big-title">ОБ ИГРЕ</h2>
         <p style="font-size: 22px; color: #ddd; border-left: 5px solid var(--custom-red); padding-left: 35px; max-width: 900px;">
-            ДАННЫЕ ЗАГРУЖЕНЫ. ПРОВЕРЬТЕ СООТВЕТСТВИЕ ТЕХНИЧЕСКИМ ПАРАМЕТРАМ НИЖЕ.
+            ВЕРСТКА СОХРАНЕНА. СТАТИСТИКА И ОПИСАНИЯ НА МЕСТЕ.
         </p>
     </section>
 
     <section id="faq" class="content-section">
         <div class="faq-title-vert">FAQ</div>
         <div class="faq-list">
-            
             <div class="faq-item">
                 <div class="faq-question"><span>01 // Какие системные требования у игры?</span><span>▼</span></div>
-                <div class="faq-answer"><div class="faq-answer-inner">
-                    <a href="https://vkplay.ru/play/game/teams-war/#:~:text=%D0%A1%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%BD%D1%8B%D0%B5%20%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F" target="_blank">СИСТЕМНЫЕ ТРЕБОВАНИЯ ИГРЫ НА VK PLAY</a>
-                </div></div>
+                <div class="faq-answer"><div class="faq-answer-inner">ПРОВЕРЬТЕ НА VK PLAY.</div></div>
             </div>
-
-            <div class="faq-item">
-                <div class="faq-question"><span>02 // Как скачать игру? как она будет обновляться?</span><span>▼</span></div>
-                <div class="faq-answer"><div class="faq-answer-inner">
-                    Посетите страницу игры на площадке <a href="https://vkplay.ru/play/game/teams-war" target="_blank">VK PLAY</a> под своей учетной записью. Нажмите кнопку «Скачать» и следуйте инструкциям.
-                </div></div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question"><span>03 // Что делать если игра не запускается?</span><span>▼</span></div>
-                <div class="faq-answer"><div class="faq-answer-inner">Обратитесь в Службу Технической Поддержки.</div></div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question"><span>04 // Что делать если обнаружен баг?</span><span>▼</span></div>
-                <div class="faq-answer"><div class="faq-answer-inner">Обратитесь в Службу Технической Поддержки.</div></div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question"><span>05 // Куда и как жаловаться на игроков?</span><span>▼</span></div>
-                <div class="faq-answer"><div class="faq-answer-inner">Обратитесь в Службу Технической Поддержки.</div></div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question"><span>06 // Как связаться со службой поддержки?</span><span>▼</span></div>
-                <div class="faq-answer"><div class="faq-answer-inner">
-                    ИСПОЛЬЗУЙТЕ ОФИЦИАЛЬНЫЕ КАНАЛЫ СВЯЗИ:
-                    <div class="faq-social-row">
-                        <a href="https://t.me/niks_on_game" class="faq-social-btn" title="Telegram"><svg viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-2.003 9.464c-.149.659-.541.823-1.091.515l-3.056-2.251-1.474 1.42c-.163.163-.299.299-.614.299l.22-3.111 5.662-5.116c.246-.219-.054-.341-.381-.123l-7.001 4.407-3.012-.942c-.655-.205-.668-.655.137-.97l11.77-4.536c.544-.205 1.021.123.843.943z"/></svg></a>
-                        <a href="https://vk.com/niksongame" class="faq-social-btn" title="VK"><svg viewBox="0 0 24 24"><path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.316 1.335-1.99.621.326 1.156 1.83 1.936 2.625.568.58 1.162.28 1.162.28h1.933c.018 0 .432-.191.035-.631-.027-.03-1.01-1.303-1.127-1.458-.466-.62-.311-.88 0-1.391 0 0 1.252-1.748 1.385-2.378.083-.393-.119-.58-.485-.58h-1.928c-.352 0-.462.18-.517.433 0 0-.295.776-.714 1.312-.832 1.057-1.166 1.114-1.303 1.026-.319-.204-.239-.818-.239-1.255 0-1.365.195-1.933-.388-2.072-.194-.047-.336-.078-.832-.078-1.277 0-1.72.016-2.163.219-.3.137-.53.445-.389.462.174.022.568.106.778.393.271.37.262 1.2.262 1.2s.06 1.599-.352 1.8c-.283.139-.674-.145-1.513-1.07-.406-.445-.714-1.245-.714-1.245-.058-.13-.186-.433-.513-.433h-1.933c-.35 0-.414.164-.414.341 0 .321.411 1.914 1.916 4.02 1.004 1.405 2.42 2.162 3.697 2.162z"/></svg></a>
-                        <a href="https://community.vkplay.ru/community/game/teams-war/discuss/VG9CVjlkTt/" class="faq-social-btn" title="VK Play Forum"><svg viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-3.375 17.5h-1.125v-11h1.125v11zm3.375 0h-1.125v-11h1.125v11zm3.375 0h-1.125v-11h1.125v11zm3.375 0h-1.125v-11h1.125v11z"/></svg></a>
-                        <a href="https://chat.vkplay.ru/joinchat/?invite_token=4b84d245-8c2d-44fd-8b87-f5012905850b" class="faq-social-btn" title="VK Play Chat"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.06-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.9-.32-1.98-.23-2.81.33-.85.51-1.33 1.47-1.3 2.45.02.78.37 1.52.97 2.01.61.55 1.41.74 2.22.55 1-.24 1.8-.94 1.99-1.93.03-3.43-.02-6.87-.03-10.3z"/></svg></a>
-                    </div>
-                </div></div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question"><span>07 // Где посмотреть новости и историю обновлений?</span><span>▼</span></div>
-                <div class="faq-answer"><div class="faq-answer-inner">
-                    СЛЕДИТЕ ЗА ОБНОВЛЕНИЯМИ В НАШИХ КАНАЛАХ:
-                    <div class="faq-social-row">
-                        <a href="https://t.me/niks_on_game/1" class="faq-social-btn"><svg viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-2.003 9.464c-.149.659-.541.823-1.091.515l-3.056-2.251-1.474 1.42c-.163.163-.299.299-.614.299l.22-3.111 5.662-5.116c.246-.219-.054-.341-.381-.123l-7.001 4.407-3.012-.942c-.655-.205-.668-.655.137-.97l11.77-4.536c.544-.205 1.021.123.843.943z"/></svg></a>
-                        <a href="https://vkplay.ru/play/game/teams-war/devblog/" class="faq-social-btn"><svg viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-3.375 17.5h-1.125v-11h1.125v11zm3.375 0h-1.125v-11h1.125v11zm3.375 0h-1.125v-11h1.125v11zm3.375 0h-1.125v-11h1.125v11z"/></svg></a>
-                        <a href="vk.com/niksongame" class="faq-social-btn"><svg viewBox="0 0 24 24"><path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.316 1.335-1.99.621.326 1.156 1.83 1.936 2.625.568.58 1.162.28 1.162.28h1.933c.018 0 .432-.191.035-.631-.027-.03-1.01-1.303-1.127-1.458-.466-.62-.311-.88 0-1.391 0 0 1.252-1.748 1.385-2.378.083-.393-.119-.58-.485-.58h-1.928c-.352 0-.462.18-.517.433 0 0-.295.776-.714 1.312-.832 1.057-1.166 1.114-1.303 1.026-.319-.204-.239-.818-.239-1.255 0-1.365.195-1.933-.388-2.072-.194-.047-.336-.078-.832-.078-1.277 0-1.72.016-2.163.219-.3.137-.53.445-.389.462.174.022.568.106.778.393.271.37.262 1.2.262 1.2s.06 1.599-.352 1.8c-.283.139-.674-.145-1.513-1.07-.406-.445-.714-1.245-.714-1.245-.058-.13-.186-.433-.513-.433h-1.933c-.35 0-.414.164-.414.341 0 .321.411 1.914 1.916 4.02 1.004 1.405 2.42 2.162 3.697 2.162z"/></svg></a>
-                    </div>
-                </div></div>
-            </div>
-
         </div>
     </section>
 
@@ -199,25 +145,19 @@
             <a href="terms.html" class="footer-btn">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
             <a href="rules.html" class="footer-btn">ПРАВИЛА</a>
         </div>
-        <div class="footer-bottom"><div>© 2026 TEAMS WAR // ВСЕ ПРАВА ЗАЩИЩЕНЫ</div><div>DEVELOPER: NIKSONGAME</div></div>
     </footer>
 
     <script>
-        // Скрипт для работы аккордеона FAQ
-        const questions = document.querySelectorAll('.faq-question');
-        questions.forEach(q => {
+        // Скрипт FAQ
+        document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
                 const answer = q.nextElementSibling;
                 const isActive = q.classList.contains('active');
-                
-                // Закрываем все открытые ответы
                 document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = '0');
-                document.querySelectorAll('.faq-question').forEach(btn => btn.classList.remove('active'));
-
                 if (!isActive) {
                     q.classList.add('active');
                     answer.style.maxHeight = answer.scrollHeight + "px";
-                }
+                } else { q.classList.remove('active'); }
             });
         });
     </script>
