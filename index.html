@@ -7,9 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #030303; 
+            --bg: #050505; 
             --dark-red: #8B0000; 
             --dark-green: #1B5E20; 
+            --atomic-red: #FF3D00; 
             --text: #ffffff; 
             --font-main: 'Sangyo-Regular', 'Oswald', sans-serif;
         }
@@ -17,35 +18,36 @@
         * { box-sizing: border-box; }
 
         body {
-            margin: 0; padding: 0 4cm;
+            margin: 0; padding: 0 4cm; /* ТЗ: ОТСТУПЫ 4 СМ */
             background-color: var(--bg); color: var(--text);
             font-family: var(--font-main); text-transform: uppercase;
+            min-height: 100vh; display: flex; flex-direction: column;
+            font-size: 18px; line-height: 1.3;
         }
 
-        /* ОБЩИЙ ФОН САЙТА */
-        body::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -3;
-            /* ИСПРАВЛЕНО ПО СКРИНШОТУ ГИТХАБА */
-            background-image: linear-gradient(rgba(3,3,3,0.9), rgba(3,3,3,0.95)), url('bg.jpg.png');
-            background-size: cover; background-position: center; filter: blur(8px);
-        }
-
+        /* Адаптивность для разных мониторов */
         @media (max-width: 1400px) { body { padding: 0 2cm; } }
         @media (max-width: 1000px) { body { padding: 0 20px; } }
 
-        /* --- ВЕРХНЯЯ СЕКЦИЯ --- */
+        /* ФОН САЙТА (Используем твой файл из GitHub) */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -3;
+            background-image: linear-gradient(rgba(5,5,5,0.85), rgba(5,5,5,0.95)), url('bg.jpg.png');
+            background-size: cover; background-position: center; filter: blur(6px);
+        }
+
+        /* --- СЕКЦИЯ ИГРАТЬ (ВЕРХ) --- */
         #play-top {
             position: relative; height: 100vh;
             width: calc(100% + 8cm); margin-left: -4cm;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            overflow: hidden; background: #000; border-bottom: 3px solid var(--dark-red);
+            overflow: hidden; background: #000; border-bottom: 2px solid var(--atomic-red);
         }
 
-        /* ПУЛЬСИРУЮЩАЯ КАРТИНКА */
+        /* ПУЛЬСИРУЮЩАЯ КАРТИНКА (Твой файл hero_bg.jpg.png) */
         .hero-pulse-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            /* ИСПРАВЛЕНО: ТЕПЕРЬ СОВПАДАЕТ С ТВОИМ ФАЙЛОМ */
             background-image: url('hero_bg.jpg.png'); 
             background-size: cover; background-position: center;
             z-index: 1; opacity: 0.6;
@@ -61,41 +63,75 @@
         .hero-content { position: relative; z-index: 10; text-align: center; }
 
         .main-title {
-            font-size: clamp(50px, 12vw, 130px); font-weight: 700; 
-            letter-spacing: 12px; margin-bottom: 50px;
+            font-size: clamp(60px, 12vw, 130px); font-weight: 700; 
+            letter-spacing: 12px; margin-bottom: 30px; line-height: 1;
         }
         .main-title .teams { color: var(--dark-green); }
-        .main-title .war { color: var(--dark-red); }
+        .main-title .war { color: var(--atomic-red); }
+
+        .tagline { 
+            font-size: 20px; color: #ccc; margin-bottom: 50px; 
+            border-left: 5px solid var(--atomic-red); padding-left: 20px;
+            max-width: 800px; margin-left: auto; margin-right: auto;
+        }
 
         .battle-btn {
-            display: inline-block; padding: 30px 100px; font-size: 32px; font-weight: 700;
-            color: white; background-color: var(--dark-red);
+            display: inline-block; padding: 25px 80px; font-size: 30px; font-weight: 700;
+            color: black; background-color: var(--atomic-red);
             text-decoration: none; transition: 0.3s;
             clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
-        .battle-btn:hover { background-color: white; color: black; box-shadow: 0 0 50px var(--dark-red); transform: scale(1.05); }
+        .battle-btn:hover { background-color: white; box-shadow: 0 0 50px var(--atomic-red); transform: scale(1.05); }
 
         @keyframes hero-breathe {
             0%, 100% { transform: scale(1); filter: brightness(0.8); }
             50% { transform: scale(1.05); filter: brightness(1.1); }
         }
 
-        /* ХЕДЕР */
+        /* --- ХЕДЕР (ТЗ: ПРОПОРЦИОНАЛЬНЫЕ КНОПКИ) --- */
         header {
-            padding: 30px 0; background: var(--bg);
-            border-bottom: 2px solid var(--dark-red);
-            position: sticky; top: 0; z-index: 100;
+            position: sticky; top: 0; z-index: 1000;
+            padding: 25px 0; background: var(--bg);
+            border-bottom: 2px solid var(--atomic-red);
         }
+
+        .age-limit {
+            position: absolute; right: 0; top: 12px;
+            font-size: 16px; font-weight: 700; color: var(--atomic-red);
+            border: 2px solid var(--atomic-red); width: 45px; height: 45px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%;
+        }
+
         .nav-container { display: flex; align-items: center; width: 100%; gap: 10px; }
+        
+        .logo-static {
+            font-size: 24px; font-weight: 700; letter-spacing: 3px;
+            padding: 0 20px; white-space: nowrap; cursor: default;
+        }
+        .logo-static span { color: var(--atomic-red); }
+
         .nav-btn {
             flex: 1; text-align: center; padding: 12px 0;
             color: white; text-decoration: none; border: 1px solid rgba(255, 61, 0, 0.2);
-            font-size: 14px; transition: 0.3s;
+            font-size: 15px; transition: 0.3s;
         }
-        .nav-btn:hover { background: var(--dark-red); color: black; }
+        .nav-btn:hover { background: var(--atomic-red); color: black; border-color: var(--atomic-red); }
+
+        /* СЕКЦИИ */
+        section.content-section { padding: 120px 0; min-height: 80vh; }
+        .section-title { font-size: 60px; color: var(--atomic-red); margin-bottom: 40px; letter-spacing: 5px; }
+
+        /* --- ФУТЕР (ТЗ: ТРИ КНОПКИ В РЯД) --- */
+        footer { padding: 60px 0; border-top: 2px solid #222; margin-top: auto; }
+        .footer-container { display: flex; width: 100%; gap: 15px; }
+        .footer-btn {
+            flex: 1; text-align: center; padding: 20px 0;
+            color: #555; text-decoration: none; border: 1px solid #222; font-size: 15px; transition: 0.3s;
+        }
+        .footer-btn:hover { border-color: var(--atomic-red); color: white; background: rgba(255,61,0,0.05); }
     </style>
 </head>
-<body>
+<body id="top">
 
     <section id="play-top">
         <div class="hero-pulse-bg"></div>
@@ -105,14 +141,16 @@
             <div class="main-title">
                 <span class="teams">TEAMS</span> <span class="war">WAR</span>
             </div>
+            <p class="tagline">Испытайте настоящий адреналин в динамичных боях против реальных игроков.</p>
             <a href="https://vkplay.ru/play/game/teams-war" class="battle-btn">В БОЙ</a>
         </div>
     </section>
 
     <header>
+        <div class="age-limit">6+</div>
         <div class="nav-container">
-            <div style="font-size: 24px; font-weight: 700; padding: 0 20px;">TEAMS <span style="color:var(--dark-red)">WAR</span></div>
-            <a href="#play-top" class="nav-btn">ИГРАТЬ</a>
+            <div class="logo-static">TEAMS <span>WAR</span></div>
+            <a href="#top" class="nav-btn">ИГРАТЬ</a>
             <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
             <a href="#media" class="nav-btn">МЕДИА</a>
             <a href="#community" class="nav-btn">СООБЩЕСТВА</a>
@@ -120,10 +158,36 @@
         </div>
     </header>
 
-    <section id="about" style="padding: 100px 0; min-height: 80vh;">
-        <h2 style="font-size: 60px; color: var(--dark-red);">ОБ ИГРЕ</h2>
-        <p>ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ.</p>
+    <section id="about" class="content-section">
+        <div class="section-title">ОБ ИГРЕ</div>
+        <p>Здесь будет ваше досье о разработке и тактических возможностях игры.</p>
     </section>
+
+    <section id="media" class="content-section">
+        <div class="section-title">МЕДИА</div>
+        <p>Архив визуальных данных находится в стадии обработки.</p>
+    </section>
+
+    <section id="community" class="content-section">
+        <div class="section-title">СООБЩЕСТВА</div>
+        <p>Присоединяйтесь к нашим закрытым каналам связи.</p>
+    </section>
+
+    <section id="faq" class="content-section">
+        <div class="section-title">FAQ</div>
+        <p>Ответы на часто задаваемые вопросы бойцов.</p>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <a href="privacy.html" class="footer-btn">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
+            <a href="terms.html" class="footer-btn">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
+            <a href="rules.html" class="footer-btn">ПРАВИЛА</a>
+        </div>
+        <div style="text-align: center; margin-top: 40px; font-size: 15px; color: #333;">
+            © 2026 TEAMS WAR // DEVELOPER: NIKSONGAME
+        </div>
+    </footer>
 
 </body>
 </html>
