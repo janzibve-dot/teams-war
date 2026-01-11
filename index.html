@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | OFFICIAL TERMINAL</title>
+    <title>TEAMS WAR | BATTLE TERMINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #050505; 
-            --atomic-red: #FF3D00; 
+            --bg: #030303; /* ТЗ: Цвета потемнее */
+            --dark-red: #8B0000; /* ТЗ: Темно-красный */
+            --dark-green: #1B5E20; /* ТЗ: Темно-зеленый */
             --text: #ffffff; 
             --font-main: 'Sangyo-Regular', 'Oswald', sans-serif;
         }
@@ -17,11 +18,10 @@
 
         body {
             margin: 0; 
-            padding: 0 4cm; /* ТЗ: ОТСТУПЫ ПО 4 СМ СЛЕВА И СПРАВА */
+            padding: 0 4cm; /* ТЗ: ОТСТУПЫ ПО 4 СМ */
             background-color: var(--bg); 
             color: var(--text);
             font-family: var(--font-main); 
-            font-weight: 400;
             text-transform: uppercase; /* ТЗ: ТОЛЬКО ЗАГЛАВНЫЕ */
             min-height: 100vh;
             display: flex;
@@ -29,72 +29,98 @@
             font-size: 18px; /* ТЗ: МИНИМУМ 15PX */
         }
 
-        /* Адаптивность для мобильных устройств */
+        /* Адаптивность отступов */
         @media (max-width: 1400px) { body { padding: 0 2cm; } }
         @media (max-width: 1000px) { body { padding: 0 20px; } }
 
-        /* ФОН (Твой файл bg.jpg.png) */
-        .bg-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2; 
-            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), url('bg.jpg.png');
-            background-size: cover; background-position: center; 
-            filter: blur(6px); transform: scale(1.1);
-        }
-
-        /* --- ХЕДЕР --- */
-        header {
-            position: sticky; top: 0; z-index: 1000;
-            padding: 30px 0;
-            background: var(--bg);
-            border-bottom: 2px solid var(--atomic-red);
-        }
-
-        /* ИСПРАВЛЕНО: ЗНАК 6+ В КРУГЕ (Правый верхний угол) */
-        .age-limit {
-            position: absolute; right: 0; top: 15px;
-            font-size: 18px; font-weight: 700; color: var(--atomic-red);
-            border: 2px solid var(--atomic-red); 
-            width: 50px; height: 50px; /* Делаем блок квадратным */
-            display: flex; align-items: center; justify-content: center; /* Центруем текст внутри */
-            border-radius: 50%; /* ПРЕВРАЩАЕМ В КРУГ */
-            line-height: 1;
-        }
-
-        .nav-container {
-            display: flex;
-            align-items: center;
+        /* --- СЕКЦИЯ ИГРАТЬ (САМЫЙ ВЕРХ) --- */
+        #play-top {
+            position: relative;
+            height: 100vh; /* На весь экран */
             width: 100%;
-            gap: 10px;
-        }
-
-        /* ЛОГОТИП (НЕ КНОПКА) */
-        .logo-static {
-            font-size: 24px; font-weight: 700; letter-spacing: 3px;
-            padding: 10px 20px; white-space: nowrap;
-            color: var(--text);
-        }
-        .logo-static span { color: var(--atomic-red); }
-
-        /* КНОПКИ ХЕДЕРА (ПРОПОРЦИОНАЛЬНЫЕ) */
-        .nav-btn {
-            flex: 1; 
-            text-align: center;
-            padding: 12px 0;
-            color: white;
-            text-decoration: none;
-            border: 1px solid rgba(255, 61, 0, 0.2);
-            transition: 0.3s;
-            font-size: 15px;
-        }
-        .nav-btn:hover { background: var(--atomic-red); color: black; border-color: var(--atomic-red); }
-
-        /* --- СЕКЦИИ --- */
-        section {
-            min-height: 80vh;
-            padding: 100px 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            margin-left: -4cm; /* Компенсация падинга body для видео на весь экран */
+            width: calc(100% + 8cm);
         }
-        .section-title { font-size: 60px; color: var(--atomic-
+
+        /* ЗАЦИКЛЕННОЕ ВИДЕО НА ФОНЕ */
+        .video-bg {
+            position: absolute;
+            top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            transform: translate(-50%, -50%);
+            z-index: -2;
+            object-fit: cover;
+        }
+
+        /* Затемнение видео для читаемости текста */
+        .video-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        /* ЛОГОТИП В ЦЕНТРЕ */
+        .main-title {
+            font-size: 120px;
+            font-weight: 700;
+            letter-spacing: 15px;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+        .main-title .teams { color: var(--dark-green); } /* ТЗ: TEAMS ЗЕЛЕНЫЙ */
+        .main-title .war { color: var(--dark-red); } /* ТЗ: WAR КРАСНЫЙ */
+
+        /* КРУПНАЯ КНОПКА "В БОЙ" */
+        .battle-btn {
+            display: inline-block;
+            padding: 30px 100px;
+            font-size: 32px;
+            font-weight: 700;
+            color: black;
+            background-color: var(--dark-red);
+            text-decoration: none;
+            transition: 0.3s;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+            border: none;
+            cursor: pointer;
+        }
+        .battle-btn:hover {
+            background-color: white;
+            box-shadow: 0 0 50px var(--dark-red);
+            transform: scale(1.05);
+        }
+
+        /* --- ХЕДЕР (ПОД СЕКЦИЕЙ ИГРАТЬ) --- */
+        header {
+            padding: 30px 0;
+            background: var(--bg);
+            border-bottom: 2px solid var(--dark-red);
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .age-limit {
+            position: absolute; right: 0; top: 15px;
+            font-size: 18px; font-weight: 700; color: var(--dark-red);
+            border: 2px solid var(--dark-red); 
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+        }
+
+        .nav-container { display: flex; align-items: center; width: 100%; gap: 10px; }
+        .nav-btn {
+            flex: 1; text-align: center; padding: 12px 0;
+            color: white; text-decoration: none; border: 1px solid rgba(255, 61, 0, 0.2);
+            font-size: 15px; transition: 0.3s;
+        }
+        .nav-btn:hover { background: var(--dark-red); color: black; }
+
+        section { padding: 100px 0; min-height: 80vh; }
+        .section-title { font-size: 60px; color: var(--dark-red); margin-bottom:
