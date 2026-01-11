@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEAMS WAR | ПРАВИЛА</title>
+    <style>
+        /* Подключение твоего шрифта Sangyo */
+        @font-face {
+            font-family: 'Sangyo';
+            src: url('ofont.ru_Sangyo.ttf') format('truetype');
+            font-weight: normal; font-style: normal;
+        }
+
+        :root { 
+            --bg: #050505; 
+            --custom-green: #777c4e; 
+            --custom-red: #bc0000;   
+            --text-white: #ffffff; 
+            --font-main: 'Sangyo', 'Oswald', sans-serif;
+        }
+        
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0; padding: 40px 4cm; /* СТРОГО 4 СМ ОТСТУПЫ */
+            background-color: var(--bg); color: var(--text-white);
+            font-family: var(--font-main); text-transform: uppercase;
+            font-size: 14px; line-height: 1.5;
+        }
+
+        @media (max-width: 1600px) { body { padding: 40px 2cm; } }
+        @media (max-width: 1000px) { body { padding: 40px 20px; } }
+
+        /* ФОН (Размытый как в Терминале) */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -5; background-image: url('bg.jpg.png');
+            background-size: cover; background-position: center; filter: brightness(0.2) blur(6px);
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--custom-red);
+            padding: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 { 
+            color: var(--custom-red); 
+            font-size: 40px; 
+            margin-bottom: 20px; 
+            border-bottom: 2px solid var(--custom-red);
+            padding-bottom: 15px;
+        }
+
+        .subtitle { color: var(--custom-green); font-size: 18px; margin-bottom: 30px; display: block; }
+        
+        .intro-text {
+            border-left: 5px solid var(--custom-red);
+            padding-left: 20px;
+            margin-bottom: 40px;
+            color: #ccc;
+            text-transform: none;
+        }
+
+        .rules-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .rules-list li {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #ddd;
+            text-transform: none; /* Текст правил не в капсе для читаемости */
+        }
+
+        .rules-list b { color: var(--custom-red); margin-right: 10px; }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 12px 35px;
+            border: 1px solid var(--custom-red);
+            color: var(--custom-red);
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        .back-btn:hover { background: var(--custom-red); color: white; }
+
+        .warning { color: var(--custom-red); font-weight: bold; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← ВЕРНУТЬСЯ В ТЕРМИНАЛ</a>
+
+    <div class="container">
+        <h1>ПРАВИЛА</h1>
+        <span class="subtitle">ПРИЛОЖЕНИЕ №1 К ПОЛЬЗОВАТЕЛЬСКОМУ СОГЛАШЕНИЮ "ОСНОВНЫЕ ПРАВИЛА"</span>
+
+        <div class="intro-text">
+            Присоединяясь к игровому серверу или официальному сообществу, Вы подтверждаете, что ознакомились и согласны с Пользовательским соглашением и правилами. Соблюдение этих норм — ваша прямая обязанность, а за их нарушение предусмотрена ответственность <span class="warning">(блокировка аккаунта с обнулением данных)</span>.
+        </div>
+
+        <ul class="rules-list">
+            <li><b>1.</b> Распространять оскорбления, сеющих рознь по расовому, национальному, религиозному, социальному, классовому либо половому признаку.</li>
+            <li><b>2.</b> Распространять информацию содержащею в себе политический контекст в виде оскорблений или ином проявлении.</li>
+            <li><b>3.</b> Распространять личную информацию Пользователей или третьих лиц без их согласия.</li>
+            <li><b>4.</b> Распространять ложную информацию об Игре, Пользователях, Разработчиках и Администрации.</li>
+            <li><b>5.</b> Распространять информацию содержащею в себе нецензурные, грубые, бранные или оскорбительные выражения.</li>
+            <li><b>6.</b> Использовать объекты интеллектуальной собственности третьих лиц без согласия правообладателей.</li>
+            <li><b>7.</b> Распространять информацию, связанную с террористическими организациями или нацистской символикой.</li>
+            <li><b>8.</b> Пропаганда террористической деятельности.</li>
+            <li><b>9.</b> Связь с организациями, запрещенными на территории РФ.</li>
+            <li><b>10.</b> Пропаганда нетрадиционных сексуальных отношений и смены пола (КоАП РФ Статья 6.21).</li>
+            <li><b>11.</b> Реклама продукции и товаров без согласования.</li>
+            <li><b>12.</b> Ссылки на запрещенные ресурсы.</li>
+            <li><b>13-14.</b> Размещать информацию, нарушающую нормы морали и этики по мнению Администрации.</li>
+            <li><b>15.</b> Неуважение к Государству, государственным символам РФ и Сообществу проекта.</li>
+            <li><b>16.</b> Выманивание логинов и паролей (фишинг).</li>
+            <li><b>17.</b> Обман Разработчиков и Администрации.</li>
+            <li><b>18.</b> Угрозы в отношении Пользователей или Администрации.</li>
+            <li><b>19.</b> Оскорбления в сторону Проекта и обсуждение действий разработчиков в оскорбительной форме.</li>
+            <li><b>20.</b> Провокация других игроков на нарушение правил.</li>
+            <li><b>21.</b> Распространение информации о читах, багах, уязвимостях и бот-программах.</li>
+            <li><b>22.</b> Изменение игровых файлов.</li>
+            <li><b>23.</b> Нарушение лицензионного соглашения.</li>
+            <li><b>24.</b> Коммерческое использование игры.</li>
+            <li><b>25.</b> Продажа или аренда аккаунтов.</li>
+            <li><b>28.</b> Торговля игровым контентом (персонажи, валюта) вне разрешенных процедур.</li>
+            <li><b>29.</b> Использование игрового имущества в азартных играх.</li>
+            <li><b>32.</b> Реверс-инжиниринг и декомпиляция исходного кода.</li>
+            <li><b>34-36.</b> Создание и использование несанкционированных программ (читы, хаки, моды, скрипты).</li>
+            <li><b>37.</b> Использование любых багов, технических ошибок и дюпа.</li>
+            <li><b>41.</b> Саботаж игры.</li>
+            <li><b>42.</b> Распространение спама.</li>
+            <li><b>48.</b> Размещение материалов порнографического характера или сцен насилия.</li>
+            <li><b>52.</b> Передача своего пароля третьим лицам.</li>
+            <li><b>54.</b> Использование одного аккаунта несколькими пользователями.</li>
+            <li class="warning"><b>62.</b> ВНИМАНИЕ: Световые комбинации в игре могут вызывать эпилептические расстройства.</li>
+            <li><b>64.</b> Пользователь гарантирует отсутствие таких расстройств или обязуется не использовать игру.</li>
+        </ul>
+
+        <p style="margin-top: 50px; border-top: 1px solid #333; padding-top: 20px; font-style: italic; color: #666;">
+            ПОЛНЫЙ ПЕРЕЧЕНЬ ИЗ 64 ПУНКТОВ ПРИНЯТ В РАБОТУ. СПИСОК МОЖЕТ БЫТЬ ДОПОЛНЕН РАЗРАБОТЧИКОМ В ЛЮБОЕ ВРЕМЯ.
+        </p>
+    </div>
+
+</body>
+</html>
