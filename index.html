@@ -15,8 +15,9 @@
 
         :root { 
             --bg: #050505; 
-            --custom-green: #777c4e; /* HEX TEAMS */
-            --custom-red: #bc0000;   /* HEX WAR */
+            --custom-green: #777c4e; 
+            --custom-red: #bc0000;   
+            --atomic-red: #FF3D00;   
             --text-white: #ffffff; 
             --font-main: 'Sangyo', 'Oswald', sans-serif;
         }
@@ -88,39 +89,51 @@
         .battle-btn { margin-top: 50px; display: inline-block; padding: 25px 100px; background: var(--custom-red); color: white; font-size: 30px; font-weight: 700; text-decoration: none; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); transition: 0.3s; }
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
 
-        /* --- СЕКЦИЯ ОБ ИГРЕ (РАСШИРЕННАЯ) --- */
-        #about { padding: 120px 0; border-top: 1px solid #1a1a1a; }
-        .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 10px; display: block; }
+        /* --- СЕКЦИИ КОНТЕНТА --- */
+        section.content-section { padding: 120px 0; border-top: 1px solid #1a1a1a; }
+        .section-label { color: var(--custom-red); font-size: 16px; margin-bottom: 15px; display: block; }
         .big-title { font-size: 85px; color: var(--custom-red); margin: 0 0 45px; line-height: 1; }
-        
-        /* Блок команд */
-        .teams-container { display: flex; gap: 40px; margin-bottom: 80px; }
-        .team-box { flex: 1; border: 1px solid #222; padding: 30px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); }
-        .team-box.alpha { border-left: 5px solid var(--custom-green); }
-        .team-box.terror { border-left: 5px solid var(--custom-red); }
-        .team-name { font-size: 32px; font-weight: 700; margin-bottom: 15px; display: block; }
-        .team-desc { font-size: 16px; color: #aaa; max-width: 70%; }
-        .op-img { position: absolute; right: -20px; bottom: -10px; height: 120%; opacity: 0.7; pointer-events: none; }
 
-        /* Режимы игры */
-        .modes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 60px 0; }
-        .mode-item { border: 1px solid #222; padding: 25px; transition: 0.3s; }
-        .mode-item:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.05); }
-        .mode-item h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 20px; }
-        .mode-item p { font-size: 14px; color: #888; margin: 0; text-transform: none; }
+        /* --- СООБЩЕСТВА (ТВОЁ ТЗ) --- */
+        #community { background: rgba(255, 255, 255, 0.01); }
+        .social-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 50px;
+        }
+        .social-card {
+            flex: 1;
+            border: 1px solid #222;
+            padding: 40px 20px;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.4s;
+            background: #080808;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .social-card:hover {
+            border-color: var(--custom-red);
+            background: rgba(188, 0, 0, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        /* Стиль иконок (SVG логотипы) */
+        .social-icon { width: 60px; height: 60px; fill: var(--text-white); transition: 0.3s; }
+        .social-card:hover .social-icon { fill: var(--custom-red); }
+        .social-name { font-size: 14px; color: #666; letter-spacing: 2px; }
 
-        /* Иконки статистики */
-        .stats-grid { display: flex; gap: 15px; margin-top: 50px; }
-        .stat-item { flex: 1; border: 1px solid #222; padding: 20px 5px; text-align: center; text-decoration: none; color: white; transition: 0.3s; }
-        .stat-item:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.1); }
-        .stat-num { font-size: 24px; font-weight: 700; display: block; color: var(--custom-red); }
-        .stat-name { font-size: 12px; color: #666; }
+        /* --- FAQ --- */
+        #faq { display: flex; gap: 80px; }
+        .faq-title-vert { font-size: 80px; writing-mode: vertical-lr; transform: rotate(180deg); color: white; border-right: 5px solid var(--custom-red); padding-right: 25px; }
+        .faq-list { flex: 1; }
+        .faq-item { border: 1px solid #222; margin-bottom: 15px; padding: 25px; display: flex; justify-content: space-between; cursor: pointer; transition: 0.3s; }
+        .faq-item:hover { border-color: var(--custom-red); background: rgba(188, 0, 0, 0.08); }
 
-        /* Рейтинги */
-        .ratings-row { display: flex; gap: 20px; margin-top: 40px; }
-        .rating-card { flex: 1; background: #111; padding: 30px; border: 1px solid var(--custom-red); text-align: center; }
-
-        /* ФУТЕР (СОХРАНЕН) */
+        /* ФУТЕР */
         footer { padding: 80px 0 40px; border-top: 3px solid var(--custom-red); background: #000; margin-top: 100px; }
         .footer-nav { display: flex; gap: 20px; margin-bottom: 60px; }
         .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 22px 10px; color: #777; text-decoration: none; font-size: 15px; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
@@ -144,89 +157,31 @@
     </header>
 
     <section id="play">
-        <div class="video-bg">
-            <video autoplay muted loop playsinline><source src="hero_bg.mp4" type="video/mp4"></video>
-        </div>
+        <div class="video-bg"><video autoplay muted loop playsinline><source src="hero_bg.mp4" type="video/mp4"></video></div>
         <h1 class="main-title"><span class="t">TEAMS</span><br><span class="w">WAR</span></h1>
         <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
     </section>
 
     <section id="about" class="content-section">
-        <span class="section-label">01 // СВЕДЕНИЯ О КОНФЛИКТЕ</span>
-        <h2 class="big-title">ТАКТИКА БОЯ</h2>
-        
-        <p style="font-size: 22px; color: #ddd; border-left: 5px solid var(--custom-red); padding-left: 35px; margin-bottom: 60px;">
-            Испытайте настоящий адреналин в динамичных боях против реальных игроков. 
-            Продемонстрируйте своё мастерство, тактику и командную работу в схватках с достойными противниками. 
-            Объединяйтесь в кланы, формируйте отряды чтобы победить противника.
+        <span class="section-label">01 // АРХИВ</span>
+        <h2 class="big-title">ОБ ИГРЕ</h2>
+        <p style="font-size: 22px; color: #ddd; border-left: 5px solid var(--custom-red); padding-left: 35px; max-width: 900px;">
+            Испытайте настоящий адреналин в динамичных боях против реальных игроков. Объединяйтесь в кланы и побеждайте противника.
         </p>
-
-        <div class="teams-container">
-            <div class="team-box alpha">
-                <span class="team-name" style="color:var(--custom-green)">АЛЬФА</span>
-                <p class="team-desc">Элитный спецназ, противостоящий постоянной угрозе со стороны Боевиков.</p>
-                <img src="alpha.png" class="op-img" alt="">
-            </div>
-            <div class="team-box terror">
-                <span class="team-name" style="color:var(--custom-red)">БОЕВИКИ</span>
-                <p class="team-desc">Противоборствующая сторона, создающая постоянные угрозы мировому порядку.</p>
-                <img src="terrorist.png" class="op-img" alt="">
-            </div>
-        </div>
-
-        <span class="section-label">02 // БОЕВЫЕ РЕЖИМЫ</span>
-        <div class="modes-grid">
-            <div class="mode-item"><h3>ЗАХВАТ ТОЧЕК</h3><p>Контролируйте стратегические точки на карте для победы.</p></div>
-            <div class="mode-item"><h3>ШТУРМ</h3><p>Уничтожьте цели или защитите их от подрыва.</p></div>
-            <div class="mode-item"><h3>КОМАНДНЫЙ БОЙ</h3><p>Классическое противостояние двух отрядов.</p></div>
-            <div class="mode-item"><h3>ЗАХВАТ ФЛАГА</h3><p>Похитьте знамя противника и доставьте на базу.</p></div>
-            <div class="mode-item"><h3>ПОДРЫВ</h3><p>Закладка и разминирование бомбы в ключевых точках.</p></div>
-            <div class="mode-item"><h3>ОХОТНИК</h3><p>Убивайте врагов и собирайте их нательные жетоны.</p></div>
-            <div class="mode-item"><h3>МЯСОРУБКА</h3><p>Каждый сам за себя. Выживет только один.</p></div>
-        </div>
-
-        <div style="display: flex; gap: 30px; margin-top: 40px;">
-            <div style="flex: 1; border: 1px solid #222; padding: 30px;">
-                <span class="section-label">03 // СНАРЯЖЕНИЕ</span>
-                <p style="font-size: 14px; color: #888; text-transform: none;">30+ вида дальнобойного, 8+ вида холодного, 12+ видов метательного оружия. Броня, VIP, перки, модули. Кастомизируйте комплекты под свой стиль.</p>
-            </div>
-            <div style="flex: 1; border: 1px solid #222; padding: 30px;">
-                <span class="section-label">04 // ОПЕРАТИВНИКИ</span>
-                <p style="font-size: 14px; color: #888; text-transform: none;">127 готовых оперативников. Быстрая смена облика без долгих настроек — выберите свой уникальный стиль из списка.</p>
-            </div>
-        </div>
-
-        <div class="ratings-row">
-            <div class="rating-card">
-                <span class="section-label">РЕЙТИНГ ИГРОКОВ</span>
-                <p style="font-size: 14px; color: #666;">БИТВА ЗА ПРИЗОВЫЕ МЕСТА В ТОП-100</p>
-            </div>
-            <div class="rating-card">
-                <span class="section-label">РЕЙТИНГ КЛАНОВ</span>
-                <p style="font-size: 14px; color: #666;">СТАНЬТЕ ЛУЧШИМ ОТРЯДОМ СЕЗОНА</p>
-            </div>
-        </div>
-
-        <div class="stats-grid">
-            <a href="#" class="stat-item"><span class="stat-num">2</span><span class="stat-name">КОМАНДЫ</span></a>
-            <a href="#" class="stat-item"><span class="stat-num">7</span><span class="stat-name">РЕЖИМОВ</span></a>
-            <a href="#" class="stat-item"><span class="stat-num">50+</span><span class="stat-name">ОРУЖИЯ</span></a>
-            <a href="#" class="stat-item"><span class="stat-num">127</span><span class="stat-name">БОЙЦОВ</span></a>
-            <a href="#" class="stat-item"><span class="stat-num">10+</span><span class="stat-name">КАРТ</span></a>
-        </div>
     </section>
 
-    <footer>
-        <div class="footer-nav">
-            <a href="privacy.html" class="footer-btn">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
-            <a href="terms.html" class="footer-btn">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
-            <a href="rules.html" class="footer-btn">ПРАВИЛА</a>
-        </div>
-        <div class="footer-bottom">
-            <div>© 2026 TEAMS WAR // ВСЕ ПРАВА ЗАЩИЩЕНЫ</div>
-            <div>DEVELOPER: NIKSONGAME // СТАТУС: ОНЛАЙН</div>
-        </div>
-    </footer>
-
-</body>
-</html>
+    <section id="community" class="content-section">
+        <span class="section-label">02 // СЕТЬ</span>
+        <h2 class="big-title">СООБЩЕСТВА</h2>
+        
+        <div class="social-grid">
+            <a href="https://t.me/niks_on_game" target="_blank" class="social-card">
+                <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-2.003 9.464c-.149.659-.541.823-1.091.515l-3.056-2.251-1.474 1.42c-.163.163-.299.299-.614.299l.22-3.111 5.662-5.116c.246-.219-.054-.341-.381-.123l-7.001 4.407-3.012-.942c-.655-.205-.668-.655.137-.97l11.77-4.536c.544-.205 1.021.123.843.943z"/></svg>
+                <span class="social-name">TELEGRAM</span>
+            </a>
+            <a href="https://www.youtube.com/@NiksOnGame" target="_blank" class="social-card">
+                <svg class="social-icon" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                <span class="social-name">YOUTUBE</span>
+            </a>
+            <a href="https://live.vkvideo.ru/niksongame" target="_blank" class="social-card">
+                <svg class="social-icon" viewBox="0 0 24 24"><path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.316 1.335-1.99.621.326 1.156 1.83 1
