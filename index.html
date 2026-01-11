@@ -29,102 +29,24 @@
             10% { opacity: 1; } 90% { opacity: 1; }
             100% { opacity: 0; transform: translateY(115vh) rotate(1080deg); }
         }
-        .s1 { left: 10%; animation-delay: 0s; }
-        .s2 { left: 40%; animation-delay: 1.5s; }
-        .s3 { left: 75%; animation-delay: 0.8s; }
+        .s1 { left: 10%; animation-delay: 0s; } .s2 { left: 40%; animation-delay: 1.5s; } .s3 { left: 75%; animation-delay: 0.8s; }
 
-        /* --- НАВИГАЦИЯ --- */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: rgba(0, 0, 0, 0.95); border-bottom: 2px solid var(--red); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 28px; font-weight: 900; letter-spacing: 2px; text-decoration: none; color: white; }
+        /* --- НАВИГАЦИЯ (НОВЫЙ СТИЛЬ) --- */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: rgba(0, 0, 0, 0.95); border-bottom: 1px solid rgba(211, 47, 47, 0.5); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 26px; font-weight: 900; letter-spacing: 2px; text-decoration: none; color: white; }
         .logo span { color: var(--red); }
-        .nav-right { display: flex; align-items: center; gap: 20px; }
-        .nav-links a { color: white; text-decoration: none; font-size: 14px; font-weight: bold; transition: 0.3s; }
-        .nav-links a:hover { color: var(--red); }
+        .nav-right { display: flex; align-items: center; gap: 15px; }
 
-        /* КНОПКА РЕГИСТРАЦИИ В УГЛУ */
-        .reg-trigger {
-            background: transparent; border: 2px solid var(--green); color: var(--green);
-            padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;
-            font-family: 'Chakra Petch'; transition: 0.3s; text-transform: uppercase;
+        /* СТИЛЬ ДЛЯ ССЫЛОК В МЕНЮ */
+        .nav-links a {
+            color: rgba(255,255,255,0.8); text-decoration: none; font-size: 13px; font-weight: bold;
+            border: 1px solid rgba(211, 47, 47, 0.3); /* Тонкая рамка */
+            border-radius: 8px; /* Закругление */
+            padding: 8px 15px;
+            transition: 0.3s;
+            /* Легкое мерцание */
+            animation: nav-flicker 4s infinite ease-in-out;
         }
-        .reg-trigger:hover { background: var(--green); color: #000; box-shadow: 0 0 15px var(--green); }
+        .nav-links a:hover { background: rgba(211, 47, 47, 0.1); color: #fff; border-color: var(--red); box-shadow: 0 0 10px rgba(211, 47, 47, 0.5); }
 
-        /* --- ГЛАВНЫЙ ЭКРАН --- */
-        .hero { position: relative; height: 85vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .bg-neon-text {
-            position: absolute; z-index: 1; font-size: 16vw; font-weight: 900; color: transparent; 
-            -webkit-text-stroke: 2px var(--red); text-transform: uppercase; white-space: nowrap; pointer-events: none; animation: flicker 4s infinite;
-        }
-        @keyframes flicker { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.45; } }
-
-        .hero-content {
-            position: relative; z-index: 10; background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(5px);
-            padding: 50px; border-radius: 40px; border: 1px solid rgba(211, 47, 47, 0.3); text-align: center;
-        }
-        h1 { font-size: 70px; margin: 0; letter-spacing: 5px; }
-        h1 span { color: var(--red); }
-
-        .btn {
-            display: inline-block; padding: 16px 35px; font-size: 16px; font-weight: 700; text-decoration: none;
-            border-radius: 12px; border: 3px solid var(--red); color: var(--text); background: rgba(0,0,0,0.6); transition: 0.3s; cursor: pointer;
-        }
-        .btn:hover { background: var(--red); color: #000; box-shadow: 0 0 30px var(--red); }
-
-        /* --- ОКНО АВТОРИЗАЦИИ (MODAL) --- */
-        .auth-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 2000;
-        }
-        .auth-modal {
-            background: #0f0f0f; border: 2px solid var(--green); padding: 40px;
-            border-radius: 20px; width: 400px; position: relative; box-shadow: 0 0 50px rgba(56, 142, 60, 0.2);
-        }
-        .auth-tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .auth-tab {
-            flex: 1; background: transparent; border: none; color: #555;
-            cursor: pointer; font-family: 'Chakra Petch'; font-weight: bold; font-size: 16px; transition: 0.3s;
-        }
-        .auth-tab.active { color: var(--green); text-shadow: 0 0 10px var(--green); }
-
-        .auth-form { display: flex; flex-direction: column; gap: 15px; }
-        .auth-input {
-            background: #000; border: 1px solid #444; padding: 12px; color: white;
-            border-radius: 5px; font-family: 'Chakra Petch'; outline: none;
-        }
-        .auth-input:focus { border-color: var(--green); }
-        .auth-submit {
-            background: var(--green); color: #000; border: none; padding: 15px;
-            font-weight: 900; border-radius: 5px; cursor: pointer; transition: 0.3s;
-        }
-        .auth-submit:hover { box-shadow: 0 0 20px var(--green); transform: translateY(-2px); }
-        
-        .close-auth { position: absolute; top: 15px; right: 20px; color: var(--red); cursor: pointer; font-size: 30px; }
-
-        footer { background: rgba(0, 0, 0, 0.98); border-top: 1px solid rgba(211, 47, 47, 0.3); padding: 30px; text-align: center; }
-        .social-link { color: var(--green); text-decoration: none; border: 1px solid var(--green); padding: 8px 15px; border-radius: 8px; margin: 0 10px; font-size: 14px; }
-    </style>
-</head>
-<body>
-
-    <div class="shell-container">
-        <div class="shell s1"></div><div class="shell s2"></div><div class="shell s3"></div>
-    </div>
-
-    <nav>
-        <a href="index.html" class="logo">TEAMS <span>WAR</span></a>
-        <div class="nav-right">
-            <div class="nav-links">
-                <a href="news.html">НОВОСТИ</a>
-                <a href="forum.html">ФОРУМ</a>
-                <a href="shop.html">МАГАЗИН</a>
-                <a href="profile.html">ПРОФИЛЬ</a>
-            </div>
-            <button class="reg-trigger" onclick="openAuth('reg')">РЕГИСТРАЦИЯ</button>
-        </div>
-    </nav>
-
-    <section class="hero">
-        <div class="bg-neon-text">TEAMS WAR</div>
-        <div class="hero-content">
-            <h1>TEAMS <span>WAR</span></h1>
-            <p
+        /* КНОПКА РЕГИСТРАЦИИ (Тот
