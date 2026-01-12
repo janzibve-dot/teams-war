@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR</title>
     <style>
         /* Базовые настройки v73.0 */
@@ -11,126 +10,124 @@
             padding: 0;
             background-color: #000;
             color: #fff;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial Black', Gadget, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .header-title {
-            margin-top: 20px;
+        header {
+            margin-top: 40px;
             font-size: 32px;
-            text-transform: uppercase;
             letter-spacing: 5px;
-            font-weight: bold;
+            text-transform: uppercase;
         }
 
-        .section-title {
+        .section-name {
             margin-top: 50px;
-            font-size: 28px;
-            text-transform: uppercase;
+            font-size: 26px;
             letter-spacing: 3px;
-            font-weight: bold;
+            text-transform: uppercase;
         }
 
         /* Контейнер для блоков */
-        .capture-container {
+        .main-container {
             display: flex;
             justify-content: center;
-            gap: 100px;
+            gap: 110px;
             margin-top: 80px;
-            padding: 0 20px;
         }
 
-        .capture-block {
+        .game-block {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 350px;
+            width: 380px;
             text-align: center;
         }
 
-        /* КАРТИНКИ: +7мм и постоянное свечение */
-        .capture-image {
-            /* Увеличение на 7мм */
-            width: calc(150px + 7mm); 
+        /* КАРТИНКИ: Увеличение на 7мм и ПОСТОЯННОЕ СВЕЧЕНИЕ */
+        .unit-img {
+            /* Базовый размер увеличен на 7мм */
+            width: calc(250px + 7mm); 
             height: auto;
-            margin-bottom: 40px; /* Отступ подогнан под размер */
-            display: block;
+            margin-bottom: 35px; /* Отступ, чтобы текст не налезал */
         }
 
-        /* Постоянное свечение для левой картинки */
-        .img-left {
+        /* Постоянное зеленое свечение для левой картинки */
+        .img-glow-green {
             filter: drop-shadow(0 0 15px #777c4e);
         }
 
-        /* Постоянное свечение для правой картинки */
-        .img-right {
+        /* Постоянное красное свечение для правой картинки */
+        .img-glow-red {
             filter: drop-shadow(0 0 15px #bc0000);
         }
 
-        .capture-name {
+        .unit-title {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
-        .capture-description {
+        .unit-desc {
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
             color: #ccc;
             margin-bottom: 30px;
-            min-height: 80px; /* Чтобы кнопки были на одном уровне */
         }
 
         /* КНОПКИ: Подсветка только при наведении */
-        .capture-button {
+        .action-btn {
             background-color: transparent;
             color: #fff;
-            border: 1px solid #444; /* Обычная обводка */
+            border: 1px solid #333; /* Обычная рамка */
             padding: 15px 40px;
-            text-transform: uppercase;
+            font-size: 14px;
             font-weight: bold;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
         /* Наведение на левую кнопку (Зеленый) */
         .btn-left:hover {
             border-color: #777c4e;
             box-shadow: 0 0 10px #777c4e;
+            color: #777c4e;
         }
 
         /* Наведение на правую кнопку (Красный) */
         .btn-right:hover {
             border-color: #bc0000;
             box-shadow: 0 0 10px #bc0000;
+            color: #bc0000;
         }
-
     </style>
 </head>
 <body>
 
-    <div class="header-title">TEAMS WAR</div>
-    <div class="section-title">ЗАХВАТ ТОЧЕК</div>
+    <header>TEAMS WAR</header>
+    <div class="section-name">ЗАХВАТ ТОЧЕК</div>
 
-    <div class="capture-container">
-        <div class="capture-block">
-            <img src="soldier_left.png" alt="Спецназ" class="capture-image img-left">
-            <div class="capture-name">Спецназ</div>
-            <div class="capture-description">
+    <div class="main-container">
+        <div class="game-block">
+            <img src="left.png" class="unit-img img-glow-green" alt="Спецназ">
+            <div class="unit-title">Спецназ</div>
+            <div class="unit-desc">
                 Штурмуйте позиции противника в составе элитного подразделения. Ваша задача — удержать объект любой ценой.
             </div>
-            <button class="capture-button btn-left">Вступить в бой</button>
+            <button class="action-btn btn-left">Вступить в бой</button>
         </div>
 
-        <div class="capture-block">
-            <img src="soldier_right.png" alt="Противник" class="capture-image img-right">
-            <div class="capture-name">Противник</div>
-            <div class="capture-description">
+        <div class="game-block">
+            <img src="right.png" class="unit-img img-glow-red" alt="Противник">
+            <div class="unit-title">Противник</div>
+            <div class="unit-desc">
                 Обороняйте захваченные рубежи и подавляйте сопротивление. Контроль над территорией дает преимущество.
             </div>
-            <button class="capture-button btn-right">Вступить в бой</button>
+            <button class="action-btn btn-right">Вступить в бой</button>
         </div>
     </div>
 
