@@ -148,7 +148,7 @@
         .team-name { font-size: 36px; font-weight: 700; margin-bottom: 20px; display: block; }
         .op-img { position: absolute; right: -10px; bottom: -10px; height: 130%; opacity: 0.6; pointer-events: none; }
 
-        /* --- НОВЫЙ БЛОК: 7 РЕЖИМОВ (ДУГА) --- */
+        /* --- НОВЫЙ БЛОК: 7 РЕЖИМОВ (ИСПРАВЛЕННАЯ ДУГА) --- */
         .arc-modes-section {
             display: flex;
             align-items: center;
@@ -156,31 +156,36 @@
             min-height: 1000px;
             margin: 100px 0;
             position: relative;
+            overflow: hidden; /* Скрываем выход за границы */
         }
 
+        /* ИСПРАВЛЕНО: Заголовок в одну строку и с отступом */
         .arc-main-title {
             font-size: 100px;
             color: var(--custom-red);
             font-weight: 700;
-            width: 450px;
-            line-height: 0.9;
+            white-space: nowrap; /* Одна строка */
+            line-height: 1;
             flex-shrink: 0;
             z-index: 5;
+            margin-right: 150px; /* Отступ от дуги */
+            margin-left: 40px;
         }
 
         .arc-container {
             position: relative;
             flex-grow: 1;
-            height: 900px;
+            height: 1000px;
             display: flex;
             align-items: center;
         }
 
+        /* ИСПРАВЛЕНО: Увеличен радиус и уменьшена ширина блоков */
         .arc-item {
             position: absolute;
-            left: 0;
-            width: 380px;
-            transform-origin: -150px center; /* Точка вращения вынесена влево для создания радиуса */
+            left: 50px;
+            width: 340px; /* Чуть уже */
+            transform-origin: -350px center; /* Радиус больше, чтобы раздвинуть блоки */
             transition: 0.3s;
         }
 
@@ -189,20 +194,19 @@
             background: rgba(0,0,0,0.6);
             padding: 25px;
             text-align: center;
-            /* Контр-вращение: чтобы текст всегда был горизонтальным */
         }
 
         .arc-content h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
         .arc-content p { font-size: 18px; color: #aaa; text-transform: uppercase; margin: 0; }
 
-        /* Позиционирование элементов по дуге */
-        .pos-1 { transform: rotate(-60deg); } .pos-1 .arc-content { transform: rotate(60deg); }
-        .pos-2 { transform: rotate(-40deg); } .pos-2 .arc-content { transform: rotate(40deg); }
-        .pos-3 { transform: rotate(-20deg); } .pos-3 .arc-content { transform: rotate(20deg); }
+        /* ИСПРАВЛЕНО: Увеличены углы между блоками (шаг 22 градуса) */
+        .pos-1 { transform: rotate(-66deg); } .pos-1 .arc-content { transform: rotate(66deg); }
+        .pos-2 { transform: rotate(-44deg); } .pos-2 .arc-content { transform: rotate(44deg); }
+        .pos-3 { transform: rotate(-22deg); } .pos-3 .arc-content { transform: rotate(22deg); }
         .pos-4 { transform: rotate(0deg); }   .pos-4 .arc-content { transform: rotate(0deg); }
-        .pos-5 { transform: rotate(20deg); }  .pos-5 .arc-content { transform: rotate(-20deg); }
-        .pos-6 { transform: rotate(40deg); }  .pos-6 .arc-content { transform: rotate(-40deg); }
-        .pos-7 { transform: rotate(60deg); }  .pos-7 .arc-content { transform: rotate(-60deg); }
+        .pos-5 { transform: rotate(22deg); }  .pos-5 .arc-content { transform: rotate(-22deg); }
+        .pos-6 { transform: rotate(44deg); }  .pos-6 .arc-content { transform: rotate(-44deg); }
+        .pos-7 { transform: rotate(66deg); }  .pos-7 .arc-content { transform: rotate(-66deg); }
 
         .arc-content:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.1); }
 
