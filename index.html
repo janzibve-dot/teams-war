@@ -134,8 +134,9 @@
 
         .teams-row { display: flex; gap: 40px; margin: 50px 0; }
         .team-card { flex: 1; border: 1px solid #222; padding: 40px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); }
-        .team-card.alpha { border-left: 6px solid var(--custom-green); }
-        .team-card.terror { border-left: 6px solid var(--custom-red); }
+        .team-card.alpha { border-left: 6px solid var(--custom-green); text-align: left; }
+        .team-card.terror { border-right: 6px solid var(--custom-red); border-left: 1px solid #222; text-align: right; } /* ВЫРАВНИВАНИЕ ВПРАВО */
+        
         .team-name { font-size: 36px; font-weight: 700; margin-bottom: 20px; display: block; }
         .op-img { position: absolute; right: -10px; bottom: -10px; height: 130%; opacity: 0.6; pointer-events: none; }
 
@@ -218,12 +219,12 @@
             <div class="teams-row">
                 <div class="team-card alpha">
                     <span class="team-name" style="color:var(--custom-green)">АЛЬФА</span>
-                    <p style="color:#888; font-size:18px;">ЭЛИТНЫЙ СПЕЦНАЗ, ПРОТИВОСТОЯЩИЙ ПОСТОЯННОЙ УГРОЗЕ СО СТОРОНЫ БОЕВИКОВ.</p>
+                    <p style="color:#888; font-size:18px; text-transform: none;">ЭЛИТНЫЙ СПЕЦНАЗ, ПРОТИВОСТОЯЩИЙ<br>угрозе со стороны Боевиков.</p>
                     <img src="alpha.png" class="op-img" alt="">
                 </div>
                 <div class="team-card terror">
                     <span class="team-name" style="color:var(--custom-red)">БОЕВИКИ</span>
-                    <p style="color:#888; font-size:18px;">ПРОТИВОБОРСТВУЮЩАЯ СТОРОНА, СОЗДАЮЩАЯ ПОСТОЯННЫЕ УГРОЗЫ МИРОВОМУ ПОРЯДКУ.</p>
+                    <p style="color:#888; font-size:18px; text-transform: none;">ПРОТИВОБОРСТВУЮЩАЯ СТОРОНА, СОЗДАЮЩАЯ<br>постоянные угрозы мировому порядку.</p>
                     <img src="terrorist.png" class="op-img" alt="">
                 </div>
             </div>
