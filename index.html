@@ -101,7 +101,7 @@
         }
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
 
-        /* КРАСНАЯ ЛИНИЯ */
+        /* КРАСНАЯ ЛИНИЯ (2.6СМ) */
         .red-boundary-line { 
             position: absolute; 
             bottom: 2.6cm; 
@@ -113,12 +113,12 @@
             box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); 
         }
 
-        /* --- ОБЕРТКА КОНТЕНТА --- */
+        /* --- ОБЕРТКА КОНТЕНТА (НАЧИНАЕТСЯ ОТ НИЖНЕГО КРАЯ ЛИНИИ) --- */
         .site-content-wrapper {
             background: rgba(5, 5, 5, 0.9); 
             position: relative;
             z-index: 10;
-            margin-top: -4.6cm; 
+            margin-top: -2.6cm; /* ТЕПЕРЬ СТРОГО ОТ НИЖНЕГО КРАЯ КРАСНОЙ ЧЕРТЫ */
         }
 
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
