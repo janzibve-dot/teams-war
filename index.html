@@ -126,7 +126,6 @@
         #about { padding-top: 0; }
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
 
-        /* ИНФО-БЛОКИ (СНАРЯЖЕНИЕ И Т.Д.) */
         .section-label { 
             color: var(--custom-green); 
             font-size: 22px; 
@@ -135,6 +134,7 @@
             display: block; 
         }
 
+        /* ОБ ИГРЕ */
         .stats-grid { display: flex; gap: 20px; margin-bottom: 50px; }
         .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; text-decoration: none; color: white; transition: 0.3s; background: rgba(255,255,255,0.02); }
         .stat-btn:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.1); }
@@ -148,69 +148,14 @@
         .team-name { font-size: 36px; font-weight: 700; margin-bottom: 20px; display: block; }
         .op-img { position: absolute; right: -10px; bottom: -10px; height: 130%; opacity: 0.6; pointer-events: none; }
 
-        /* --- НОВЫЙ БЛОК: 7 РЕЖИМОВ (ИСПРАВЛЕННАЯ ДУГА) --- */
-        .arc-modes-section {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 1000px;
-            margin: 100px 0;
-            position: relative;
-            overflow: hidden; /* Скрываем выход за границы */
-        }
+        /* РЕЖИМЫ (СЕТКА GRID ИЗ v67.0) */
+        .modes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin: 60px 0; }
+        .mode-item { border: 1px solid #222; padding: 30px; transition: 0.3s; background: rgba(0,0,0,0.4); text-align: center; }
+        .mode-item:hover { border-color: var(--custom-red); }
+        .mode-item h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
+        .mode-item p { font-size: 18px; color: #aaa; text-transform: uppercase; margin: 0; }
 
-        /* ИСПРАВЛЕНО: Заголовок в одну строку и с отступом */
-        .arc-main-title {
-            font-size: 100px;
-            color: var(--custom-red);
-            font-weight: 700;
-            white-space: nowrap; /* Одна строка */
-            line-height: 1;
-            flex-shrink: 0;
-            z-index: 5;
-            margin-right: 150px; /* Отступ от дуги */
-            margin-left: 40px;
-        }
-
-        .arc-container {
-            position: relative;
-            flex-grow: 1;
-            height: 1000px;
-            display: flex;
-            align-items: center;
-        }
-
-        /* ИСПРАВЛЕНО: Увеличен радиус и уменьшена ширина блоков */
-        .arc-item {
-            position: absolute;
-            left: 50px;
-            width: 340px; /* Чуть уже */
-            transform-origin: -350px center; /* Радиус больше, чтобы раздвинуть блоки */
-            transition: 0.3s;
-        }
-
-        .arc-content {
-            border: 1px solid #222;
-            background: rgba(0,0,0,0.6);
-            padding: 25px;
-            text-align: center;
-        }
-
-        .arc-content h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
-        .arc-content p { font-size: 18px; color: #aaa; text-transform: uppercase; margin: 0; }
-
-        /* ИСПРАВЛЕНО: Увеличены углы между блоками (шаг 22 градуса) */
-        .pos-1 { transform: rotate(-66deg); } .pos-1 .arc-content { transform: rotate(66deg); }
-        .pos-2 { transform: rotate(-44deg); } .pos-2 .arc-content { transform: rotate(44deg); }
-        .pos-3 { transform: rotate(-22deg); } .pos-3 .arc-content { transform: rotate(22deg); }
-        .pos-4 { transform: rotate(0deg); }   .pos-4 .arc-content { transform: rotate(0deg); }
-        .pos-5 { transform: rotate(22deg); }  .pos-5 .arc-content { transform: rotate(-22deg); }
-        .pos-6 { transform: rotate(44deg); }  .pos-6 .arc-content { transform: rotate(-44deg); }
-        .pos-7 { transform: rotate(66deg); }  .pos-7 .arc-content { transform: rotate(-66deg); }
-
-        .arc-content:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.1); }
-
-        /* ИНФО-КАРТЫ */
+        /* ИНФО-БЛОКИ С ПОДСВЕТКОЙ */
         .info-cards { display: flex; gap: 30px; margin-top: 50px; }
         .info-box { 
             flex: 1; 
@@ -305,18 +250,14 @@
                 </div>
             </div>
 
-            <div class="arc-modes-section">
-                <h2 class="arc-main-title">7 РЕЖИМОВ</h2>
-                
-                <div class="arc-container">
-                    <div class="arc-item pos-1"><div class="arc-content"><h3>ЗАХВАТ ТОЧЕК</h3><p>КОНТРОЛИРУЙТЕ СТРАТЕГИЧЕСКИЕ ТОЧКИ НА КАРТЕ.</p></div></div>
-                    <div class="arc-item pos-2"><div class="arc-content"><h3>ШТУРМ</h3><p>УНИЧТОЖЬТЕ ЦЕЛИ ИЛИ ЗАЩИТИТЕ ИХ ОТ ПОДРЫВА.</p></div></div>
-                    <div class="arc-item pos-3"><div class="arc-content"><h3>КОМАНДНЫЙ БОЙ</h3><p>КЛАССИЧЕСКОЕ ПРОТИВОСТОЯНИЕ ДВУХ КОМАНД.</p></div></div>
-                    <div class="arc-item pos-4"><div class="arc-content"><h3>ЗАХВАТ ФЛАГА</h3><p>ПОХИТЬТЕ ЗНАМЯ ПРОТИВНИКА И ДОСТАВЬТЕ НА БАЗУ.</p></div></div>
-                    <div class="arc-item pos-5"><div class="arc-content"><h3>ПОДРЫВ</h3><p>АТАКУЮЩАЯ КОМАНДА ДОЛЖНА ЗАЛОЖИТЬ БОМБУ.</p></div></div>
-                    <div class="arc-item pos-6"><div class="arc-content"><h3>ОХОТНИК</h3><p>УБЕЙТЕ ВРАГА И ЗАБЕРИТЕ ЕГО НАТЕЛЬНЫЙ ЖЕТОН.</p></div></div>
-                    <div class="arc-item pos-7"><div class="arc-content"><h3>МЯСОРУБКА</h3><p>ВСЕ ИГРОКИ СРАЖАЮТСЯ НЕЗАВИСИМО ДРУГ ОТ ДРУГА.</p></div></div>
-                </div>
+            <div class="modes-grid">
+                <div class="mode-item"><h3>ЗАХВАТ ТОЧЕК</h3><p>КОНТРОЛИРУЙТЕ СТРАТЕГИЧЕСКИЕ ТОЧКИ НА КАРТЕ.</p></div>
+                <div class="mode-item"><h3>ШТУРМ</h3><p>УНИЧТОЖЬТЕ ЦЕЛИ ИЛИ ЗАЩИТИТЕ ИХ ОТ ПОДРЫВА.</p></div>
+                <div class="mode-item"><h3>КОМАНДНЫЙ БОЙ</h3><p>КЛАССИЧЕСКОЕ ПРОТИВОСТОЯНИЕ ДВУХ КОМАНД.</p></div>
+                <div class="mode-item"><h3>ЗАХВАТ ФЛАГА</h3><p>ПОХИТЬТЕ ЗНАМЯ ПРОТИВНИКА И ДОСТАВЬТЕ НА БАЗУ.</p></div>
+                <div class="mode-item"><h3>ПОДРЫВ</h3><p>АТАКУЮЩАЯ КОМАНДА ДОЛЖНА ЗАЛОЖИТЬ БОМБУ.</p></div>
+                <div class="mode-item"><h3>ОХОТНИК</h3><p>УБЕЙТЕ ВРАГА И ЗАБЕРИТЕ ЕГО НАТЕЛЬНЫЙ ЖЕТОН.</p></div>
+                <div class="mode-item"><h3>МЯСОРУБКА</h3><p>ВСЕ ИГРОКИ СРАЖАЮТСЯ НЕЗАВИСИМО ДРУГ ОТ ДРУГА.</p></div>
             </div>
 
             <div class="info-cards">
