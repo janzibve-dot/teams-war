@@ -118,7 +118,7 @@
             background: rgba(5, 5, 5, 0.9); 
             position: relative;
             z-index: 10;
-            margin-top: -2.6cm; 
+            margin-top: -4.6cm; 
         }
 
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
@@ -126,7 +126,6 @@
         #about { padding-top: 0; }
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
 
-        /* ИЗМЕНЕНИЕ: ЗАГОЛОВКИ БОЛДОМ И 22PX */
         .section-label { 
             color: var(--custom-green); 
             font-size: 22px; 
@@ -155,8 +154,21 @@
         .mode-item h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
         .mode-item p { font-size: 18px; color: #aaa; text-transform: uppercase; }
 
+        /* ИЗМЕНЕНИЕ: ИНФО-БЛОКИ С ПОДСВЕТКОЙ ПРИ НАВЕДЕНИИ */
         .info-cards { display: flex; gap: 30px; margin-top: 50px; }
-        .info-box { flex: 1; border: 1px solid #222; padding: 40px; background: #080808; text-align: center; }
+        .info-box { 
+            flex: 1; 
+            border: 1px solid #222; /* СЕРЫЙ ЦВЕТ ПО УМОЛЧАНИЮ */
+            padding: 40px; 
+            background: #080808; 
+            text-align: center; 
+            transition: 0.3s; /* ПЛАВНОСТЬ */
+        }
+        /* ЭФФЕКТ НАВЕДЕНИЯ КУРСОРA */
+        .info-box:hover { 
+            border-color: var(--custom-green); /* ПОДСВЕТКА #777c4e */
+            box-shadow: 0 0 20px rgba(119, 124, 78, 0.2); 
+        }
         .info-box p { font-size: 18px; text-transform: uppercase; color: #999; margin: 0; }
 
         /* FAQ */
