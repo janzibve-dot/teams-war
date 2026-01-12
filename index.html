@@ -142,13 +142,19 @@
 
         .teams-row { display: flex; gap: 40px; margin: 50px 0; }
         .team-card { flex: 1; border: 1px solid #222; padding: 40px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); }
-        .team-card.alpha { border-left: 6px solid var(--custom-green); text-align: left; }
+        
+        /* ИЗМЕНЕНИЕ ДЛЯ АЛЬФА: Флекс-контейнер для картинки справа */
+        .team-card.alpha { 
+            border-left: 6px solid var(--custom-green); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+        }
         .team-card.terror { border-right: 6px solid var(--custom-red); border-left: 1px solid #222; text-align: right; }
         
         .team-name { font-size: 36px; font-weight: 700; margin-bottom: 20px; display: block; }
         .op-img { position: absolute; right: -10px; bottom: -10px; height: 130%; opacity: 0.6; pointer-events: none; }
 
-        /* РЕЖИМЫ (СЕТКА GRID ИЗ v67.0) */
         .modes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin: 60px 0; }
         .mode-item { border: 1px solid #222; padding: 30px; transition: 0.3s; background: rgba(0,0,0,0.4); text-align: center; }
         .mode-item:hover { border-color: var(--custom-red); }
@@ -172,7 +178,7 @@
         .info-box p { font-size: 18px; text-transform: uppercase; color: #999; margin: 0; }
 
         /* FAQ */
-        #faq { display: flex; gap: 80px; }
+        #faq-section { margin-top: 100px; display: flex; gap: 80px; }
         .faq-title-vert { font-size: 100px; writing-mode: vertical-lr; transform: rotate(180deg); color: white; border-right: 6px solid var(--custom-red); padding-right: 30px; }
         .faq-list { flex: 1; }
         .faq-item { border-bottom: 1px solid #222; margin-bottom: 15px; }
@@ -239,10 +245,13 @@
 
             <div class="teams-row">
                 <div class="team-card alpha">
-                    <span class="team-name" style="color:var(--custom-green)">АЛЬФА</span>
-                    <p style="color:#888; font-size:18px; text-transform: none;">ЭЛИТНЫЙ СПЕЦНАЗ, ПРОТИВОСТОЯЩИЙ<br>угрозе со стороны боевиков.</p>
-                    <img src="alpha.png" class="op-img" alt="">
+                    <div style="text-align: left;">
+                        <span class="team-name" style="color:var(--custom-green); display: block; margin-bottom: 10px;">АЛЬФА</span>
+                        <p style="color:#888; font-size:18px; text-transform: none; margin: 0;">ЭЛИТНЫЙ СПЕЦНАЗ, ПРОТИВОСТОЯЩИЙ<br>угрозе со стороны боевиков.</p>
+                    </div>
+                    <img src="T_TeamAlphaIcon.png" alt="" style="height: 140px; width: auto; opacity: 1;">
                 </div>
+
                 <div class="team-card terror">
                     <span class="team-name" style="color:var(--custom-red)">БОЕВИКИ</span>
                     <p style="color:#888; font-size:18px; text-transform: none;">ПРОТИВОБОРСТВУЮЩАЯ СТОРОНА, СОЗДАЮЩАЯ<br>постоянные угрозы мировому порядку.</p>
@@ -277,15 +286,17 @@
         </section>
 
         <section id="faq" class="full-section">
-            <div class="faq-title-vert">FAQ</div>
-            <div class="faq-list">
-                <div class="faq-item"><div class="faq-question"><span>01 // Системные требования</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/">ПРОВЕРЬТЕ НА VK PLAY</a></div></div></div>
-                <div class="faq-item"><div class="faq-question"><span>02 // Как скачать и обновить?</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ИСПОЛЬЗУЙТЕ ЛАУНЧЕР VK PLAY.</div></div></div>
-                <div class="faq-item"><div class="faq-question"><span>03 // Игра не запускается</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОБРАТИТЕСЬ В ТЕХПОДДЕРЖКУ.</div></div></div>
-                <div class="faq-item"><div class="faq-question"><span>04 // Обнаружен баг</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">СООБЩИТЕ В СЛУЖБУ ТЕХНИЧЕСКОЙ ПОДДЕРЖКИ.</div></div></div>
-                <div class="faq-item"><div class="faq-question"><span>05 // Жалоба на игрока</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОТПРАВЬТЕ ЖАЛОБУ В ТЕХПОДДЕРЖКУ.</div></div></div>
-                <div class="faq-item"><div class="faq-question"><span>06 // Связаться с поддержкой</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">КАНАЛЫ СВЯЗИ:<div class="faq-social-row"><a href="https://t.me/niks_on_game" class="faq-social-btn"><svg viewBox="0 0 24 24" width="24" fill="white"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-2.003 9.464c-.149.659-.541.823-1.091.515l-3.056-2.251-1.474 1.42c-.163.163-.299.299-.614.299l.22-3.111 5.662-5.116c.246-.219-.054-.341-.381-.123l-7.001 4.407-3.012-.942c-.655-.205-.668-.655.137-.97l11.77-4.536c.544-.205 1.021.123.843.943z"/></svg></a></div></div></div></div>
-                <div class="faq-item"><div class="faq-question"><span>07 // Новости и обновления</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/devblog/">ДНЕВНИКИ РАЗРАБОТКИ</a></div></div></div>
+            <div id="faq-section">
+                <div class="faq-title-vert">FAQ</div>
+                <div class="faq-list">
+                    <div class="faq-item"><div class="faq-question"><span>01 // Системные требования</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/">ПРОВЕРЬТЕ НА VK PLAY</a></div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>02 // Как скачать и обновить?</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ИСПОЛЬЗУЙТЕ ЛАУНЧЕР VK PLAY.</div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>03 // Игра не запускается</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОБРАТИТЕСЬ В ТЕХПОДДЕРЖКУ.</div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>04 // Обнаружен баг</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">СООБЩИТЕ В СЛУЖБУ ТЕХНИЧЕСКОЙ ПОДДЕРЖКИ.</div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>05 // Жалоба на игрока</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОТПРАВЬТЕ ЖАЛОБУ В ТЕХПОДДЕРЖКУ.</div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>06 // Связаться с поддержкой</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">КАНАЛЫ СВЯЗИ:<div class="faq-social-row"><a href="https://t.me/niks_on_game" class="faq-social-btn"><svg viewBox="0 0 24 24" width="24" fill="white"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-2.003 9.464c-.149.659-.541.823-1.091.515l-3.056-2.251-1.474 1.42c-.163.163-.299.299-.614.299l.22-3.111 5.662-5.116c.246-.219-.054-.341-.381-.123l-7.001 4.407-3.012-.942c-.655-.205-.668-.655.137-.97l11.77-4.536c.544-.205 1.021.123.843.943z"/></svg></a></div></div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>07 // Новости и обновления</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/devblog/">ДНЕВНИКИ РАЗРАБОТКИ</a></div></div></div>
+                </div>
             </div>
         </section>
 
