@@ -101,7 +101,7 @@
         }
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
 
-        /* КРАСНАЯ ЛИНИЯ (2.6СМ) */
+        /* КРАСНАЯ ЛИНИЯ */
         .red-boundary-line { 
             position: absolute; 
             bottom: 2.6cm; 
@@ -113,12 +113,12 @@
             box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); 
         }
 
-        /* --- ОБЕРТКА КОНТЕНТА (ВЫРОВНЕНА ПО ЛИНИИ) --- */
+        /* --- ОБЕРТКА КОНТЕНТА --- */
         .site-content-wrapper {
             background: rgba(5, 5, 5, 0.9); 
             position: relative;
             z-index: 10;
-            margin-top: -2.6cm; /* ИСПРАВЛЕНО: Теперь начинается строго от нижнего края линии */
+            margin-top: -2.6cm; 
         }
 
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
@@ -126,7 +126,6 @@
         #about { padding-top: 0; }
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
 
-        /* МЕТКИ РАЗДЕЛОВ (ЗЕЛЕНЫЙ ЦВЕТ) */
         .section-label { color: var(--custom-green); font-size: 16px; margin-bottom: 10px; display: block; }
 
         /* ОБ ИГРЕ */
@@ -222,7 +221,7 @@
             <div class="teams-row">
                 <div class="team-card alpha">
                     <span class="team-name" style="color:var(--custom-green)">АЛЬФА</span>
-                    <p style="color:#888; font-size:18px; text-transform: none;">ЭЛИТНЫЙ СПЕЦНАЗ, ПРОТИВОСТОЯЩИЙ<br>угрозе со стороны Боевиков.</p>
+                    <p style="color:#888; font-size:18px; text-transform: none;">ЭЛИТНЫЙ СПЕЦНАЗ, ПРОТИВОСТОЯЩИЙ<br>угрозе со стороны боевиков.</p>
                     <img src="alpha.png" class="op-img" alt="">
                 </div>
                 <div class="team-card terror">
