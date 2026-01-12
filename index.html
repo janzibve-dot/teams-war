@@ -118,7 +118,7 @@
             background: rgba(5, 5, 5, 0.9); 
             position: relative;
             z-index: 10;
-            margin-top: -4.6cm; 
+            margin-top: -2.6cm; /* ИСПРАВЛЕНО: Теперь начинается строго от нижнего края линии */
         }
 
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
@@ -143,7 +143,7 @@
         .teams-row { display: flex; gap: 40px; margin: 50px 0; }
         .team-card { flex: 1; border: 1px solid #222; padding: 40px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); }
         
-        /* БЛОК АЛЬФА: ТЕКСТ СЛЕВА, КАРТИНКА СПРАВА, ПОЛОСКА СЛЕВА */
+        /* БЛОК АЛЬФА */
         .team-card.alpha { 
             border-left: 6px solid var(--custom-green); 
             display: flex; 
@@ -151,9 +151,9 @@
             justify-content: space-between; 
         }
 
-        /* БЛОК БОЕВИКИ: КАРТИНКА СЛЕВА, ТЕКСТ СПРАВА, ПОЛОСКА СПРАВА */
+        /* БЛОК БОЕВИКИ */
         .team-card.terror { 
-            border-right: 6px solid var(--custom-red); /* Полоска справа */
+            border-right: 6px solid var(--custom-red); 
             border-left: 1px solid #222; 
             display: flex; 
             align-items: center; 
