@@ -118,7 +118,7 @@
             background: rgba(5, 5, 5, 0.9); 
             position: relative;
             z-index: 10;
-            margin-top: -2.6cm; /* ИСПРАВЛЕНО: Теперь начинается строго от нижнего края линии */
+            margin-top: -2.6cm; 
         }
 
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
@@ -141,25 +141,40 @@
         .stat-num { font-size: 32px; font-weight: 700; display: block; color: var(--custom-red); margin-bottom: 5px; }
 
         .teams-row { display: flex; gap: 40px; margin: 50px 0; }
-        .team-card { flex: 1; border: 1px solid #222; padding: 40px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); }
-        
-        /* БЛОК АЛЬФА */
-        .team-card.alpha { 
-            border-left: 6px solid var(--custom-green); 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
+
+        /* ОБНОВЛЕННЫЕ КАРТОЧКИ КОМАНД (КНОПКИ) */
+        .team-card { 
+            flex: 1; 
+            border: 1px solid #222; 
+            padding: 40px; 
+            position: relative; 
+            overflow: hidden; 
+            background: rgba(255,255,255,0.02); 
+            transition: 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
         }
 
-        /* БЛОК БОЕВИКИ */
-        .team-card.terror { 
-            border-right: 6px solid var(--custom-red); 
-            border-left: 1px solid #222; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            text-align: right; 
+        /* Увеличение картинок на 7мм и ПОСТОЯННОЕ свечение */
+        .team-card img { 
+            height: calc(140px + 7mm); 
+            width: auto; 
+            opacity: 1; 
+            transition: 0.3s ease;
         }
+
+        /* АЛЬФА: Зеленое свечение и подсветка при наведении */
+        .team-card.alpha { border-left: 6px solid var(--custom-green); }
+        .team-card.alpha img { filter: drop-shadow(0 0 15px var(--custom-green)); }
+        .team-card.alpha:hover { border: 1px solid var(--custom-green); border-left: 6px solid var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.3); }
+
+        /* БОЕВИКИ: Красное свечение и подсветка при наведении */
+        .team-card.terror { border-right: 6px solid var(--custom-red); text-align: right; }
+        .team-card.terror img { filter: drop-shadow(0 0 15px var(--custom-red)); }
+        .team-card.terror:hover { border: 1px solid var(--custom-red); border-right: 6px solid var(--custom-red); box-shadow: 0 0 20px rgba(188, 0, 0, 0.3); }
         
         .team-name { font-size: 36px; font-weight: 700; margin-bottom: 20px; display: block; }
 
@@ -257,11 +272,11 @@
                         <span class="team-name" style="color:var(--custom-green); display: block; margin-bottom: 10px;">АЛЬФА</span>
                         <p style="color:#888; font-size:18px; text-transform: none; margin: 0;">ЭЛИТНЫЙ СПЕЦНАЗ, ПРОТИВОСТОЯЩИЙ<br>угрозе со стороны боевиков.</p>
                     </div>
-                    <img src="T_TeamAlphaIcon.png" alt="" style="height: 140px; width: auto; opacity: 1;">
+                    <img src="T_TeamAlphaIcon.png" alt="">
                 </div>
 
                 <div class="team-card terror">
-                    <img src="T_TeamTerrorIcon.png" alt="" style="height: 140px; width: auto; opacity: 1;">
+                    <img src="T_TeamTerrorIcon.png" alt="">
                     <div style="text-align: right;">
                         <span class="team-name" style="color:var(--custom-red); display: block; margin-bottom: 10px;">БОЕВИКИ</span>
                         <p style="color:#888; font-size:18px; text-transform: none; margin: 0;">ПРОТИВОБОРСТВУЮЩАЯ СТОРОНА, СОЗДАЮЩАЯ<br>постоянные угрозы мировому порядку.</p>
