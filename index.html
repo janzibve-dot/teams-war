@@ -118,7 +118,7 @@
             background: rgba(5, 5, 5, 0.9); 
             position: relative;
             z-index: 10;
-            margin-top: -4.6cm; 
+            margin-top: -2.6cm; 
         }
 
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
@@ -148,25 +148,72 @@
         .team-name { font-size: 36px; font-weight: 700; margin-bottom: 20px; display: block; }
         .op-img { position: absolute; right: -10px; bottom: -10px; height: 130%; opacity: 0.6; pointer-events: none; }
 
-        .modes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin: 60px 0; }
-        .mode-item { border: 1px solid #222; padding: 30px; transition: 0.3s; background: rgba(0,0,0,0.4); text-align: center; }
-        .mode-item:hover { border-color: var(--custom-red); }
-        .mode-item h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
-        .mode-item p { font-size: 18px; color: #aaa; text-transform: uppercase; }
+        /* --- НОВЫЕ СТИЛИ ДЛЯ ПОЛУКРУГА РЕЖИМОВ --- */
+        .modes-section-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 150px 0; /* Отступы сверху и снизу */
+            gap: 20px;
+        }
 
-        /* ИЗМЕНЕНИЕ: ИНФО-БЛОКИ С ПОДСВЕТКОЙ ПРИ НАВЕДЕНИИ */
+        .modes-main-title {
+            font-size: 100px;
+            color: var(--custom-red);
+            font-weight: 700;
+            line-height: 1;
+            flex-shrink: 0;
+            max-width: 350px;
+        }
+
+        .arc-wrapper {
+            position: relative;
+            width: 1000px; /* Ширина основания дуги */
+            height: 450px; /* Высота дуги (радиус) */
+            flex-grow: 1;
+        }
+
+        .mode-wrap {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 260px; /* Ширина блока режима */
+            margin-left: -130px;
+            transform-origin: bottom center;
+        }
+
+        .mode-item-arc {
+            border: 1px solid #222;
+            padding: 20px;
+            background: rgba(0,0,0,0.5);
+            text-align: center;
+            /* Важно: контр-вращение в позициях */
+        }
+        .mode-item-arc h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 20px; }
+        .mode-item-arc p { font-size: 16px; color: #aaa; text-transform: uppercase; margin: 0; }
+
+        /* Позиции по дуге (радиус 450px) */
+        .pos-1 { transform: rotate(-90deg); } .pos-1 .mode-item-arc { transform: translateY(-450px) rotate(90deg); }
+        .pos-2 { transform: rotate(-60deg); } .pos-2 .mode-item-arc { transform: translateY(-450px) rotate(60deg); }
+        .pos-3 { transform: rotate(-30deg); } .pos-3 .mode-item-arc { transform: translateY(-450px) rotate(30deg); }
+        .pos-4 { transform: rotate(0deg); }   .pos-4 .mode-item-arc { transform: translateY(-450px) rotate(0deg); }
+        .pos-5 { transform: rotate(30deg); }  .pos-5 .mode-item-arc { transform: translateY(-450px) rotate(-30deg); }
+        .pos-6 { transform: rotate(60deg); }  .pos-6 .mode-item-arc { transform: translateY(-450px) rotate(-60deg); }
+        .pos-7 { transform: rotate(90deg); }  .pos-7 .mode-item-arc { transform: translateY(-450px) rotate(-90deg); }
+        /* --------------------------------------- */
+
+
         .info-cards { display: flex; gap: 30px; margin-top: 50px; }
         .info-box { 
             flex: 1; 
-            border: 1px solid #222; /* СЕРЫЙ ЦВЕТ ПО УМОЛЧАНИЮ */
+            border: 1px solid #222; 
             padding: 40px; 
             background: #080808; 
             text-align: center; 
-            transition: 0.3s; /* ПЛАВНОСТЬ */
+            transition: 0.3s; 
         }
-        /* ЭФФЕКТ НАВЕДЕНИЯ КУРСОРA */
         .info-box:hover { 
-            border-color: var(--custom-green); /* ПОДСВЕТКА #777c4e */
+            border-color: var(--custom-green); 
             box-shadow: 0 0 20px rgba(119, 124, 78, 0.2); 
         }
         .info-box p { font-size: 18px; text-transform: uppercase; color: #999; margin: 0; }
@@ -250,14 +297,17 @@
                 </div>
             </div>
 
-            <div class="modes-grid">
-                <div class="mode-item"><h3>ЗАХВАТ ТОЧЕК</h3><p>КОНТРОЛИРУЙТЕ СТРАТЕГИЧЕСКИЕ ТОЧКИ НА КАРТЕ.</p></div>
-                <div class="mode-item"><h3>ШТУРМ</h3><p>УНИЧТОЖЬТЕ ЦЕЛИ ИЛИ ЗАЩИТИТЕ ИХ ОТ ПОДРЫВА.</p></div>
-                <div class="mode-item"><h3>КОМАНДНЫЙ БОЙ</h3><p>КЛАССИЧЕСКОЕ ПРОТИВОСТОЯНИЕ ДВУХ КОМАНД.</p></div>
-                <div class="mode-item"><h3>ЗАХВАТ ФЛАГА</h3><p>ПОХИТЬТЕ ЗНАМЯ ПРОТИВНИКА И ДОСТАВЬТЕ НА БАЗУ.</p></div>
-                <div class="mode-item"><h3>ПОДРЫВ</h3><p>АТАКУЮЩАЯ КОМАНДА ДОЛЖНА ЗАЛОЖИТЬ БОМБУ.</p></div>
-                <div class="mode-item"><h3>ОХОТНИК</h3><p>УБЕЙТЕ ВРАГА И ЗАБЕРИТЕ ЕГО НАТЕЛЬНЫЙ ЖЕТОН.</p></div>
-                <div class="mode-item"><h3>МЯСОРУБКА</h3><p>ВСЕ ИГРОКИ СРАЖАЮТСЯ НЕЗАВИСИМО ДРУГ ОТ ДРУГА.</p></div>
+            <div class="modes-section-container">
+                <h2 class="modes-main-title">7 РЕЖИМОВ</h2>
+                <div class="arc-wrapper">
+                    <div class="mode-wrap pos-1"><div class="mode-item-arc"><h3>ЗАХВАТ ТОЧЕК</h3><p>КОНТРОЛИРУЙТЕ СТРАТЕГИЧЕСКИЕ ТОЧКИ НА КАРТЕ.</p></div></div>
+                    <div class="mode-wrap pos-2"><div class="mode-item-arc"><h3>ШТУРМ</h3><p>УНИЧТОЖЬТЕ ЦЕЛИ ИЛИ ЗАЩИТИТЕ ИХ ОТ ПОДРЫВА.</p></div></div>
+                    <div class="mode-wrap pos-3"><div class="mode-item-arc"><h3>КОМАНДНЫЙ БОЙ</h3><p>КЛАССИЧЕСКОЕ ПРОТИВОСТОЯНИЕ ДВУХ КОМАНД.</p></div></div>
+                    <div class="mode-wrap pos-4"><div class="mode-item-arc"><h3>ЗАХВАТ ФЛАГА</h3><p>ПОХИТЬТЕ ЗНАМЯ ПРОТИВНИКА И ДОСТАВЬТЕ НА БАЗУ.</p></div></div>
+                    <div class="mode-wrap pos-5"><div class="mode-item-arc"><h3>ПОДРЫВ</h3><p>АТАКУЮЩАЯ КОМАНДА ДОЛЖНА ЗАЛОЖИТЬ БОМБУ.</p></div></div>
+                    <div class="mode-wrap pos-6"><div class="mode-item-arc"><h3>ОХОТНИК</h3><p>УБЕЙТЕ ВРАГА И ЗАБЕРИТЕ ЕГО НАТЕЛЬНЫЙ ЖЕТОН.</p></div></div>
+                    <div class="mode-wrap pos-7"><div class="mode-item-arc"><h3>МЯСОРУБКА</h3><p>ВСЕ ИГРОКИ СРАЖАЮТСЯ НЕЗАВИСИМО ДРУГ ОТ ДРУГА.</p></div></div>
+                </div>
             </div>
 
             <div class="info-cards">
