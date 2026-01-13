@@ -100,7 +100,7 @@
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
         
         #about { padding-top: 0; }
-        .big-title { font-size: 100px; color: white; margin-bottom: 30px; line-height: 1; }
+        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
 
         .section-label { color: var(--custom-green); font-size: 22px; font-weight: 700; margin-bottom: 10px; display: block; }
 
@@ -126,6 +126,8 @@
         .team-card.terror { border-right: 6px solid var(--custom-red); text-align: right; }
         .team-card.terror img { filter: drop-shadow(0 0 15px var(--custom-red)); }
         .team-card.terror:hover { border: 1px solid var(--custom-red); border-right: 6px solid var(--custom-red); box-shadow: 0 0 20px rgba(188, 0, 0, 0.3); }
+        
+        .team-name { font-size: 36px; font-weight: 700; margin-bottom: 20px; display: block; }
 
         .modes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin: 60px 0; }
         .mode-item { border: 1px solid #222; padding: 30px; transition: 0.3s; background: rgba(0,0,0,0.4); text-align: center; }
@@ -133,14 +135,22 @@
         .mode-item h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
         .mode-item p { font-size: 18px; color: #aaa; text-transform: uppercase; margin: 0; }
 
-        /* FAQ */
-        #faq-section { margin-top: -6cm; display: flex; flex-direction: column; }
-        .faq-title-horiz { font-size: 100px; color: white; text-align: left; margin-bottom: 40px; } /* Выровнено влево */
-        .faq-list { flex: 1; }
+        /* ИНФО-БЛОКИ */
+        .info-cards { display: flex; gap: 30px; margin-top: 50px; }
+        .info-box { flex: 1; border: 1px solid #222; padding: 40px; background: #080808; text-align: center; transition: 0.3s; }
+        .info-box:hover { border-color: var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.2); }
+        .info-box p { font-size: 18px; text-transform: uppercase; color: #999; margin: 0; }
+
+        /* FAQ - ПОДНЯТО, ВЫРОВНЕНО ВЛЕВО, ЦВЕТ ЗЕЛЕНЫЙ */
+        #faq-section { margin-top: -6cm; display: flex; flex-direction: column; align-items: flex-start; }
+        .faq-title-horiz { font-size: 100px; color: var(--custom-green); text-align: left; margin-bottom: 40px; width: 100%; }
+        .faq-list { width: 100%; }
         
         .faq-item { 
-            border-bottom: 1px solid #222; margin-bottom: 15px;
-            width: calc(100% - 5mm); margin-left: 0; /* Выровнено влево */
+            border-bottom: 1px solid #222; 
+            margin-bottom: 15px;
+            width: calc(100% - 5mm); 
+            transition: 0.3s;
         }
 
         .faq-question { 
@@ -204,32 +214,46 @@
                 <a href="#" class="stat-btn"><span class="stat-num">10+</span>КАРТ</a>
             </div>
             <p style="font-size: 24px; color: #ddd; border-left: 6px solid var(--custom-red); padding-left: 40px; max-width: 2000px;">
-                ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ...
+                ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ. ПРОДЕМОНСТРИРУЙТЕ СВОЁ МАСТЕРСТВО, ТАКТИКУ И КОМАНДНУЮ РАБОТУ В СХВАТКАХ С ДОСТОЙНЫМИ ПРОТИВНИКАМИ. ОБЪЕДИНЯЙТЕСЬ В КЛАНЫ, ФОРМИРУЙТЕ ОТРЯДЫ ЧТОБЫ ПОБЕДИТЬ ПРОТИВНИКА.
             </p>
             <div class="teams-row">
                 <div class="team-card alpha">
-                    <div style="text-align: left;"><span class="team-name" style="color:var(--custom-green);">АЛЬФА</span><p>ЭЛИТНЫЙ СПЕЦНАЗ...</p></div>
+                    <div style="text-align: left;"><span class="team-name" style="color:var(--custom-green);">АЛЬФА</span><p style="color:#888; font-size:18px; text-transform: none; margin: 0;">ЭЛИТНЫЙ СПЕЦНАЗ, ПРОТИВОСТОЯЩИЙ<br>угрозе со стороны боевиков.</p></div>
                     <img src="T_TeamAlphaIcon.png" alt="">
                 </div>
                 <div class="team-card terror">
                     <img src="T_TeamTerrorIcon.png" alt="">
-                    <div style="text-align: right;"><span class="team-name" style="color:var(--custom-red);">БОЕВИКИ</span><p>ПРОТИВОБОРСТВУЮЩАЯ СТОРОНА...</p></div>
+                    <div style="text-align: right;"><span class="team-name" style="color:var(--custom-red);">БОЕВИКИ</span><p style="color:#888; font-size:18px; text-transform: none; margin: 0;">ПРОТИВОБОРСТВУЮЩАЯ СТОРОНА, СОЗДАЮЩАЯ<br>постоянные угрозы мировому порядку.</p></div>
                 </div>
             </div>
             <div class="modes-grid">
-                <div class="mode-item"><h3>ЗАХВАТ ТОЧЕК</h3><p>КОНТРОЛИРУЙТЕ ТОЧКИ...</p></div>
-                </div>
+                <div class="mode-item"><h3>ЗАХВАТ ТОЧЕК</h3><p>КОНТРОЛИРУЙТЕ СТРАТЕГИЧЕСКИЕ ТОЧКИ НА КАРТЕ.</p></div>
+                <div class="mode-item"><h3>ШТУРМ</h3><p>УНИЧТОЖЬТЕ ЦЕЛИ ИЛИ ЗАЩИТИТЕ ИХ ОТ ПОДРЫВА.</p></div>
+                <div class="mode-item"><h3>КОМАНДНЫЙ БОЙ</h3><p>КЛАССИЧЕСКОЕ ПРОТИВОСТОЯНИЕ ДВУХ КОМАНД.</p></div>
+                <div class="mode-item"><h3>ЗАХВАТ ФЛАГА</h3><p>ПОХИТЬТЕ ЗНАМЯ ПРОТИВНИКА И ДОСТАВЬТЕ НА БАЗУ.</p></div>
+                <div class="mode-item"><h3>ПОДРЫВ</h3><p>АТАКУЮЩАЯ КОМАНДА ДОЛЖНА ЗАЛОЖИТЬ БОМБУ.</p></div>
+                <div class="mode-item"><h3>ОХОТНИК</h3><p>УБЕЙТЕ ВРАГА И ЗАБЕРИТЕ ЕГО НАТЕЛЬНЫЙ ЖЕТОН.</p></div>
+                <div class="mode-item"><h3>МЯСОРУБКА</h3><p>ВСЕ ИГРОКИ СРАЖАЮТСЯ НЕЗАВИСИМО ДРУГ ОТ ДРУГА.</p></div>
+            </div>
+            <div class="info-cards">
+                <div class="info-box"><span class="section-label">СНАРЯЖЕНИЕ</span><p>30+ ВИДА ДАЛЬНОБОЙНОГО, 8+ ХОЛОДНОГО, 12+ МЕТАТЕЛЬНОГО ОРУЖИЯ. БРОНЯ, VIP, ПЕРКИ, МОДУЛИ. КАСТОМИЗИРУЙТЕ КОМПЛЕКТЫ ПОД СВОЙ СТИЛЬ.</p></div>
+                <div class="info-box"><span class="section-label">ОПЕРАТИВНИКИ</span><p>127 ГОТОВЫХ ОПЕРАТИВНИКА - ПОД РАЗНЫЕ ЗАДАЧИ. БЫСТРАЯ СМЕНА ОБЛИКА БЕЗ ДОЛГИХ НАСТРОЕК.</p></div>
+                <div class="info-box"><span class="section-label">РЕЙТИНГ</span><p>РЕЙТИНГ ИГРОКОВ И КЛАНОВ С ПРИЗОВЫМИ МЕСТАМИ. СТАНЬТЕ ЛУЧШИМ В СЕЗОНЕ.</p></div>
+            </div>
         </section>
 
         <section id="faq" class="full-section">
             <div id="faq-section">
                 <div class="faq-title-horiz">FAQ</div>
                 <div class="faq-list">
-                    <div class="faq-item">
-                        <div class="faq-question"><span>01 // СИСТЕМНЫЕ ТРЕБОВАНИЯ</span><span>▼</span></div>
-                        <div class="faq-answer"><div class="faq-answer-inner">СИСТЕМНЫЕ ТРЕБОВАНИЯ НА <a href="https://vkplay.ru/play/game/teams-war/" class="faq-link">VK Play</a></div></div>
-                    </div>
-                    </div>
+                    <div class="faq-item"><div class="faq-question"><span>01 // СИСТЕМНЫЕ ТРЕБОВАНИЯ</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">СИСТЕМНЫЕ ТРЕБОВАНИЯ ИГРЫ НА <a href="https://vkplay.ru/play/game/teams-war/" class="faq-link">VK Play</a></div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>02 // КАК СКАЧАТЬ?</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ПОСЕТИТЕ СТРАНИЦУ ИГРЫ НА ПЛОЩАДКЕ <a href="https://vkplay.ru/play/game/teams-war/" class="faq-link">VK Play</a> ПОД СВОЕЙ УЧЕТНОЙ ЗАПИСЬЮ. нАЖМИТЕ КНОПКУ “СКАЧАТЬ” И СЛЕДУЙТЕ ИНСТРУКЦИЯМ.</div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>03 // Игра не запускается</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОБРАТИТЕСЬ В ТЕХПОДДЕРЖКУ.</div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>04 // Обнаружен баг</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">СООБЩИТЕ В СЛУЖБУ ТЕХНИЧЕСКОЙ ПОДДЕРЖКИ.</div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>05 // Жалоба на игрока</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОТПРАВЬТЕ ЖАЛОБУ В ТЕХПОДДЕРЖКУ.</div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>06 // Связаться с поддержкой</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">КАНАЛЫ СВЯЗИ:<div class="faq-social-row"><a href="https://t.me/niks_on_game" class="faq-social-btn"><svg viewBox="0 0 24 24" width="24" fill="white"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-2.003 9.464c-.149.659-.541.823-1.091.515l-3.056-2.251-1.474 1.42c-.163.163-.299.299-.614.299l.22-3.111 5.662-5.116c.246-.219-.054-.341-.381-.123l-7.001 4.407-3.012-.942c-.655-.205-.668-.655.137-.97l11.77-4.536c.544-.205 1.021.123.843.943z"/></svg></a></div></div></div></div>
+                    <div class="faq-item"><div class="faq-question"><span>07 // Новости и обновления</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/devblog/" class="faq-link">ДНЕВНИКИ РАЗРАБОТКИ</a></div></div></div>
+                </div>
             </div>
         </section>
 
