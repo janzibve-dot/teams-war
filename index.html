@@ -142,7 +142,7 @@
 
         .teams-row { display: flex; gap: 40px; margin: 50px 0; }
 
-        /* ОБНОВЛЕННЫЕ КАРТОЧКИ КОМАНД (КНОПКИ) */
+        /* КАРТОЧКИ КОМАНД */
         .team-card { 
             flex: 1; 
             border: 1px solid #222; 
@@ -158,20 +158,25 @@
             gap: 20px;
         }
 
-        /* Увеличение картинок на 7мм и ПОСТОЯННОЕ свечение */
+        /* Настройки картинок */
         .team-card img { 
             height: calc(140px + 7mm); 
             width: auto; 
             opacity: 1; 
-            transition: 0.3s ease;
+            transition: 0.4s ease-in-out; /* Плавная анимация */
         }
 
-        /* АЛЬФА: Зеленое свечение и подсветка при наведении */
+        /* ЭФФЕКТ УВЕЛИЧЕНИЯ ПРИ НАВЕДЕНИИ НА БЛОК */
+        .team-card:hover img {
+            transform: scale(1.15); /* Визуальное увеличение */
+        }
+
+        /* АЛЬФА: Зеленое свечение и подсветка */
         .team-card.alpha { border-left: 6px solid var(--custom-green); }
         .team-card.alpha img { filter: drop-shadow(0 0 15px var(--custom-green)); }
         .team-card.alpha:hover { border: 1px solid var(--custom-green); border-left: 6px solid var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.3); }
 
-        /* БОЕВИКИ: Красное свечение и подсветка при наведении */
+        /* БОЕВИКИ: Красное свечение и подсветка */
         .team-card.terror { border-right: 6px solid var(--custom-red); text-align: right; }
         .team-card.terror img { filter: drop-shadow(0 0 15px var(--custom-red)); }
         .team-card.terror:hover { border: 1px solid var(--custom-red); border-right: 6px solid var(--custom-red); box-shadow: 0 0 20px rgba(188, 0, 0, 0.3); }
@@ -184,7 +189,7 @@
         .mode-item h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
         .mode-item p { font-size: 18px; color: #aaa; text-transform: uppercase; margin: 0; }
 
-        /* ИНФО-БЛОКИ С ПОДСВЕТКОЙ */
+        /* ИНФО-БЛОКИ */
         .info-cards { display: flex; gap: 30px; margin-top: 50px; }
         .info-box { 
             flex: 1; 
