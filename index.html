@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
+    
+    <link rel="icon" href="favicon.png" type="image/png">
+
     <style>
         /* Шрифт Sangyo */
         @font-face {
@@ -124,7 +127,8 @@
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
         
         #about { padding-top: 0; }
-        .big-title { font-size: 100px; color: white; margin-bottom: 30px; line-height: 1; }
+        /* Заголовок ОБ ИГРЕ цветом #bc0000 */
+        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
 
         .section-label { 
             color: var(--custom-green); 
@@ -150,10 +154,7 @@
             background: rgba(255,255,255,0.02); 
             transition: 0.3s ease;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
+            display: flex; align-items: center; justify-content: space-between; gap: 20px;
         }
 
         .team-card img { 
@@ -187,22 +188,34 @@
         .info-box:hover { border-color: var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.2); }
         .info-box p { font-size: 18px; text-transform: uppercase; color: #999; margin: 0; }
 
-        /* FAQ ОБНОВЛЕННЫЙ */
-        #faq-section { margin-top: 100px; display: flex; flex-direction: column; }
-        .faq-title-horiz { font-size: 100px; color: white; text-align: right; margin-bottom: 40px; }
-        .faq-list { flex: 1; }
-        .faq-item { border-bottom: 1px solid #222; margin-bottom: 15px; }
-        .faq-question { padding: 30px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); }
-        .faq-question.active { color: var(--custom-red); border-left: 6px solid var(--custom-red); }
+        /* FAQ - ПОДНЯТО, ВЛЕВО, ЗЕЛЕНЫЙ И ЖИРНЫЙ */
+        #faq-section { margin-top: calc(100px - 6cm); display: flex; flex-direction: column; align-items: flex-start; }
+        .faq-title-horiz { font-size: 100px; color: var(--custom-green); text-align: left; margin-bottom: 40px; font-weight: bold; width: 100%; }
+        .faq-list { flex: 1; width: 100%; }
+        .faq-item { 
+            border-bottom: 1px solid #222; margin-bottom: 15px; 
+            width: calc(100% - 5mm); transition: 0.3s; 
+        }
+        .faq-question { 
+            padding: 30px; display: flex; justify-content: space-between; align-items: center; 
+            cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02);
+            border: 1px solid transparent;
+        }
+
+        /* Подсветка обводки при наведении */
+        .faq-item:hover .faq-question {
+            border: 1px solid var(--custom-red);
+            box-shadow: 0 0 20px rgba(188, 0, 0, 0.3);
+            color: var(--custom-red);
+        }
+
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); }
         .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
         
-        /* Стили для ссылок внутри FAQ */
         .faq-link { color: var(--custom-red); text-decoration: underline; transition: 0.3s; }
         .faq-link:hover { color: white; }
 
         .faq-social-row { display: flex; gap: 15px; margin-top: 20px; }
-        .faq-social-btn { padding: 15px; border: 1px solid #333; display: flex; align-items: center; justify-content: center; width: 55px; height: 55px; }
 
         /* ФУТЕР */
         footer { padding: 100px 40px; border-top: 4px solid var(--custom-red); background: transparent; }
@@ -345,7 +358,7 @@
             <div class="footer-nav">
                 <a href="privacy.html" class="footer-btn">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
                 <a href="terms.html" class="footer-btn">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
-                <a href=\"rules.html\" class=\"footer-btn\">ПРАВИЛА</a>
+                <a href="rules.html" class="footer-btn">ПРАВИЛА</a>
             </div>
         </footer>
     </div>
@@ -363,12 +376,16 @@
         }
         setInterval(createShell, 400);
 
+        // Теперь открытие только по клику
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
                 const answer = q.nextElementSibling, isActive = q.classList.contains('active');
                 document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = '0');
                 document.querySelectorAll('.faq-question').forEach(btn => btn.classList.remove('active'));
-                if (!isActive) { q.classList.add('active'); answer.style.maxHeight = answer.scrollHeight + "px"; }
+                if (!isActive) { 
+                    q.classList.add('active'); 
+                    answer.style.maxHeight = answer.scrollHeight + "px"; 
+                }
             });
         });
     </script>
