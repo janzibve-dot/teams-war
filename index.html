@@ -36,6 +36,16 @@
             background-size: cover; background-position: center; filter: brightness(0.2) blur(6px);
         }
 
+        /* Стиль для слова ТЕСТ */
+        .test-label {
+            font-size: 150px;
+            color: var(--custom-red);
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(188, 0, 0, 0.6);
+            z-index: 20;
+        }
+
         /* --- ХЕДЕР --- */
         header {
             position: sticky; top: 0; z-index: 1500;
@@ -188,39 +198,12 @@
         .info-box p { font-size: 18px; text-transform: uppercase; color: #999; margin: 0; }
 
         /* FAQ ОБНОВЛЕННЫЙ */
-        #faq-section { margin-top: -6cm; display: flex; flex-direction: column; }
+        #faq-section { margin-top: 100px; display: flex; flex-direction: column; }
         .faq-title-horiz { font-size: 100px; color: white; text-align: right; margin-bottom: 40px; }
         .faq-list { flex: 1; }
-        
-        .faq-item { 
-            border-bottom: 1px solid #222; 
-            margin-bottom: 15px;
-            width: calc(100% - 5mm); /* Уже на 5мм */
-            margin-left: auto; /* Выравнивание вправо */
-        }
-
-        .faq-question { 
-            padding: 30px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            background: rgba(255,255,255,0.02);
-            border: 1px solid transparent; /* Для подсветки обводки */
-        }
-
-        /* Открытие при наведении и подсветка */
-        .faq-item:hover .faq-question {
-            border: 1px solid var(--custom-red);
-            box-shadow: 0 0 20px rgba(188, 0, 0, 0.3);
-            color: var(--custom-red);
-        }
-        
-        .faq-item:hover .faq-answer {
-            max-height: 500px; /* Раскрытие при наведении */
-        }
-
+        .faq-item { border-bottom: 1px solid #222; margin-bottom: 15px; }
+        .faq-question { padding: 30px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); }
+        .faq-question.active { color: var(--custom-red); border-left: 6px solid var(--custom-red); }
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); }
         .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
         
@@ -257,6 +240,8 @@
         <div class="video-bg"><video autoplay muted loop playsinline><source src="hero_bg.mp4" type="video/mp4"></video></div>
         <img src="new-right-char.png" class="hero-char" alt="Боец">
         <div class="hero-content-group">
+            <div class="test-label">ТЕСТ</div>
+            
             <div class="main-title">
                 <span class="t">TEAMS</span>
                 <div class="war-btn-wrap">
@@ -379,7 +364,6 @@
         }
         setInterval(createShell, 400);
 
-        /* Скрипт клика оставлен для совместимости, но hover в CSS теперь приоритетнее */
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
                 const answer = q.nextElementSibling, isActive = q.classList.contains('active');
