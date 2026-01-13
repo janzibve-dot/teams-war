@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
-    
-    <link rel="icon" href="favicon.png" type="image/png">
-
     <style>
         /* Шрифт Sangyo */
         @font-face {
@@ -127,7 +124,7 @@
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
         
         #about { padding-top: 0; }
-        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
+        .big-title { font-size: 100px; color: white; margin-bottom: 30px; line-height: 1; }
 
         .section-label { 
             color: var(--custom-green); 
@@ -190,50 +187,17 @@
         .info-box:hover { border-color: var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.2); }
         .info-box p { font-size: 18px; text-transform: uppercase; color: #999; margin: 0; }
 
-        /* FAQ ОБНОВЛЕННЫЙ: ПОДНЯТО, ВЛЕВО, ЗЕЛЕНЫЙ И ЖИРНЫЙ */
-        #faq-section { 
-            margin-top: calc(100px - 6cm); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: flex-start;
-        }
-        .faq-title-horiz { 
-            font-size: 100px; 
-            color: var(--custom-green); 
-            text-align: left; 
-            margin-bottom: 40px; 
-            font-weight: bold; 
-            width: 100%;
-        }
-        .faq-list { flex: 1; width: 100%; }
-        
-        .faq-item { 
-            border-bottom: 1px solid #222; 
-            margin-bottom: 15px; 
-            width: calc(100% - 5mm);
-            transition: 0.3s;
-        }
-
-        .faq-question { 
-            padding: 30px; display: flex; justify-content: space-between; align-items: center; 
-            cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); 
-            border: 1px solid transparent;
-        }
-
-        /* Открытие при наведении и подсветка */
-        .faq-item:hover .faq-question {
-            border: 1px solid var(--custom-red);
-            box-shadow: 0 0 20px rgba(188, 0, 0, 0.3);
-            color: var(--custom-red);
-        }
-
-        .faq-item:hover .faq-answer {
-            max-height: 500px;
-        }
-
+        /* FAQ ОБНОВЛЕННЫЙ */
+        #faq-section { margin-top: 100px; display: flex; flex-direction: column; }
+        .faq-title-horiz { font-size: 100px; color: white; text-align: right; margin-bottom: 40px; }
+        .faq-list { flex: 1; }
+        .faq-item { border-bottom: 1px solid #222; margin-bottom: 15px; }
+        .faq-question { padding: 30px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); }
+        .faq-question.active { color: var(--custom-red); border-left: 6px solid var(--custom-red); }
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); }
         .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
         
+        /* Стили для ссылок внутри FAQ */
         .faq-link { color: var(--custom-red); text-decoration: underline; transition: 0.3s; }
         .faq-link:hover { color: white; }
 
@@ -343,7 +307,7 @@
                 <div class="faq-title-horiz">FAQ</div>
                 <div class="faq-list">
                     <div class="faq-item">
-                        <div class="faq-question"><span>01 // СИСТЕМНЫЕ ТРЕБОВАНИЯ</span><span>▼</span></div>
+                        <div class="faq-question"><span>01 // Системные требования</span><span>▼</span></div>
                         <div class="faq-answer">
                             <div class="faq-answer-inner">
                                 СИСТЕМНЫЕ ТРЕБОВАНИЯ ИГРЫ НА <a href="https://vkplay.ru/play/game/teams-war/" class="faq-link">VK Play</a>
@@ -351,7 +315,7 @@
                         </div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question"><span>02 // КАК СКАЧАТЬ?</span><span>▼</span></div>
+                        <div class="faq-question"><span>02 // Как скачать и обновить?</span><span>▼</span></div>
                         <div class="faq-answer">
                             <div class="faq-answer-inner">
                                 ПОСЕТИТЕ СТРАНИЦУ ИГРЫ НА ПЛОЩАДКЕ <a href="https://vkplay.ru/play/game/teams-war/" class="faq-link">VK Play</a> ПОД СВОЕЙ УЧЕТНОЙ ЗАПИСЬЮ. нАЖМИТЕ КНОПКУ “СКАЧАТЬ” И СЛЕДУЙТЕ ИНСТРУКЦИЯМ.
@@ -361,7 +325,17 @@
                     <div class="faq-item"><div class="faq-question"><span>03 // Игра не запускается</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОБРАТИТЕСЬ В ТЕХПОДДЕРЖКУ.</div></div></div>
                     <div class="faq-item"><div class="faq-question"><span>04 // Обнаружен баг</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">СООБЩИТЕ В СЛУЖБУ ТЕХНИЧЕСКОЙ ПОДДЕРЖКИ.</div></div></div>
                     <div class="faq-item"><div class="faq-question"><span>05 // Жалоба на игрока</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">ОТПРАВЬТЕ ЖАЛОБУ В ТЕХПОДДЕРЖКУ.</div></div></div>
-                    <div class="faq-item"><div class="faq-question"><span>06 // Связаться с поддержкой</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner">КАНАЛЫ СВЯЗИ:<div class="faq-social-row"><a href="https://t.me/niks_on_game" class="faq-social-btn"><svg viewBox="0 0 24 24" width="24" fill="white"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-2.003 9.464c-.149.659-.541.823-1.091.515l-3.056-2.251-1.474 1.42c-.163.163-.299.299-.614.299l.22-3.111 5.662-5.116c.246-.219-.054-.341-.381-.123l-7.001 4.407-3.012-.942c-.655-.205-.668-.655.137-.97l11.77-4.536c.544-.205 1.021.123.843.943z"/></svg></a></div></div></div></div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>06 // Связаться с поддержкой</span><span>▼</span></div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                КАНАЛЫ СВЯЗИ:
+                                <div class="faq-social-row">
+                                    <a href="https://t.me/niks_on_game" target="_blank" class="nav-btn" style="padding: 10px 30px; display: inline-block; width: auto; text-decoration: none;">ТЕЛЕГРАМ</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="faq-item"><div class="faq-question"><span>07 // Новости и обновления</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/devblog/" class="faq-link">ДНЕВНИКИ РАЗРАБОТКИ</a></div></div></div>
                 </div>
             </div>
@@ -371,7 +345,7 @@
             <div class="footer-nav">
                 <a href="privacy.html" class="footer-btn">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
                 <a href="terms.html" class="footer-btn">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
-                <a href="rules.html" class="footer-btn">ПРАВИЛА</a>
+                <a href=\"rules.html\" class=\"footer-btn\">ПРАВИЛА</a>
             </div>
         </footer>
     </div>
