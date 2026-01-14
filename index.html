@@ -97,7 +97,7 @@
         .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
         
-        /* МЯГКАЯ ПОДСВЕТКА TEAMS (v82/v85) */
+        /* МЯГКАЯ ПОДСВЕТКА TEAMS (v82/v85/v86) */
         .main-title .t { 
             color: var(--custom-green);
             text-shadow: 0 0 30px rgba(119, 124, 78, 0.4);
@@ -105,7 +105,7 @@
         
         .war-btn-wrap { display: flex; flex-direction: column; align-items: center; width: min-content; }
         
-        /* МЯГКАЯ ПОДСВЕТКА WAR (v82/v85) */
+        /* МЯГКАЯ ПОДСВЕТКА WAR (v82/v85/v86) */
         .main-title .w { 
             color: var(--custom-red);
             text-shadow: 0 0 30px rgba(188, 0, 0, 0.4);
@@ -248,7 +248,7 @@
             overflow: hidden;
         }
 
-        /* ОБНОВЛЕНО: ГИЛЬЗЫ (v86) ПРОЗРАЧНЕЕ И ВЕРНУЛИСЬ К ПРОПОРЦИЯМ */
+        /* ОБНОВЛЕНО: ГИЛЬЗЫ (v87) ЕЩЕ ПРОЗРАЧНЕЕ */
         .faq-question::before {
             content: '';
             position: absolute;
@@ -257,9 +257,9 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
-            opacity: 0.57; /* Прозрачность увеличена (было 0.77) */
+            opacity: 0.47; /* Прозрачность увеличена еще на 10% (было 0.57) */
             filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
-            transform: scale(1.3); /* Вернулись к пропорциональному увеличению */
+            transform: scale(1.3); /* Пропорциональный размер (v86) */
             pointer-events: none;
             z-index: 1;
         }
