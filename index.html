@@ -46,14 +46,21 @@
         }
 
         .nav-container { display: flex; align-items: center; flex: 1; gap: 20px; margin-right: 40px; }
+        
+        /* ОБНОВЛЕНО: ЛЕГКАЯ ПОДСВЕТКА ЛОГОТИПА В ХЕДЕРЕ */
         .logo-static { font-size: 28px; font-weight: 700; letter-spacing: 2px; white-space: nowrap; margin-right: 40px; }
-        .logo-static .t { color: var(--custom-green); }
-        .logo-static .w { color: var(--custom-red); }
+        .logo-static .t { 
+            color: var(--custom-green); 
+            text-shadow: 0 0 15px rgba(119, 124, 78, 0.5); 
+        }
+        .logo-static .w { 
+            color: var(--custom-red); 
+            text-shadow: 0 0 15px rgba(188, 0, 0, 0.5); 
+        }
 
         .nav-btn { flex: 1; text-align: center; padding: 12px 0; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); font-size: 14px; transition: 0.3s; cursor: pointer; }
         .nav-btn:hover { background: var(--custom-red); color: white; }
 
-        /* КРАСНАЯ ПУЛЬСАЦИЯ ДЛЯ КНОПКИ ФОРУМ */
         .btn-forum {
             animation: red-pulse 2s infinite ease-in-out;
             border: 1px solid var(--custom-red) !important;
@@ -97,7 +104,6 @@
         .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
         
-        /* МЯГКАЯ ПОДСВЕТКА TEAMS (v82/v85/v86) */
         .main-title .t { 
             color: var(--custom-green);
             text-shadow: 0 0 30px rgba(119, 124, 78, 0.4);
@@ -105,7 +111,6 @@
         
         .war-btn-wrap { display: flex; flex-direction: column; align-items: center; width: min-content; }
         
-        /* МЯГКАЯ ПОДСВЕТКА WAR (v82/v85/v86) */
         .main-title .w { 
             color: var(--custom-red);
             text-shadow: 0 0 30px rgba(188, 0, 0, 0.4);
@@ -123,7 +128,6 @@
         }
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
 
-        /* КРАСНАЯ ЛИНИЯ */
         .red-boundary-line { 
             position: absolute; 
             bottom: 2.6cm; 
@@ -248,7 +252,7 @@
             overflow: hidden;
         }
 
-        /* ОБНОВЛЕНО: ГИЛЬЗЫ (v87) ЕЩЕ ПРОЗРАЧНЕЕ */
+        /* ОБНОВЛЕНО: ГИЛЬЗЫ (v88) ПРОЗРАЧНЕЕ ЕЩЕ НА 10% */
         .faq-question::before {
             content: '';
             position: absolute;
@@ -257,9 +261,9 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
-            opacity: 0.47; /* Прозрачность увеличена еще на 10% (было 0.57) */
+            opacity: 0.37; /* -10% от предыдущего значения (v87) */
             filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
-            transform: scale(1.3); /* Пропорциональный размер (v86) */
+            transform: scale(1.3); 
             pointer-events: none;
             z-index: 1;
         }
