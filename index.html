@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
     <style>
+        /* Шрифт Sangyo */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -17,13 +18,17 @@
             --custom-red: #bc0000;   
             --text-white: #ffffff; 
             --font-main: 'Sangyo', 'Oswald', sans-serif;
+            --gold-glow: rgba(212, 175, 55, 0.5);
         }
         
         * { box-sizing: border-box; scroll-behavior: smooth; }
+        html { scroll-padding-top: 100px; }
+
         body {
-            margin: 0; padding: 0; background-color: var(--bg); color: var(--text-white);
+            margin: 0; padding: 0; 
+            background-color: var(--bg); color: var(--text-white);
             font-family: var(--font-main); text-transform: uppercase;
-            overflow-x: hidden;
+            font-size: 18px; line-height: 1.4; overflow-x: hidden;
         }
 
         body::before {
@@ -49,220 +54,177 @@
         @keyframes red-pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(188, 0, 0, 0.6); } 100% { transform: scale(1); } }
         .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; }
 
-        /* --- ФОРУМ (v105) --- */
-        #community { 
-            padding: 100px 40px; 
-            min-height: 100vh;
-            background: rgba(0,0,0,0.85);
-            display: none; /* Скрыт по умолчанию до нажатия кнопки */
-        }
-        .forum-wrapper {
-            display: grid;
-            grid-template-columns: 250px 1fr 300px;
-            gap: 30px;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* Боковое меню форума */
-        .forum-sidebar { display: flex; flex-direction: column; gap: 10px; }
-        .forum-tab-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #333;
-            color: white;
-            padding: 15px;
-            text-align: left;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .forum-tab-btn.active, .forum-tab-btn:hover {
-            border-color: var(--custom-green);
-            background: rgba(119, 124, 78, 0.1);
-            color: var(--custom-green);
-        }
-
-        /* Центральная часть: Чат и Темы */
-        .forum-content { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 20px; position: relative; }
-        
-        .chat-box { height: 500px; overflow-y: auto; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .chat-message { font-size: 14px; text-transform: none; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 4px; }
-        .chat-meta { color: var(--custom-green); font-weight: 700; margin-bottom: 5px; font-size: 12px; }
-        .chat-time { color: #666; font-weight: normal; margin-left: 10px; }
-        .chat-input-row { display: flex; gap: 10px; }
-        .forum-input { flex: 1; background: #111; border: 1px solid #333; color: white; padding: 12px; font-family: var(--font-main); }
-        .forum-btn { background: var(--custom-red); color: white; border: none; padding: 10px 25px; cursor: pointer; transition: 0.3s; }
-        .forum-btn:hover { background: white; color: black; }
-
-        /* Профиль и Статистика */
-        .user-panel { border: 1px solid var(--custom-red); padding: 20px; background: rgba(188,0,0,0.05); }
-        .user-avatar { width: 100px; height: 100px; border: 2px solid var(--custom-green); margin: 0 auto 15px; display: block; object-fit: cover; }
-        .stats-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
-        .online-count { color: var(--custom-green); font-weight: 900; }
-
-        /* Модальные окна Авторизации */
-        .auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; }
-        .auth-card { background: #080808; border: 2px solid var(--custom-red); padding: 40px; width: 400px; text-align: center; }
-        
-        /* Стандартные разделы из v104 */
-        .site-content-wrapper { background: rgba(5, 5, 5, 0.9); position: relative; z-index: 10; margin-top: -2.6cm; }
+        /* --- ГЛАВНЫЙ ЭКРАН --- */
+        #play { position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: 80px; }
+        .hero-char { position: absolute; bottom: 2.6cm; height: 88vh; z-index: -1; pointer-events: none; right: 0; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); }
+        .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
+        .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
+        .main-title .t { color: var(--custom-green); text-shadow: 0 0 30px rgba(119, 124, 78, 0.4); }
+        .main-title .w { color: var(--custom-red); text-shadow: 0 0 30px rgba(188, 0, 0, 0.4); }
+        .battle-btn { width: 100%; margin-top: 30px; display: block; padding: 25px 0; background: var(--custom-red); color: white; font-size: 30px; font-weight: 700; text-decoration: none; text-align: center; transition: 0.3s; z-index: 10; }
+        .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
         .red-boundary-line { position: absolute; bottom: 2.6cm; left: 0; width: 100%; height: 1.5mm; background: var(--custom-red); z-index: 5; }
 
-        .footer-signature { width: 5cm; height: 5mm; margin: 30px auto 0; color: var(--custom-red); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); }
+        /* КНОПКИ СОЦСЕТЕЙ */
+        .social-links-wrap { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px; width: 100%; }
+        .social-link-btn { background: transparent; border: none; cursor: pointer; transition: 0.3s; padding: 5px; text-decoration: none; }
+        .social-link-btn img { width: 80px; height: auto; display: block; filter: drop-shadow(0 0 10px rgba(119, 124, 78, 0.3)); }
+        .social-link-btn:hover img { transform: scale(1.1); filter: drop-shadow(0 0 20px var(--custom-green)); }
+
+        /* --- ОБЕРТКА КОНТЕНТА --- */
+        .site-content-wrapper { background: rgba(5, 5, 5, 0.9); position: relative; z-index: 10; margin-top: -2.6cm; }
+        section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
+        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
+        .stats-grid { display: flex; gap: 20px; margin-bottom: 50px; }
+        .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; text-decoration: none; color: white; transition: 0.3s; background: rgba(255,255,255,0.02); }
+        .stat-num { font-size: 32px; font-weight: 700; display: block; color: var(--custom-red); margin-bottom: 5px; }
+
+        /* --- FAQ --- */
+        #faq { border-top: 1mm solid var(--custom-red); padding-top: 0.75cm !important; }
+        .faq-title-horiz { font-size: 100px; color: var(--custom-green); font-weight: 900; margin-bottom: 40px; }
+        .faq-item { border-bottom: 1px solid #222; margin-bottom: 15px; }
+        .faq-question { padding: 30px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); }
+        .faq-question::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('shell.png'); background-repeat: no-repeat; background-position: center; background-size: contain; opacity: 0.27; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); transform: scale(1.3); pointer-events: none; }
+        .shell-text { position: absolute; top: calc(50% - 2mm); left: calc(50% + 4mm); transform: translate(-50%, -50%); opacity: 0.7; font-size: 10px; font-weight: 900; z-index: 1.5; pointer-events: none; }
+        .shell-text .t { color: var(--custom-green); }
+        .shell-text .w { color: var(--custom-red); }
+
+        /* --- ФОРУМ (v105/v106) --- */
+        #community { background: rgba(0,0,0,0.5); border-top: 1mm solid var(--custom-red); }
+        .forum-wrapper { display: grid; grid-template-columns: 250px 1fr 300px; gap: 30px; margin-top: 40px; }
+        .forum-tab-btn { background: #111; border: 1px solid #333; color: white; padding: 15px; margin-bottom: 5px; cursor: pointer; width: 100%; text-align: left; }
+        .forum-tab-btn.active { border-color: var(--custom-green); color: var(--custom-green); }
+        .forum-content { background: rgba(0,0,0,0.4); border: 1px solid #222; padding: 20px; min-height: 600px; }
+        .chat-box { height: 450px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid #333; margin-bottom: 20px; }
+        .forum-input { background: #000; border: 1px solid #444; color: white; padding: 12px; width: 100%; margin-bottom: 10px; }
+        .forum-btn { background: var(--custom-red); color: white; border: none; padding: 12px 30px; cursor: pointer; font-weight: 700; }
+
+        /* --- ФУТЕР --- */
+        footer { padding: 100px 40px 60px; border-top: 4px solid var(--custom-red); }
+        .footer-nav { display: flex; gap: 30px; justify-content: center; }
+        .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 25px; color: #777; text-decoration: none; font-size: 14px; }
+        .footer-signature { width: 5cm; height: 5mm; margin: 30px auto 0; color: var(--custom-red); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+
+        #shells-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
+        .shell { position: absolute; width: 4px; height: 12px; background: linear-gradient(to bottom, #d4af37, #b8860b); opacity: 0.8; }
+        @keyframes text-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
     </style>
 </head>
-<body>
+<body id="top">
 
     <header>
         <div class="nav-container">
-            <div class="logo-static" onclick="showSection('play')"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-            <a href="javascript:void(0)" onclick="showSection('play')" class="nav-btn">ИГРАТЬ</a>
-            <a href="javascript:void(0)" onclick="showSection('about')" class="nav-btn">ОБ ИГРЕ</a>
-            <a href="javascript:void(0)" onclick="showSection('faq')" class="nav-btn">FAQ</a>
-            <a href="javascript:void(0)" onclick="showSection('community')" class="nav-btn btn-forum">ФОРУМ</a>
+            <div class="logo-static"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
+            <a href="#top" class="nav-btn">ИГРАТЬ</a>
+            <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
+            <a href="#faq" class="nav-btn">FAQ</a>
+            <a href="#community" class="nav-btn btn-forum">ФОРУМ</a>
         </div>
         <div class="age-limit">6+</div>
     </header>
 
-    <section id="play" class="page-section">
-        <div style="min-height: 100vh; position: relative; display: flex; align-items: center; padding-left: 80px;">
-            <img src="new-right-char.png" style="position: absolute; bottom: 2.6cm; height: 88vh; right: 0; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4));" alt="Боец">
-            <div style="display: flex; flex-direction: column; align-items: center; width: min-content; z-index: 10;">
-                <div style="font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; text-align: center;">
-                    <span style="color: var(--custom-green); text-shadow: 0 0 30px rgba(119, 124, 78, 0.4);">TEAMS</span><br>
-                    <span style="color: var(--custom-red); text-shadow: 0 0 30px rgba(188, 0, 0, 0.4);">WAR</span>
-                </div>
-                <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" style="width: 100%; margin-top: 30px; display: block; padding: 25px 0; background: var(--custom-red); color: white; font-size: 30px; font-weight: 700; text-decoration: none; text-align: center;">В БОЙ</a>
-                <div style="display: flex; gap: 15px; margin-top: 20px;">
-                    <a href="#" class="social-link"><img src="ВК.png" width="40" alt="VK"></a>
-                    <a href="#" class="social-link"><img src="ТГ.png" width="40" alt="TG"></a>
-                    <a href="#" class="social-link"><img src="ЮТ.png" width="40" alt="YT"></a>
+    <div id="shells-container"></div>
+
+    <section id="play">
+        <img src="new-right-char.png" class="hero-char" alt="Боец">
+        <div class="hero-content-group">
+            <div class="main-title">
+                <span class="t">TEAMS</span>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <span class="w">WAR</span>
+                    <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
+                    <div class="social-links-wrap">
+                        <a href="https://vk.com/niksongame" target="_blank" class="social-link-btn"><img src="ВК.png" alt="VK"></a>
+                        <a href="https://t.me/niks_on_game" target="_blank" class="social-link-btn"><img src="ТГ.png" alt="TG"></a>
+                        <a href="https://www.youtube.com/@NiksOnGame" target="_blank" class="social-link-btn"><img src="ЮТ.png" alt="YT"></a>
+                        <a href="https://rutube.ru/channel/12011050/" target="_blank" class="social-link-btn"><img src="Рут.png" alt="RT"></a>
+                        <a href="https://www.tiktok.com/@niksongame" target="_blank" class="social-link-btn"><img src="Тик ток.png" alt="TT"></a>
+                        <a href="https://live.vkvideo.ru/niksongame" target="_blank" class="social-link-btn"><img src="ВКВидео.png" alt="VKV"></a>
+                    </div>
                 </div>
             </div>
-            <div class="red-boundary-line"></div>
         </div>
+        <div class="red-boundary-line"></div>
     </section>
 
-    <section id="community" class="page-section">
-        <h2 style="font-size: 60px; color: var(--custom-red); border-left: 10px solid var(--custom-red); padding-left: 30px; margin-bottom: 50px;">ТЕРМИНАЛ ФОРУМА</h2>
-        
-        <div class="forum-wrapper">
-            <div class="forum-sidebar">
-                <button class="forum-tab-btn active" onclick="openForumTab('chat')">ОБЩИЙ ЧАТ</button>
-                <button class="forum-tab-btn" onclick="openForumTab('topics')">ТЕМЫ ФОРУМА</button>
-                <button class="forum-tab-btn" onclick="openForumTab('rating')">РЕЙТИНГ ИГРОКОВ</button>
-                <button class="forum-tab-btn" onclick="openForumTab('friends')">ДРУЗЬЯ</button>
-                <button class="forum-tab-btn" onclick="openForumTab('profile')">ПРОФИЛЬ</button>
+    <div class="site-content-wrapper">
+        <section id="about" class="full-section">
+            <h2 class="big-title">ОБ ИГРЕ</h2>
+            <div class="stats-grid">
+                <div class="stat-btn"><span class="stat-num">2</span>КОМАНДЫ</div>
+                <div class="stat-btn"><span class="stat-num">7+</span>РЕЖИМОВ</div>
+                <div class="stat-btn"><span class="stat-num">50+</span>ОРУЖИЕ</div>
+                <div class="stat-btn"><span class="stat-num">127+</span>ОПЕРАТИВНИКОВ</div>
             </div>
+            <p style="border-left: 6px solid var(--custom-red); padding-left: 40px; font-size: 22px;">ОБЪЕДИНЯЙТЕСЬ В КЛАНЫ И ПОБЕЖДАЙТЕ В ДИНАМИЧНЫХ БОЯХ.</p>
+        </section>
 
-            <div class="forum-content" id="forum-main">
-                <div id="tab-chat">
-                    <div class="chat-box" id="global-chat">
-                        <div class="chat-message">
-                            <div class="chat-meta">SYSTEM <span class="chat-time">14.01.2026 | 14:00</span></div>
-                            Добро пожаловать в общий чат TEAMS WAR. Соблюдайте правила терминала.
-                        </div>
+        <section id="faq" class="full-section">
+            <div class="faq-title-horiz">FAQ</div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>01 // Системные требования</span>
+                        <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
+                        <span>▼</span>
                     </div>
-                    <div class="chat-input-row">
-                        <input type="text" class="forum-input" placeholder="Введите сообщение...">
-                        <button class="forum-btn">ОТПРАВИТЬ</button>
+                    <div style="display:none; padding: 20px;">ТРЕБОВАНИЯ ДОСТУПНЫ НА VK PLAY.</div>
+                </div>
+                </div>
+        </section>
+
+        <section id="community" class="full-section">
+            <h2 class="big-title">ФОРУМ</h2>
+            <div class="forum-wrapper">
+                <div class="forum-sidebar">
+                    <button class="forum-tab-btn active">ЧАТ</button>
+                    <button class="forum-tab-btn">ТЕМЫ</button>
+                    <button class="forum-tab-btn">РЕЙТИНГ</button>
+                    <button class="forum-tab-btn">ПРОФИЛЬ</button>
+                </div>
+                <div class="forum-content">
+                    <div class="chat-box">
+                        <div style="font-size: 14px; text-transform: none;"><span style="color:var(--custom-green)">SYSTEM [14:15]:</span> ДОБРО ПОЖАЛОВАТЬ В ТЕРМИНАЛ.</div>
                     </div>
+                    <input type="text" class="forum-input" placeholder="СООБЩЕНИЕ...">
+                    <button class="forum-btn">ОТПРАВИТЬ</button>
                 </div>
-
-                <div id="tab-profile" style="display:none;">
-                    <h3>ЛИЧНОЕ ДЕЛО</h3>
-                    <img src="avatar-placeholder.png" class="user-avatar" id="current-avatar">
-                    <input type="file" id="avatar-upload" style="margin-bottom: 20px;">
-                    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px;">
-                        <input type="password" class="forum-input" placeholder="Старый пароль">
-                        <input type="password" class="forum-input" placeholder="Новый пароль">
-                        <button class="forum-btn">СМЕНИТЬ ПАРОЛЬ</button>
-                    </div>
+                <div class="forum-info" style="border: 1px solid #333; padding: 20px;">
+                    <h4 style="color:var(--custom-red)">СТАТУС</h4>
+                    <div>ОНЛАЙН: <span style="color:var(--custom-green)">127</span></div>
+                    <button class="forum-btn" style="width:100%; margin-top:20px;">ВХОД</button>
                 </div>
             </div>
+        </section>
 
-            <div class="forum-info">
-                <div class="user-panel">
-                    <h4 style="margin-top: 0;">ВАШ СТАТУС</h4>
-                    <div class="stats-item">ЛОГИН: <span id="user-name">ГОСТЬ</span></div>
-                    <div class="stats-item">БАЛЛЫ: <span style="color:var(--custom-red)">0</span></div>
-                    <button class="forum-btn" style="width:100%; margin-top:10px;" onclick="openAuth()">ВХОД / РЕГИСТРАЦИЯ</button>
-                </div>
-                
-                <div style="margin-top: 30px; border: 1px solid #333; padding: 15px;">
-                    <h4>АКТИВНОСТЬ</h4>
-                    <div class="stats-item">ОНЛАЙН: <span class="online-count">127</span></div>
-                    <hr style="border: 0; border-top: 1px solid #222;">
-                    <div style="font-size: 12px; color: #666;">ПОСЛЕДНИЕ ТЕМЫ:</div>
-                    <ul style="padding-left: 15px; font-size: 12px; color: var(--custom-green);">
-                        <li style="cursor:pointer; margin-bottom: 5px;">КАК ПОЛУЧИТЬ АЛЬФА-ПАК?</li>
-                        <li style="cursor:pointer;">НАБОР В КЛАН "RED_DOGS"</li>
-                    </ul>
-                </div>
+        <footer>
+            <div class="footer-nav">
+                <a href="#" class="footer-btn">ПОЛИТИКА</a>
+                <a href="#" class="footer-btn">СОГЛАШЕНИЕ</a>
+                <a href="#" class="footer-btn">ПРАВИЛА</a>
             </div>
-        </div>
-    </section>
-
-    <div class="auth-overlay" id="auth-modal">
-        <div class="auth-card">
-            <h2 id="auth-title">ВХОД</h2>
-            <div id="auth-inputs" style="display: flex; flex-direction: column; gap: 15px;">
-                <input type="text" class="forum-input" placeholder="ЛОГИН">
-                <input type="email" id="reg-email" class="forum-input" placeholder="EMAIL" style="display:none;">
-                <input type="password" class="forum-input" placeholder="ПАРОЛЬ">
-                <button class="forum-btn" onclick="handleAuth()">ПОДТВЕРДИТЬ</button>
-            </div>
-            <p style="font-size: 12px; margin-top: 20px; cursor: pointer;" onclick="toggleAuthMode()" id="auth-switch">НЕТ АККАУНТА? РЕГИСТРАЦИЯ</p>
-            <button class="forum-btn" style="background:#333; margin-top: 10px;" onclick="closeAuth()">ОТМЕНА</button>
-        </div>
+            <div class="footer-signature">NIKS ON GAME</div>
+        </footer>
     </div>
 
-    <footer>
-        <div class="footer-signature">NIKS ON GAME</div>
-    </footer>
-
     <script>
-        // Переключение разделов сайта
-        function showSection(id) {
-            document.querySelectorAll('.page-section').forEach(s => s.style.display = 'none');
-            const target = document.getElementById(id);
-            if (target) target.style.display = 'block';
-            if (id === 'community') target.style.display = 'block';
+        function createShell() {
+            const container = document.getElementById('shells-container');
+            const shell = document.createElement('div');
+            shell.className = 'shell';
+            shell.style.left = Math.random() * 100 + 'vw';
+            const duration = 2.5 + Math.random() * 2;
+            shell.style.animation = `shell-fall ${duration}s linear forwards`;
+            container.appendChild(shell);
+            setTimeout(() => shell.remove(), duration * 1000);
         }
+        setInterval(createShell, 400);
 
-        // Переключение вкладок форума
-        function openForumTab(tabId) {
-            document.querySelectorAll('#forum-main > div').forEach(d => d.style.display = 'none');
-            document.getElementById('tab-' + tabId).style.display = 'block';
-            
-            document.querySelectorAll('.forum-tab-btn').forEach(b => b.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-
-        // Логика Авторизации
-        function openAuth() { document.getElementById('auth-modal').style.display = 'flex'; }
-        function closeAuth() { document.getElementById('auth-modal').style.display = 'none'; }
-        
-        let isRegMode = false;
-        function toggleAuthMode() {
-            isRegMode = !isRegMode;
-            document.getElementById('auth-title').innerText = isRegMode ? "РЕГИСТРАЦИЯ" : "ВХОД";
-            document.getElementById('reg-email').style.display = isRegMode ? "block" : "none";
-            document.getElementById('auth-switch').innerText = isRegMode ? "УЖЕ ЕСТЬ АККАУНТ? ВХОД" : "НЕТ АККАУНТА? РЕГИСТРАЦИЯ";
-        }
-
-        function handleAuth() {
-            alert(isRegMode ? "Письмо с подтверждением отправлено на почту!" : "Вход выполнен!");
-            closeAuth();
-            document.getElementById('user-name').innerText = "USER_01";
-        }
-
-        // Смена аватара
-        document.getElementById('avatar-upload').addEventListener('change', function(e) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('current-avatar').src = event.target.result;
-            };
-            reader.readAsDataURL(e.target.files[0]);
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const ans = q.nextElementSibling;
+                ans.style.display = ans.style.display === 'none' ? 'block' : 'none';
+            });
         });
     </script>
 </body>
