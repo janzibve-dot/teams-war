@@ -67,9 +67,12 @@
         /* --- ГЛАВНЫЙ ЭКРАН --- */
         #play { position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: 80px; }
         .hero-char { position: absolute; bottom: 2.6cm; height: 88vh; z-index: -1; pointer-events: none; right: 0; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); }
+        
+        /* Flex-контейнеры уже обеспечивают центрирование по поперечной оси (align-items: center) */
         .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
         .main-title .t { color: var(--custom-green); text-shadow: 0 0 30px rgba(119, 124, 78, 0.4); }
+        .war-btn-wrap { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title .w { color: var(--custom-red); text-shadow: 0 0 30px rgba(188, 0, 0, 0.4); }
 
         .battle-btn { width: 100%; margin-top: 30px; display: block; padding: 25px 0; background: var(--custom-red); color: white; font-size: 30px; font-weight: 700; text-decoration: none; text-align: center; transition: 0.3s; z-index: 10; }
@@ -123,10 +126,15 @@
             pointer-events: none; z-index: 1;
         }
 
-        /* ОБНОВЛЕНО: НАДПИСЬ НА ГИЛЬЗЕ (v103) */
+        /* ОБНОВЛЕНО: ПОЗИЦИЯ И ПРОЗРАЧНОСТЬ НАДПИСИ НА ГИЛЬЗЕ (v104) */
         .shell-text {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            opacity: 0.27; font-size: 10px; font-weight: 900; letter-spacing: 1px;
+            position: absolute;
+            /* Центр + смещение: вверх на 2мм, вправо на 4мм */
+            top: calc(50% - 2mm);
+            left: calc(50% + 4mm);
+            transform: translate(-50%, -50%);
+            opacity: 0.7; /* Прозрачность уменьшена, надпись ярче */
+            font-size: 10px; font-weight: 900; letter-spacing: 1px;
             z-index: 1.5; pointer-events: none; white-space: nowrap;
         }
         .shell-text .t { color: var(--custom-green); }
@@ -149,8 +157,11 @@
         .footer-nav { display: flex; gap: 30px; margin-bottom: 60px; }
         .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 25px; color: #777; text-decoration: none; font-size: 16px; display: flex; align-items: center; justify-content: center; }
 
+        /* ОБНОВЛЕНО: УБРАН ФОН У ПОДПИСИ (v104) */
         .footer-signature {
-            width: 5cm; height: 5mm; margin: 30px auto 0; background-color: var(--custom-red); color: var(--custom-red);
+            width: 5cm; height: 5mm; margin: 30px auto 0;
+            background-color: transparent; /* Фон теперь прозрачный */
+            color: var(--custom-red);
             display: flex; align-items: center; justify-content: center;
             font-size: 12px; font-weight: 900; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); white-space: nowrap;
         }
