@@ -95,9 +95,20 @@
 
         .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
-        .main-title .t { color: var(--custom-green); }
+        
+        /* ДОБАВЛЕНО ЕЛЕ ЗАМЕТНОЕ СВЕЧЕНИЕ ДЛЯ TEAMS */
+        .main-title .t { 
+            color: var(--custom-green);
+            text-shadow: 0 0 30px rgba(119, 124, 78, 0.4);
+        }
+        
         .war-btn-wrap { display: flex; flex-direction: column; align-items: center; width: min-content; }
-        .main-title .w { color: var(--custom-red); }
+        
+        /* ДОБАВЛЕНО ЕЛЕ ЗАМЕТНОЕ СВЕЧЕНИЕ ДЛЯ WAR */
+        .main-title .w { 
+            color: var(--custom-red);
+            text-shadow: 0 0 30px rgba(188, 0, 0, 0.4);
+        }
 
         .battle-btn { 
             width: 100%; 
