@@ -97,7 +97,7 @@
         .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
         
-        /* ОБНОВЛЕНО: ВОЗВРАТ К МЯГКОЙ ПОДСВЕТКЕ TEAMS (v82) */
+        /* МЯГКАЯ ПОДСВЕТКА TEAMS (v82/v85) */
         .main-title .t { 
             color: var(--custom-green);
             text-shadow: 0 0 30px rgba(119, 124, 78, 0.4);
@@ -105,7 +105,7 @@
         
         .war-btn-wrap { display: flex; flex-direction: column; align-items: center; width: min-content; }
         
-        /* ОБНОВЛЕНО: ВОЗВРАТ К МЯГКОЙ ПОДСВЕТКЕ WAR (v82) */
+        /* МЯГКАЯ ПОДСВЕТКА WAR (v82/v85) */
         .main-title .w { 
             color: var(--custom-red);
             text-shadow: 0 0 30px rgba(188, 0, 0, 0.4);
@@ -248,7 +248,7 @@
             overflow: hidden;
         }
 
-        /* ОБНОВЛЕНО: ГИЛЬЗЫ (v85) ШИРЕ, ДЛИННЕЕ И ПРОЗРАЧНЕЕ */
+        /* ОБНОВЛЕНО: ГИЛЬЗЫ (v86) ПРОЗРАЧНЕЕ И ВЕРНУЛИСЬ К ПРОПОРЦИЯМ */
         .faq-question::before {
             content: '';
             position: absolute;
@@ -257,10 +257,9 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
-            opacity: 0.77; /* Прозрачнее еще на 8% (итого 23%) */
+            opacity: 0.57; /* Прозрачность увеличена (было 0.77) */
             filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
-            /* Увеличены пропорционально запросу: шире и значительно длиннее */
-            transform: scale(1.45, 2.1); 
+            transform: scale(1.3); /* Вернулись к пропорциональному увеличению */
             pointer-events: none;
             z-index: 1;
         }
@@ -391,7 +390,7 @@
 
         <footer>
             <div class="footer-nav">
-                <a href="privacy.html" class="footer-btn">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОности</a>
+                <a href="privacy.html" class="footer-btn">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
                 <a href="terms.html" class="footer-btn">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
                 <a href="rules.html" class="footer-btn">ПРАВИЛА</a>
             </div>
