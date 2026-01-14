@@ -136,6 +136,7 @@
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
         
         #about { padding-top: 0; border-top: none; }
+        /* ОБ ИГРЕ цветом #bc0000 */
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
 
         .section-label { 
@@ -192,17 +193,16 @@
         .mode-item h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
         .mode-item p { font-size: 18px; color: #aaa; text-transform: uppercase; margin: 0; }
 
-        /* ИНФО-БЛОКИ */
         .info-cards { display: flex; gap: 30px; margin-top: 50px; }
         .info-box { flex: 1; border: 1px solid #222; padding: 40px; background: #080808; text-align: center; transition: 0.3s; }
         .info-box:hover { border-color: var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.2); }
         .info-box p { font-size: 18px; text-transform: uppercase; color: #999; margin: 0; }
 
-        /* FAQ РАЗДЕЛИТЕЛЬ И ОТСТУПЫ */
+        /* FAQ РАЗДЕЛИТЕЛЬ И СМЕЩЕНИЕ ВВЕРХ НА 3.5 СМ */
         #faq { 
-            margin-top: 0.75cm; /* Верхняя часть отступа (половина от 1.5см) */
-            border-top: 1mm solid var(--custom-red); /* Красная черта по середине */
-            padding-top: 0.75cm !important; /* Нижняя часть отступа до текста */
+            margin-top: -2.75cm; /* Поднято на 3.5 см выше от прошлого варианта (было +0.75см) */
+            border-top: 1mm solid var(--custom-red); 
+            padding-top: 0.75cm !important; 
             min-height: auto; 
         }
         
@@ -242,7 +242,7 @@
             color: var(--custom-red);
         }
 
-        /* СПЕЦИАЛЬНАЯ подсветка для блока 06 */
+        /* СПЕЦИАЛЬНАЯ подсветка для блока 06 (Связаться с поддержкой) цветом #777c4e */
         .faq-item:nth-child(6):hover .faq-question {
             color: var(--custom-green);
             border: 1px solid var(--custom-green);
