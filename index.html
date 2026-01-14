@@ -18,6 +18,7 @@
             --custom-red: #bc0000;   
             --text-white: #ffffff; 
             --font-main: 'Sangyo', 'Oswald', sans-serif;
+            --gold-glow: rgba(212, 175, 55, 0.5); /* Золотистое свечение */
         }
         
         * { box-sizing: border-box; scroll-behavior: smooth; }
@@ -96,18 +97,18 @@
         .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
         
-        /* СВЕЧЕНИЕ ДЛЯ TEAMS */
+        /* ОБНОВЛЕНО: ЯРКАЯ НО МЯГКАЯ ПОДСВЕТКА TEAMS */
         .main-title .t { 
             color: var(--custom-green);
-            text-shadow: 0 0 30px rgba(119, 124, 78, 0.4);
+            text-shadow: 0 0 20px rgba(119, 124, 78, 0.8), 0 0 50px rgba(119, 124, 78, 0.4);
         }
         
         .war-btn-wrap { display: flex; flex-direction: column; align-items: center; width: min-content; }
         
-        /* СВЕЧЕНИЕ ДЛЯ WAR */
+        /* ОБНОВЛЕНО: ЯРКАЯ НО МЯГКАЯ ПОДСВЕТКА WAR */
         .main-title .w { 
             color: var(--custom-red);
-            text-shadow: 0 0 30px rgba(188, 0, 0, 0.4);
+            text-shadow: 0 0 20px rgba(188, 0, 0, 0.8), 0 0 50px rgba(188, 0, 0, 0.4);
         }
 
         .battle-btn { 
@@ -244,14 +245,25 @@
             background: rgba(255,255,255,0.02);
             border: 1px solid transparent; 
             position: relative;
-            /* ДОБАВЛЕНА ГИЛЬЗА В ФОН БЛОКА */
+            overflow: hidden; /* Чтобы гильза не выходила за рамки */
+        }
+
+        /* ОБНОВЛЕНО: ГИЛЬЗЫ С ПОДСВЕТКОЙ, БОЛЬШЕГО РАЗМЕРА И ПРОЗРАЧНОСТЬЮ */
+        .faq-question::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('shell.png');
             background-repeat: no-repeat;
             background-position: center;
-            background-size: contain; /* Чтобы не выходил за рамки */
+            background-size: contain;
+            opacity: 0.85; /* Прозрачнее на 15% */
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); /* Золотистая подсветка */
+            transform: scale(1.3); /* Немного шире и длиннее */
+            pointer-events: none;
+            z-index: 1;
         }
 
-        /* ТЕКСТ ПОВЕРХ ГИЛЬЗЫ (чтобы был читаемым) */
         .faq-question span {
             position: relative;
             z-index: 2;
