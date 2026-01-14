@@ -233,20 +233,12 @@
             border: 1px solid transparent; 
         }
 
+        /* Общая подсветка для всех блоков FAQ зеленым при наведении */
         .faq-item:hover .faq-question {
-            border: 1px solid var(--custom-red);
-            box-shadow: 0 0 20px rgba(188, 0, 0, 0.3);
-            color: var(--custom-red);
-        }
-
-        /* СПЕЦИАЛЬНАЯ подсветка для блока 06 цветом #777c4e */
-        .faq-item:nth-child(6):hover .faq-question {
-            color: var(--custom-green);
             border: 1px solid var(--custom-green);
             box-shadow: 0 0 20px rgba(119, 124, 78, 0.4);
+            color: var(--custom-green);
         }
-        
-        /* УБРАНО раскрытие при наведении (:hover) */
 
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); }
         .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
