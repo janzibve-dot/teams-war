@@ -47,7 +47,7 @@
 
         .nav-container { display: flex; align-items: center; flex: 1; gap: 20px; margin-right: 40px; }
         
-        /* ОБНОВЛЕНО: ЛЕГКАЯ ПОДСВЕТКА ЛОГОТИПА В ХЕДЕРЕ */
+        /* ЛЕГКАЯ ПОДСВЕТКА ЛОГОТИПА В ХЕДЕРЕ */
         .logo-static { font-size: 28px; font-weight: 700; letter-spacing: 2px; white-space: nowrap; margin-right: 40px; }
         .logo-static .t { 
             color: var(--custom-green); 
@@ -252,7 +252,7 @@
             overflow: hidden;
         }
 
-        /* ОБНОВЛЕНО: ГИЛЬЗЫ (v88) ПРОЗРАЧНЕЕ ЕЩЕ НА 10% */
+        /* ОБНОВЛЕНО: ГИЛЬЗЫ (v89) ЕЩЕ ПРОЗРАЧНЕЕ (opacity: 0.27) */
         .faq-question::before {
             content: '';
             position: absolute;
@@ -261,7 +261,7 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
-            opacity: 0.37; /* -10% от предыдущего значения (v87) */
+            opacity: 0.27; /* -10% от v88 */
             filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
             transform: scale(1.3); 
             pointer-events: none;
@@ -277,6 +277,31 @@
             border: 1px solid var(--custom-green);
             box-shadow: 0 0 20px rgba(119, 124, 78, 0.4);
             color: var(--custom-green);
+        }
+
+        /* КНОПКА ВК В FAQ */
+        .faq-vk-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            padding-bottom: 20px;
+        }
+        .vk-link-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            padding: 10px;
+        }
+        .vk-link-btn img {
+            width: 80px;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 0 10px rgba(119, 124, 78, 0.3));
+        }
+        .vk-link-btn:hover img {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 20px var(--custom-green));
         }
 
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); }
@@ -388,6 +413,12 @@
                         </div>
                     </div>
                     <div class="faq-item"><div class="faq-question"><span>07 // Новости</span><span>▼</span></div><div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/devblog/" class="faq-link">ДНЕВНИКИ РАЗРАБОТКИ</a></div></div></div>
+                </div>
+                
+                <div class="faq-vk-container">
+                    <a href="https://vk.com/niksongame" target="_blank" class="vk-link-btn">
+                        <img src="ВК.png" alt="VK">
+                    </a>
                 </div>
             </div>
         </section>
