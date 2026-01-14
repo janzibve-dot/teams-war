@@ -224,7 +224,7 @@
             font-size: 100px; 
             color: var(--custom-green); 
             text-align: left; 
-            margin-bottom: 0; /* Убрано для выравнивания с кнопкой */
+            margin-bottom: 0;
             font-weight: 900;
             text-shadow: 0 0 15px rgba(119, 124, 78, 0.3);
         }
@@ -277,22 +277,28 @@
             color: var(--custom-green);
         }
 
-        /* КНОПКА ВК (v90 - ПЕРЕМЕЩЕНА) */
-        .vk-link-btn {
+        /* КНОПКИ СОЦСЕТЕЙ (v91 - ДОБАВЛЕН ТГ) */
+        .social-links-wrap {
+            display: flex;
+            align-items: center;
+            gap: 20px; /* Отступ между кнопками */
+            margin-left: 5cm; /* Расстояние 5см от слова FAQ */
+        }
+        .social-link-btn {
             background: transparent;
             border: none;
             cursor: pointer;
             transition: 0.3s ease-in-out;
-            padding: 10px;
+            padding: 5px;
             text-decoration: none;
         }
-        .vk-link-btn img {
+        .social-link-btn img {
             width: 80px;
             height: auto;
             display: block;
             filter: drop-shadow(0 0 10px rgba(119, 124, 78, 0.3));
         }
-        .vk-link-btn:hover img {
+        .social-link-btn:hover img {
             transform: scale(1.1);
             filter: drop-shadow(0 0 20px var(--custom-green));
         }
@@ -392,9 +398,14 @@
             <div id="faq-section">
                 <div style="display: flex; align-items: center; margin-bottom: 40px;">
                     <div class="faq-title-horiz">FAQ</div>
-                    <a href="https://vk.com/niksongame" target="_blank" class="vk-link-btn" style="margin-left: 5cm;">
-                        <img src="ВК.png" alt="VK">
-                    </a>
+                    <div class="social-links-wrap">
+                        <a href="https://vk.com/niksongame" target="_blank" class="social-link-btn">
+                            <img src="ВК.png" alt="VK">
+                        </a>
+                        <a href="https://t.me/niks_on_game" target="_blank" class="social-link-btn">
+                            <img src="ТГ.png" alt="Telegram">
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="faq-list">
