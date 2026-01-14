@@ -135,7 +135,7 @@
 
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
         
-        #about { padding-top: 0; }
+        #about { padding-top: 0; border-top: none; }
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
 
         .section-label { 
@@ -198,13 +198,14 @@
         .info-box:hover { border-color: var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.2); }
         .info-box p { font-size: 18px; text-transform: uppercase; color: #999; margin: 0; }
 
-        /* FAQ ОБНОВЛЕННЫЙ С КРАСНОЙ ЧЕРТОЙ */
+        /* FAQ РАЗДЕЛИТЕЛЬ И ОТСТУПЫ */
         #faq { 
-            margin-top: -6cm; 
-            border-top: 1mm solid var(--custom-red); 
-            padding-top: 1cm !important; /* ЧЕРТА ВЫШЕ НАДПИСИ НА 1 СМ */
-            justify-content: flex-start !important; /* Выравнивание от верха */
+            margin-top: 0.75cm; /* Верхняя часть отступа (половина от 1.5см) */
+            border-top: 1mm solid var(--custom-red); /* Красная черта по середине */
+            padding-top: 0.75cm !important; /* Нижняя часть отступа до текста */
+            min-height: auto; 
         }
+        
         #faq-section { display: flex; flex-direction: column; }
         
         /* FAQ СМЕЩЕН ВЛЕВО И ЖИРНЫЙ */
