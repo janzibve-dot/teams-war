@@ -134,6 +134,7 @@
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
         
         #about { padding-top: 0; border-top: none; }
+        /* ОБ ИГРЕ цветом #bc0000 */
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
 
         .section-label { 
@@ -205,20 +206,23 @@
         
         #faq-section { display: flex; flex-direction: column; }
         
-        /* FAQ СМЕЩЕН ВЛЕВО, ЖИРНЫЙ, ЦВЕТ #777c4e */
+        /* FAQ СМЕЩЕН ВЛЕВО, ЖИРНЫЙ, ЦВЕТ #777c4e С ЛЕГКОЙ ПОДСВЕТКОЙ */
         .faq-title-horiz { 
             font-size: 100px; 
             color: var(--custom-green); 
             text-align: left; 
             margin-bottom: 40px; 
-            font-weight: 900; 
+            font-weight: 900;
+            text-shadow: 0 0 15px rgba(119, 124, 78, 0.3); /* Легкая подсветка */
         }
         
         .faq-list { flex: 1; }
+        
+        /* БЛОКИ FAQ СУЖЕНЫ НА 5 ММ (ИТОГО 10 ММ ОТ КРАЯ) */
         .faq-item { 
             border-bottom: 1px solid #222; 
             margin-bottom: 15px;
-            width: calc(100% - 5mm); 
+            width: calc(100% - 10mm); 
             margin-left: auto; 
         }
 
