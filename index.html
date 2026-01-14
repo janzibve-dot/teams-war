@@ -66,7 +66,7 @@
 
         .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; flex-shrink: 0; }
 
-        /* --- ГИЛЬЗЫ --- */
+        /* --- ГИЛЬЗЫ (ПАДАЮЩИЕ) --- */
         #shells-container { position: fixed; top: 90px; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 100; }
         .shell { position: absolute; width: 4px; height: 12px; background: linear-gradient(to bottom, #d4af37, #b8860b); border-radius: 1px; opacity: 0.8; }
         @keyframes shell-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
@@ -96,7 +96,7 @@
         .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
         
-        /* ДОБАВЛЕНО ЕЛЕ ЗАМЕТНОЕ СВЕЧЕНИЕ ДЛЯ TEAMS */
+        /* СВЕЧЕНИЕ ДЛЯ TEAMS */
         .main-title .t { 
             color: var(--custom-green);
             text-shadow: 0 0 30px rgba(119, 124, 78, 0.4);
@@ -104,7 +104,7 @@
         
         .war-btn-wrap { display: flex; flex-direction: column; align-items: center; width: min-content; }
         
-        /* ДОБАВЛЕНО ЕЛЕ ЗАМЕТНОЕ СВЕЧЕНИЕ ДЛЯ WAR */
+        /* СВЕЧЕНИЕ ДЛЯ WAR */
         .main-title .w { 
             color: var(--custom-red);
             text-shadow: 0 0 30px rgba(188, 0, 0, 0.4);
@@ -145,7 +145,6 @@
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
         
         #about { padding-top: 0; border-top: none; }
-        /* ОБ ИГРЕ цветом #bc0000 */
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
 
         .section-label { 
@@ -207,7 +206,7 @@
         .info-box:hover { border-color: var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.2); }
         .info-box p { font-size: 18px; text-transform: uppercase; color: #999; margin: 0; }
 
-        /* FAQ РАЗДЕЛИТЕЛЬ И СМЕЩЕНИЕ ВВЕРХ НА 3.5 СМ */
+        /* --- FAQ РАЗДЕЛИТЕЛЬ И СМЕЩЕНИЕ --- */
         #faq { 
             margin-top: -2.75cm; 
             border-top: 1mm solid var(--custom-red); 
@@ -217,19 +216,17 @@
         
         #faq-section { display: flex; flex-direction: column; }
         
-        /* FAQ СМЕЩЕН ВЛЕВО, ЖИРНЫЙ, ЦВЕТ #777c4e С ЛЕГКОЙ ПОДСВЕТКОЙ */
         .faq-title-horiz { 
             font-size: 100px; 
             color: var(--custom-green); 
             text-align: left; 
             margin-bottom: 40px; 
             font-weight: 900;
-            text-shadow: 0 0 15px rgba(119, 124, 78, 0.3); /* Легкая подсветка */
+            text-shadow: 0 0 15px rgba(119, 124, 78, 0.3);
         }
         
         .faq-list { flex: 1; }
         
-        /* БЛОКИ FAQ СУЖЕНЫ НА 5 ММ (ИТОГО 10 ММ ОТ КРАЯ) */
         .faq-item { 
             border-bottom: 1px solid #222; 
             margin-bottom: 15px;
@@ -246,9 +243,20 @@
             transition: 0.3s; 
             background: rgba(255,255,255,0.02);
             border: 1px solid transparent; 
+            position: relative;
+            /* ДОБАВЛЕНА ГИЛЬЗА В ФОН БЛОКА */
+            background-image: url('shell.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain; /* Чтобы не выходил за рамки */
         }
 
-        /* Общая подсветка для всех блоков FAQ зеленым при наведении */
+        /* ТЕКСТ ПОВЕРХ ГИЛЬЗЫ (чтобы был читаемым) */
+        .faq-question span {
+            position: relative;
+            z-index: 2;
+        }
+
         .faq-item:hover .faq-question {
             border: 1px solid var(--custom-green);
             box-shadow: 0 0 20px rgba(119, 124, 78, 0.4);
@@ -264,7 +272,7 @@
         .faq-social-row { display: flex; gap: 15px; margin-top: 20px; }
         .faq-social-btn { padding: 15px; border: 1px solid #333; display: flex; align-items: center; justify-content: center; width: 55px; height: 55px; }
 
-        /* ФУТЕР */
+        /* --- ФУТЕР --- */
         footer { padding: 100px 40px; border-top: 4px solid var(--custom-red); background: transparent; }
         .footer-nav { display: flex; gap: 30px; margin-bottom: 60px; }
         .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 25px; color: #777; text-decoration: none; font-size: 16px; display: flex; align-items: center; justify-content: center; }
