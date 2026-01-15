@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TEAMS WAR | ФОРУМ (DEV MODE)</title>
+    <title>TEAMS WAR | ФОРУМ (forv2)</title>
     <style>
         :root {
             --green: #777c4e;
@@ -16,80 +16,68 @@
         body {
             background-color: var(--black);
             color: var(--text);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            border: 4px solid var(--red);
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column;
+            height: 100vh; border: 4px solid var(--red);
             text-transform: uppercase;
         }
 
-        /* --- ШАПКА ФОРУМА --- */
         .forum-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--red);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--red); padding-bottom: 15px; margin-bottom: 20px;
         }
 
         .exit-btn {
-            background: var(--red);
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            cursor: pointer;
-            font-weight: 900;
+            background: var(--red); color: white; border: none;
+            padding: 10px 25px; cursor: pointer; font-weight: 900;
         }
 
-        /* --- СЕТКА --- */
         .main-grid {
-            display: grid;
-            grid-template-columns: 250px 1fr 300px;
-            gap: 20px;
-            flex: 1;
-            overflow: hidden;
+            display: grid; grid-template-columns: 250px 1fr 350px;
+            gap: 20px; flex: 1; overflow: hidden;
         }
 
         /* --- ЛЕВОЕ МЕНЮ --- */
         .sidebar { display: flex; flex-direction: column; gap: 10px; }
         .nav-btn {
-            background: #111;
-            border: 1px solid #333;
-            color: white;
-            padding: 15px;
-            text-align: left;
-            cursor: pointer;
-            transition: 0.3s;
+            background: #111; border: 1px solid #333; color: white;
+            padding: 15px; text-align: left; cursor: pointer; transition: 0.3s;
         }
         .nav-btn:hover, .nav-btn.active { border-color: var(--green); color: var(--green); }
 
-        /* --- ЦЕНТРАЛЬНЫЙ БЛОК --- */
         .content-area {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid #222;
-            padding: 20px;
-            overflow-y: auto;
-            position: relative;
+            background: rgba(255,255,255,0.02); border: 1px solid #222;
+            padding: 20px; overflow-y: auto;
         }
 
-        /* --- ЧАТ --- */
-        .chat-container { display: flex; flex-direction: column; height: 100%; }
-        .chat-messages { flex: 1; overflow-y: auto; margin-bottom: 15px; }
+        /* --- ТЕМЫ --- */
+        .topic-item {
+            background: rgba(255,255,255,0.05); border: 1px solid #333;
+            padding: 15px; margin-bottom: 15px; display: flex;
+            justify-content: space-between; align-items: center;
+        }
+        .topic-title { font-size: 16px; color: white; margin: 0; }
+        .topic-author { color: var(--green); font-size: 10px; }
+
+        /* --- ЧАТЫ --- */
+        .chat-messages { height: 400px; overflow-y: auto; margin-bottom: 15px; border-bottom: 1px solid #333; }
         .msg { margin-bottom: 10px; font-size: 14px; border-left: 2px solid var(--green); padding-left: 10px; }
-        .msg-info { color: var(--green); font-size: 12px; margin-bottom: 3px; }
         .forum-input { background: #000; border: 1px solid #444; color: white; padding: 12px; width: 100%; margin-top: 5px; }
 
-        /* --- ПРАВАЯ ПАНЕЛЬ --- */
-        .stats-panel { border: 1px solid var(--red); padding: 15px; background: rgba(188,0,0,0.05); }
-        .user-mini-profile { text-align: center; margin-bottom: 20px; }
-        .avatar-circle { width: 80px; height: 80px; border: 2px solid var(--green); margin: 0 auto 10px; overflow: hidden; background: #222; }
+        /* --- ПРАВАЯ ПАНЕЛЬ (ЛИЧНЫЕ СООБЩЕНИЯ) --- */
+        .stats-panel { border: 1px solid var(--red); padding: 15px; background: rgba(188,0,0,0.05); display: flex; flex-direction: column; gap: 15px; }
+        .avatar-circle { width: 60px; height: 60px; border: 2px solid var(--green); margin: 0 auto 5px; overflow: hidden; background: #222; }
         .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- УВЕДОМЛЕНИЯ --- */
-        .notification-log { font-size: 11px; color: #888; margin-top: 20px; max-height: 150px; overflow-y: auto; }
+        .dm-section { border-top: 1px solid var(--red); padding-top: 15px; flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .dm-list { flex: 1; overflow-y: auto; margin: 10px 0; }
+        .dm-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: #111; padding: 8px; margin-bottom: 5px; border: 1px solid #222; font-size: 12px;
+        }
+        .dm-name { cursor: pointer; color: var(--green); }
+        .dm-name:hover { text-decoration: underline; }
+        .del-dm { color: var(--red); background: none; border: none; cursor: pointer; font-weight: 900; }
 
         .hidden { display: none; }
     </style>
@@ -97,7 +85,7 @@
 <body>
 
     <div class="forum-header">
-        <h1 style="color: var(--green); margin: 0;">ТЕРМИНАЛ ФОРУМА [ONLINE: <span id="online-count">127</span>]</h1>
+        <h1 style="color: var(--green); margin: 0;">ТЕРМИНАЛ ФОРУМА [forv2]</h1>
         <button class="exit-btn" onclick="window.parent.postMessage('closeForum', '*')">ВЫХОД [ESC]</button>
     </div>
 
@@ -106,104 +94,172 @@
             <button class="nav-btn active" onclick="showTab('chat')">ОБЩИЙ ЧАТ</button>
             <button class="nav-btn" onclick="showTab('topics')">ТЕМЫ ФОРУМА</button>
             <button class="nav-btn" onclick="showTab('rating')">РЕЙТИНГ ИГРОКОВ</button>
-            <button class="nav-btn" onclick="showTab('friends')">ДРУЗЬЯ</button>
             <button class="nav-btn" onclick="showTab('profile')">МОЙ ПРОФИЛЬ</button>
         </div>
 
         <div class="content-area">
-            <div id="tab-chat" class="chat-container">
+            <div id="tab-chat">
                 <div class="chat-messages" id="chat-list">
-                    <div class="msg"><div class="msg-info">SYSTEM [15.01.2026]</div>РЕЖИМ РАЗРАБОТКИ АКТИВИРОВАН. ОКНО ВХОДА СКРЫТО.</div>
+                    <div class="msg">ТЕРМИНАЛ ГОТОВ К РАБОТЕ.</div>
                 </div>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="chat-input" class="forum-input" placeholder="ВВЕДИТЕ СООБЩЕНИЕ...">
-                    <button class="exit-btn" style="height:45px; margin-top:5px;" onclick="sendChatMessage()">ОТПРАВИТЬ</button>
+                <input type="text" id="chat-input" class="forum-input" placeholder="СООБЩЕНИЕ... (ENTER ДЛЯ ОТПРАВКИ)" onkeydown="if(event.key==='Enter') sendChatMessage()">
+                <button class="exit-btn" style="width:100%; margin-top:10px;" onclick="sendChatMessage()">ОТПРАВИТЬ</button>
+            </div>
+
+            <div id="tab-topics" class="hidden">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h2>АКТУАЛЬНЫЕ ТЕМЫ</h2>
+                    <button class="exit-btn" style="background:var(--green)" onclick="createNewTopic()">+ СОЗДАТЬ ТЕМУ</button>
                 </div>
+                <div id="topics-list"></div>
+            </div>
+
+            <div id="tab-dm-view" class="hidden">
+                <h2 id="dm-title">ЧАТ С: ...</h2>
+                <div class="chat-messages" id="dm-chat-log"></div>
+                <input type="text" id="dm-input" class="forum-input" placeholder="ЛИЧНОЕ СООБЩЕНИЕ... (ENTER)" onkeydown="if(event.key==='Enter') sendPrivateMessage()">
+                <button class="exit-btn" style="width:100%; margin-top:10px; background:var(--green);" onclick="sendPrivateMessage()">ОТПРАВИТЬ ЛС</button>
             </div>
 
             <div id="tab-profile" class="hidden">
-                <h2>РЕДАКТИРОВАНИЕ ЛИЧНОГО ДЕЛА</h2>
-                <div class="avatar-circle" style="width:150px; height:150px;">
-                    <img id="profile-img-big" src="avatar-placeholder.png">
-                </div>
-                <p style="font-size:10px;">ЗАГРУЗИТЬ ФОТО С ПК:</p>
-                <input type="file" id="avatar-input" accept="image/*" style="margin-bottom:20px;">
-                
-                <input type="password" id="old-pass" class="forum-input" placeholder="СТАРЫЙ ПАРОЛЬ">
-                <input type="password" id="new-pass" class="forum-input" placeholder="НОВЫЙ ПАРОЛЬ">
-                <button class="exit-btn" style="margin-top:20px; width:100%;" onclick="alert('ДАННЫЕ СОХРАНЕНЫ (DEV MODE)')">ОБНОВИТЬ ДАННЫЕ</button>
+                <h2>ЛИЧНОЕ ДЕЛО</h2>
+                <div class="avatar-circle" style="width:120px; height:120px;"><img id="profile-img-big" src="avatar-placeholder.png"></div>
+                <input type="file" id="avatar-input">
             </div>
-
-            <div id="tab-topics" class="hidden"><h2>РАЗДЕЛ ТЕМ ГОТОВИТСЯ...</h2></div>
-            <div id="tab-rating" class="hidden"><h2>ТАБЛИЦА ЛИДЕРОВ...</h2></div>
-            <div id="tab-friends" class="hidden"><h2>СПИСОК КОНТАКТОВ...</h2></div>
         </div>
 
         <div class="stats-panel">
-            <div class="user-mini-profile">
-                <div class="avatar-circle"><img id="user-avatar-mini" src="avatar-placeholder.png"></div>
-                <div id="current-user-name" style="color:var(--green); font-weight:900;">ТЕСТИРОВЩИК</div>
-                <div style="font-size:12px; margin-top:5px;">РЕЙТИНГ: <span id="user-rating" style="color:var(--red)">0</span></div>
+            <div style="text-align:center;">
+                <div class="avatar-circle"><img id="mini-avatar" src="avatar-placeholder.png"></div>
+                <div style="color:var(--green); font-weight:900;">ТЕСТИРОВЩИК</div>
+                <div style="font-size:12px;">ONLINE: 127</div>
             </div>
-            <div style="font-size:12px; border-top:1px solid #333; padding-top:10px;">
-                ЛОГ ОПОВЕЩЕНИЙ:
-                <div id="notif-log" class="notification-log">
-                    <div>СИСТЕМА: ДОБРО ПОЖАЛОВАТЬ, АДМИН.</div>
+
+            <div class="dm-section">
+                <div style="font-size:14px; color:var(--red); font-weight:900;">ЛИЧНЫЕ СООБЩЕНИЯ</div>
+                <div class="dm-list" id="dm-contacts">
+                    </div>
+                <div style="margin-top:auto;">
+                    <input type="text" id="add-dm-nick" class="forum-input" style="padding:8px; font-size:10px;" placeholder="НИК ИГРОКА...">
+                    <button class="exit-btn" style="width:100%; padding:5px; font-size:10px; margin-top:5px; background:var(--green);" onclick="addDMContact()">+ ДОБАВИТЬ В ЧАТ</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Временный пользователь для тестов
-        let currentUser = { login: "ТЕСТИРОВЩИК", rating: 0 };
+        let currentUser = { login: "ТЕСТИРОВЩИК", avatar: "avatar-placeholder.png" };
+        let topics = JSON.parse(localStorage.getItem('tw_topics')) || [];
+        let dmContacts = JSON.parse(localStorage.getItem('tw_dms')) || [];
+        let activeDM = null;
 
         function showTab(tabId) {
-            document.querySelectorAll('.content-area > div').forEach(div => div.classList.add('hidden'));
+            document.querySelectorAll('.content-area > div').forEach(d => d.classList.add('hidden'));
             document.getElementById('tab-' + tabId).classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            // Если кнопка навигации существует для этой вкладки, подсвечиваем её
+            const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.innerText.toLowerCase().includes(tabId));
+            if(btn) btn.classList.add('active');
+            if(tabId === 'topics') renderTopics();
+            renderDMList();
         }
 
-        function addNotification(text) {
-            const log = document.getElementById('notif-log');
-            const note = document.createElement('div');
-            note.innerText = "> " + text;
-            log.prepend(note);
-        }
-
-        function sendChatMessage() {
-            const input = document.getElementById('chat-input');
-            if(input.value) {
-                const list = document.getElementById('chat-list');
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString();
-                
-                const msgDiv = document.createElement('div');
-                msgDiv.className = 'msg';
-                msgDiv.innerHTML = `<div class="msg-info">${currentUser.login} [${timeStr}]</div>${input.value}`;
-                list.appendChild(msgDiv);
-                input.value = '';
-                list.scrollTop = list.scrollHeight;
+        // --- ЛИЧНЫЕ СООБЩЕНИЯ ---
+        function addDMContact() {
+            const nick = document.getElementById('add-dm-nick').value.trim();
+            if(nick && !dmContacts.includes(nick)) {
+                dmContacts.push(nick);
+                localStorage.setItem('tw_dms', JSON.stringify(dmContacts));
+                document.getElementById('add-dm-nick').value = '';
+                renderDMList();
             }
         }
 
-        // Загрузка аватара (DEV MODE)
-        document.getElementById('avatar-input').addEventListener('change', function(e) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('profile-img-big').src = event.target.result;
-                document.getElementById('user-avatar-mini').src = event.target.result;
-                addNotification("АВАТАР ОБНОВЛЕН.");
-            };
-            reader.readAsDataURL(e.target.files[0]);
-        });
+        function renderDMList() {
+            const list = document.getElementById('dm-contacts');
+            list.innerHTML = '';
+            dmContacts.forEach(nick => {
+                list.innerHTML += `
+                    <div class="dm-item">
+                        <span class="dm-name" onclick="openPrivateChat('${nick}')">${nick}</span>
+                        <button class="del-dm" onclick="deleteDMContact('${nick}')">X</button>
+                    </div>
+                `;
+            });
+        }
 
-        // Клавиша ESC для выхода
+        function deleteDMContact(nick) {
+            dmContacts = dmContacts.filter(n => n !== nick);
+            localStorage.setItem('tw_dms', JSON.stringify(dmContacts));
+            renderDMList();
+            if(activeDM === nick) showTab('chat');
+        }
+
+        function openPrivateChat(nick) {
+            activeDM = nick;
+            showTab('dm-view');
+            document.getElementById('dm-title').innerText = "ЧАТ С: " + nick;
+            document.getElementById('dm-chat-log').innerHTML = `<div class="msg">ИСТОРИЯ ПЕРЕПИСКИ С ${nick} ЗАГРУЖЕНА.</div>`;
+        }
+
+        function sendPrivateMessage() {
+            const val = document.getElementById('dm-input').value;
+            if(val && activeDM) {
+                const msg = document.createElement('div');
+                msg.className = 'msg';
+                msg.innerHTML = `<div style="color:var(--green)">ВЫ -> ${activeDM}:</div>${val}`;
+                document.getElementById('dm-chat-log').appendChild(msg);
+                document.getElementById('dm-input').value = '';
+                document.getElementById('dm-chat-log').scrollTop = document.getElementById('dm-chat-log').scrollHeight;
+            }
+        }
+
+        // --- ОБЩИЙ ЧАТ ---
+        function sendChatMessage() {
+            const val = document.getElementById('chat-input').value;
+            if(val) {
+                const msg = document.createElement('div');
+                msg.className = 'msg';
+                msg.innerHTML = `<div style="color:var(--green)">${currentUser.login}:</div>${val}`;
+                document.getElementById('chat-list').appendChild(msg);
+                document.getElementById('chat-input').value = '';
+                document.getElementById('chat-list').scrollTop = document.getElementById('chat-list').scrollHeight;
+            }
+        }
+
+        // --- ТЕМЫ ---
+        function createNewTopic() {
+            const title = prompt("НАЗВАНИЕ ТЕМЫ:");
+            if(title) {
+                topics.push({ id: Date.now(), title, author: currentUser.login });
+                localStorage.setItem('tw_topics', JSON.stringify(topics));
+                renderTopics();
+            }
+        }
+
+        function renderTopics() {
+            const list = document.getElementById('topics-list');
+            list.innerHTML = topics.map(t => `
+                <div class="topic-item">
+                    <div><div class="topic-author">АВТОР: ${t.author}</div><div class="topic-title">${t.title}</div></div>
+                    <button onclick="deleteTopic(${t.id})" style="color:red; background:none; border:1px solid red; cursor:pointer;">X</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteTopic(id) {
+            topics = topics.filter(t => t.id !== id);
+            localStorage.setItem('tw_topics', JSON.stringify(topics));
+            renderTopics();
+        }
+
+        // ESC для закрытия окна форума
         window.addEventListener('keydown', (e) => {
             if(e.key === 'Escape') window.parent.postMessage('closeForum', '*');
         });
+
+        // Инициализация при загрузке
+        renderDMList();
     </script>
 </body>
 </html>
