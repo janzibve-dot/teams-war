@@ -2,14 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TEAMS WAR | ФОРУМ (forv3)</title>
+    <title>TEAMS WAR | ФОРУМ (forv5)</title>
     <style>
         :root {
             --bg-black: #050505;
             --block-bg: #0d0d0d;
             --red: #bc0000;
             --green: #777c4e;
-            --border: #1a1a1a;
+            --border-glow: rgba(188, 0, 0, 0.4);
             --text-gray: #888;
         }
 
@@ -20,21 +20,23 @@
             margin: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
             overflow-x: hidden;
+            text-transform: uppercase;
         }
 
-        /* --- ВЕРХНЯЯ ПАНЕЛЬ --- */
+        /* --- ВЕРХНЯЯ ПАНЕЛЬ (СТИЛЬ КАК НА САЙТЕ) --- */
         .forum-nav {
             background: #000;
-            border-bottom: 1px solid var(--border);
+            /* Обводка как в хедере index.html */
+            border-bottom: 3px solid var(--red); 
             padding: 15px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky; top: 0; z-index: 100;
         }
-        .nav-left, .nav-center, .nav-right { display: flex; align-items: center; gap: 25px; }
-        .logo { font-weight: 900; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .nav-link { color: #ccc; text-decoration: none; font-size: 14px; transition: 0.3s; display: flex; align-items: center; gap: 5px; }
+        .logo { font-weight: 900; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .nav-center { display: flex; gap: 25px; }
+        .nav-link { color: #ccc; text-decoration: none; font-size: 14px; transition: 0.3s; }
         .nav-link:hover { color: white; }
         .reg-btn { background: var(--red); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
 
@@ -48,90 +50,93 @@
             padding: 0 20px;
         }
 
-        /* --- РАЗДЕЛЫ (ЛЕВО) --- */
         .section-header { 
             font-size: 18px; font-weight: bold; margin-bottom: 25px; 
             display: flex; align-items: center; gap: 10px;
         }
         .section-header::before { content: ''; width: 4px; height: 24px; background: var(--red); display: block; }
 
-        .category-card {
+        /* --- БЛОКИ С КРАСНОЙ ОБВОДКОЙ И СВЕЧЕНИЕМ --- */
+        .category-card, .sidebar-block, .stat-box {
             background: var(--block-bg);
-            border: 1px solid var(--border);
+            /* Тонкая обводка + свечение как на основном сайте */
+            border: 1px solid var(--red); 
+            box-shadow: 0 0 10px var(--border-glow); 
             border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .category-card {
             padding: 20px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: 0.3s;
             cursor: pointer;
         }
-        .category-card:hover { border-color: #333; transform: translateX(5px); }
+        .category-card:hover { 
+            box-shadow: 0 0 20px rgba(188, 0, 0, 0.6); 
+            transform: translateX(5px); 
+        }
+
         .cat-info { display: flex; align-items: center; gap: 20px; }
         .cat-icon { width: 45px; height: 45px; background: #111; border: 1px solid #222; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--text-gray); }
         .cat-title { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
-        .cat-desc { font-size: 12px; color: var(--text-gray); }
+        .cat-desc { font-size: 11px; color: var(--text-gray); }
         .cat-stats { text-align: right; font-size: 12px; color: var(--text-gray); }
         .cat-stats b { color: white; display: block; font-size: 14px; }
 
-        /* --- БОКОВАЯ ПАНЕЛЬ (ПРАВО) --- */
+        /* БОКОВАЯ ПАНЕЛЬ */
         .sidebar-block {
-            background: var(--block-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
             margin-bottom: 25px;
             padding: 20px;
         }
-        .block-title { font-size: 14px; font-weight: bold; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .live-tag { font-size: 10px; background: #222; padding: 2px 8px; border-radius: 10px; color: #555; }
+        .block-title { font-size: 14px; font-weight: bold; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px; }
 
         /* ЧАТ */
-        .mini-chat { height: 350px; overflow-y: auto; font-size: 13px; color: #aaa; margin-bottom: 15px; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px; }
-        .chat-msg { margin-bottom: 12px; line-height: 1.4; }
-        .chat-msg b { color: var(--red); cursor: pointer; }
-        .chat-msg span { font-size: 10px; color: #444; margin-left: 8px; }
+        .mini-chat { height: 350px; overflow-y: auto; font-size: 13px; color: #aaa; margin-bottom: 15px; padding-right: 5px; }
+        .chat-msg { margin-bottom: 12px; }
+        .chat-msg b { color: var(--red); }
 
-        .chat-input-wrap { position: relative; }
-        .chat-input { background: #111; border: 1px solid #222; color: white; width: 100%; padding: 10px; border-radius: 4px; font-size: 12px; }
+        .chat-input { background: #111; border: 1px solid var(--red); color: white; width: 100%; padding: 10px; border-radius: 4px; font-size: 12px; box-shadow: 0 0 5px var(--border-glow); }
 
         /* СТАТИСТИКА */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center; }
-        .stat-box { background: #000; padding: 15px; border-radius: 6px; border: 1px solid #111; }
+        .stat-box { padding: 15px; }
         .stat-val { font-size: 20px; font-weight: bold; color: white; display: block; }
         .stat-label { font-size: 10px; color: var(--text-gray); margin-top: 5px; }
 
-        /* Кнопка выхода */
-        .exit-btn { position: fixed; bottom: 30px; right: 30px; background: var(--red); color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 200; box-shadow: 0 5px 20px rgba(188,0,0,0.4); }
-
-        .hidden { display: none; }
+        /* ПЛАВАЮЩАЯ КНОПКА ВЫХОДА */
+        .exit-btn { 
+            position: fixed; bottom: 30px; right: 30px; background: var(--red); 
+            color: white; border: none; padding: 12px 25px; border-radius: 30px; 
+            font-weight: bold; cursor: pointer; z-index: 200; 
+            box-shadow: 0 0 15px var(--border-glow);
+            transition: 0.3s;
+        }
+        .exit-btn:hover { background: white; color: black; box-shadow: 0 0 25px white; }
     </style>
 </head>
 <body>
 
     <header class="forum-nav">
-        <div class="nav-left">
-            <div class="logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--red)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-                TEAMS <span style="color:var(--red)">WAR</span>
-            </div>
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--red)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+            TEAMS <span style="color:var(--red)">WAR</span>
         </div>
         <div class="nav-center">
             <a href="#" class="nav-link">Главная</a>
             <a href="#" class="nav-link">Рейтинг</a>
             <a href="#" class="nav-link">Поиск</a>
         </div>
-        <div class="nav-right">
-            <a href="#" class="nav-link">Вход</a>
-            <button class="reg-btn">Регистрация</button>
-        </div>
+        <div class="reg-btn">Регистрация</div>
     </header>
 
     <main class="main-layout">
         <section>
             <div class="section-header">РАЗДЕЛЫ ФОРУМА</div>
             
-            <div class="category-card" onclick="openCategory('news')">
+            <div class="category-card">
                 <div class="cat-info">
                     <div class="cat-icon">🛡️</div>
                     <div>
@@ -147,7 +152,7 @@
                     <div class="cat-icon">⚔️</div>
                     <div>
                         <div class="cat-title">Тактика и стратегии</div>
-                        <div class="cat-desc">Обсуждение игровых механик и победных стратегий</div>
+                        <div class="cat-desc">Обсуждение механик и стратегий</div>
                     </div>
                 </div>
                 <div class="cat-stats"><b>0 тем</b> АКТИВНОСТЬ</div>
@@ -158,29 +163,7 @@
                     <div class="cat-icon">👥</div>
                     <div>
                         <div class="cat-title">Кланы и альянсы</div>
-                        <div class="cat-desc">Поиск соклановцев и общение между кланами</div>
-                    </div>
-                </div>
-                <div class="cat-stats"><b>0 тем</b> АКТИВНОСТЬ</div>
-            </div>
-
-            <div class="category-card">
-                <div class="cat-info">
-                    <div class="cat-icon">⚡</div>
-                    <div>
-                        <div class="cat-title">Техническая поддержка</div>
-                        <div class="cat-desc">Вопросы по работе игры и баг-репорты</div>
-                    </div>
-                </div>
-                <div class="cat-stats"><b>0 тем</b> АКТИВНОСТЬ</div>
-            </div>
-
-            <div class="category-card">
-                <div class="cat-info">
-                    <div class="cat-icon">💬</div>
-                    <div>
-                        <div class="cat-title">Флудилка</div>
-                        <div class="cat-desc">Общение на любые темы, не связанные с игрой</div>
+                        <div class="cat-desc">Поиск соклановцев</div>
                     </div>
                 </div>
                 <div class="cat-stats"><b>0 тем</b> АКТИВНОСТЬ</div>
@@ -189,26 +172,18 @@
 
         <aside>
             <div class="sidebar-block">
-                <div class="block-title">ОБЩИЙ ЧАТ <span class="live-tag">LIVE</span></div>
+                <div class="block-title">ОБЩИЙ ЧАТ</div>
                 <div class="mini-chat" id="main-chat">
-                    <div class="chat-msg">Будьте первым, кто напишет в чате!</div>
+                    <div class="chat-msg"><b>СИСТЕМА</b>: ПОДКЛЮЧЕНО К ТЕРМИНАЛУ.</div>
                 </div>
-                <div class="chat-input-wrap">
-                    <input type="text" id="chat-input" class="chat-input" placeholder="Введите сообщение..." onkeydown="if(event.key==='Enter') sendMsg()">
-                </div>
+                <input type="text" id="chat-input" class="chat-input" placeholder="Введите сообщение..." onkeydown="if(event.key==='Enter') sendMsg()">
             </div>
 
             <div class="sidebar-block">
                 <div class="block-title">СТАТИСТИКА</div>
                 <div class="stats-grid">
-                    <div class="stat-box">
-                        <span class="stat-val">148</span>
-                        <span class="stat-label">В СЕТИ</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-val">0</span>
-                        <span class="stat-label">ТЕМ</span>
-                    </div>
+                    <div class="stat-box"><span class="stat-val">148</span><span class="stat-label">В СЕТИ</span></div>
+                    <div class="stat-box"><span class="stat-val">0</span><span class="stat-label">ТЕМ</span></div>
                 </div>
             </div>
         </aside>
@@ -221,21 +196,15 @@
             const input = document.getElementById('chat-input');
             const chat = document.getElementById('main-chat');
             if(input.value.trim() !== "") {
-                const now = new Date();
-                const time = now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
                 const msg = document.createElement('div');
                 msg.className = 'chat-msg';
-                msg.innerHTML = `<b>ТЕСТИРОВЩИК</b>: ${input.value} <span>${time}</span>`;
+                msg.innerHTML = `<b>ТЕСТИРОВЩИК</b>: ${input.value}`;
                 chat.appendChild(msg);
                 input.value = "";
                 chat.scrollTop = chat.scrollHeight;
             }
         }
-
-        // Клавиша ESC
-        window.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape') window.parent.postMessage('closeForum', '*');
-        });
+        window.addEventListener('keydown', (e) => { if(e.key === 'Escape') window.parent.postMessage('closeForum', '*'); });
     </script>
 </body>
 </html>
