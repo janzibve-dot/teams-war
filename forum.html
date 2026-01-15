@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TEAMS WAR | GLOBAL FORUM (forv9)</title>
+    <title>TEAMS WAR | FORUM (forv11)</title>
     <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
         @font-face {
@@ -45,7 +45,7 @@
 
         /* --- МАКЕТ --- */
         .main-layout { display: grid; grid-template-columns: 1fr 350px; gap: 30px; max-width: 1400px; margin: 40px auto; padding: 0 20px; }
-        .category-card, .sidebar-block, .stat-box, .auth-card, .overlay-content {
+        .category-card, .sidebar-block, .stat-box {
             background: var(--block-bg); border: 1px solid var(--custom-red); box-shadow: 0 0 10px var(--border-glow); border-radius: 8px; transition: 0.3s;
         }
 
@@ -56,20 +56,17 @@
 
         /* --- ЧАТ --- */
         .sidebar-block { padding: 20px; margin-bottom: 25px; }
-        .mini-chat { height: 350px; overflow-y: auto; font-size: 13px; font-family: sans-serif; margin-bottom: 10px; padding-right: 5px; }
+        .mini-chat { height: 350px; overflow-y: auto; font-size: 13px; font-family: sans-serif; margin-bottom: 10px; padding-right: 5px; border-bottom: 1px solid #111; }
         .chat-msg { margin-bottom: 10px; border-left: 2px solid var(--custom-green); padding-left: 10px; text-transform: none; line-height: 1.4; }
-        .chat-msg b { color: var(--custom-red); text-transform: uppercase; cursor: pointer; }
-        .chat-time { font-size: 9px; color: #444; display: block; }
-        .chat-input { background: #000; border: 1px solid var(--custom-red); color: white; width: 100%; padding: 12px; font-family: var(--font-main); box-shadow: 0 0 5px var(--border-glow); }
+        .chat-msg b { color: var(--custom-red); text-transform: uppercase; }
+        .chat-input { background: #000; border: 1px solid var(--custom-red); color: white; width: 100%; padding: 12px; font-family: var(--font-main); }
 
-        /* --- ФУТЕР --- */
-        .footer-wrap { padding: 40px; border-top: 4px solid var(--custom-red); margin-top: 60px; }
+        .footer-wrap { padding: 40px; border-top: 4px solid var(--custom-red); margin-top: 60px; text-align: center; }
         .footer-signature { width: 5cm; height: 5mm; margin: 0 auto; color: var(--custom-red); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); }
 
-        .exit-btn { position: fixed; bottom: 30px; right: 30px; background: var(--custom-red); color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 3000; box-shadow: 0 0 15px var(--border-glow); }
+        .exit-btn { position: fixed; bottom: 30px; right: 30px; background: var(--custom-red); color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 5000; box-shadow: 0 0 15px var(--border-glow); font-family: var(--font-main); }
         .screen { display: none; }
         .screen.active { display: block; }
-        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -79,105 +76,48 @@
             <div class="logo-static" onclick="showScreen('home')"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
             <div class="nav-btn active" id="btn-home" onclick="showScreen('home')">ГЛАВНАЯ</div>
             <div class="nav-btn" id="btn-rating" onclick="showScreen('rating')">РЕЙТИНГ</div>
-            <div class="nav-btn" id="btn-profile" onclick="showScreen('profile')">ПРОФИЛЬ</div>
+            <div class="nav-btn" id="btn-search" onclick="showScreen('search')">ПОИСК</div>
+            <div class="nav-btn" id="btn-profile" onclick="showScreen('profile')">ВХОД</div>
+            <button class="reg-btn">РЕГИСТРАЦИЯ</button>
         </div>
-        <div style="display:flex; align-items:center; gap:15px;">
-            <div style="font-size:12px; text-align:right">
-                <span id="display-name" style="color:var(--custom-green); font-weight:900">ТЕСТИРОВЩИК</span><br>
-                <span style="color:var(--custom-red)">ОНЛАЙН</span>
-            </div>
-        </div>
-        <div class="age-limit" style="margin-left:20px;">6+</div>
+        <div class="age-limit">6+</div>
     </header>
 
     <main class="main-layout">
         <section id="content-master">
             <div id="screen-home" class="screen active">
                 <div class="section-header">РАЗДЕЛЫ ФОРУМА</div>
-                <div id="categories-list">
-                    </div>
+                <div id="cat-render-area"></div>
             </div>
-
-            <div id="screen-profile" class="screen">
-                <div class="section-header">ЛИЧНОЕ ДЕЛО</div>
-                <div class="sidebar-block">
-                    <h2>НИКНЕЙМ: <span style="color:var(--custom-green)">ТЕСТИРОВЩИК</span></h2>
-                    <p>В этой версии чат работает через облако Gun.js. Все сообщения видны всем пользователям в реальном времени.</p>
-                </div>
-            </div>
+            <div id="screen-rating" class="screen"><div class="section-header">РЕЙТИНГ БОЙЦОВ</div><p>ЗАГРУЗКА ДАННЫХ...</p></div>
+            <div id="screen-search" class="screen"><div class="section-header">ПОИСК</div><p>ПОИСК ПО БАЗЕ...</p></div>
+            <div id="screen-profile" class="screen"><div class="section-header">ЛИЧНЫЙ КАБИНЕТ</div><p>ВОЙДИТЕ В СИСТЕМУ.</p></div>
         </section>
 
         <aside>
             <div class="sidebar-block">
-                <div class="block-title">ОБЩИЙ ЧАТ <span style="font-size:9px; color:var(--custom-green)">LIVE (CLOUD)</span></div>
-                <div class="mini-chat" id="global-chat-box">
-                    </div>
-                <input type="text" id="chat-input" class="chat-input" placeholder="Введите сообщение... (ENTER)" onkeydown="if(event.key==='Enter') sendGlobalMsg()">
+                <div class="block-title">ОБЩИЙ ЧАТ <span id="conn-info" style="color:gray; font-size:9px;">[CONNECTING...]</span></div>
+                <div class="mini-chat" id="chat-window">
+                    <div class="chat-msg"><b>СИСТЕМА</b>: ПОДКЛЮЧЕНИЕ К КАНАЛУ...</div>
+                </div>
+                <input type="text" id="chat-input" class="chat-input" placeholder="Введите сообщение... (ENTER)" onkeydown="if(event.key==='Enter') send()">
             </div>
-
             <div class="sidebar-block">
                 <div class="block-title">СТАТИСТИКА</div>
-                <div style="text-align:center;">
-                    <span style="font-size:30px; font-weight:900;">148</span><br>
-                    <span style="font-size:10px; color:var(--text-gray);">БОЙЦОВ В СЕТИ</span>
+                <div style="text-align:center; padding:10px;">
+                    <span style="font-size:30px; font-weight:bold;">148</span><br>
+                    <span style="font-size:10px; color:gray;">БОЙЦОВ В СЕТИ</span>
                 </div>
             </div>
         </aside>
     </main>
 
-    <div class="footer-wrap">
-        <div class="footer-signature">NIKS ON GAME</div>
-    </div>
-
+    <div class="footer-wrap"><div class="footer-signature">NIKS ON GAME</div></div>
+    
     <button class="exit-btn" onclick="window.parent.postMessage('closeForum', '*')">ВЫХОД С ФОРУМА</button>
 
     <script>
-        // --- ПОДКЛЮЧЕНИЕ К ОБЛАКУ GUN ---
-        // Эти серверы (Relays) помогают браузерам найти друг друга
-        const gun = Gun(['https://gun-manhattan.herokuapp.com/gun', 'https://liberated.herokuapp.com/gun']);
-        const chatDb = gun.get('tw_war_global_chat');
-
-        const currentUser = "ТЕСТИРОВЩИК_" + Math.floor(Math.random() * 1000); // Уникальный ник для теста
-
-        // --- ЛОГИКА ЧАТА ---
-        function sendGlobalMsg() {
-            const input = document.getElementById('chat-input');
-            const text = input.value.trim();
-            if(text !== "") {
-                const now = new Date();
-                const timeStr = now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
-                
-                // Сохраняем в облако
-                chatDb.set({
-                    user: currentUser,
-                    text: text,
-                    time: timeStr,
-                    timestamp: Date.now()
-                });
-                
-                input.value = "";
-            }
-        }
-
-        // СЛУШАЕМ ОБЛАКО (Когда кто-то другой пишет - это сработает тут)
-        chatDb.map().once(function(data, id) {
-            if(!data || !data.text) return;
-            
-            const box = document.getElementById('global-chat-box');
-            
-            // Проверка, чтобы не дублировать (Gun иногда присылает данные дважды)
-            if(document.getElementById(id)) return;
-
-            const msgDiv = document.createElement('div');
-            msgDiv.id = id; // Уникальный ID сообщения
-            msgDiv.className = 'chat-msg';
-            msgDiv.innerHTML = `<span class="chat-time">${data.time}</span><b>${data.user}</b>: ${data.text}`;
-            
-            box.appendChild(msgDiv);
-            box.scrollTop = box.scrollHeight;
-        });
-
-        // --- НАВИГАЦИЯ ---
+        // --- 1. ФУНКЦИИ ИНТЕРФЕЙСА (РАБОТАЮТ ВСЕГДА) ---
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen-' + id).classList.add('active');
@@ -186,30 +126,54 @@
             if(btn) btn.classList.add('active');
         }
 
-        // Рендер разделов (просто для вида)
-        const CATEGORIES = [
-            { title: 'Новости игры', icon: '🛡️' },
-            { title: 'Тактика и стратегии', icon: '⚔️' },
-            { title: 'Кланы и альянсы', icon: '👥' },
-            { title: 'Техническая поддержка', icon: '⚡' },
-            { title: 'Флудилка', icon: '💬' }
+        const cats = [
+            { t: 'Новости игры', i: '🛡️' },
+            { t: 'Тактика и стратегии', i: '⚔️' },
+            { t: 'Кланы и альянсы', i: '👥' },
+            { t: 'Техническая поддержка', i: '⚡' },
+            { t: 'Флудилка', i: '💬' }
         ];
+        document.getElementById('cat-render-area').innerHTML = cats.map(c => `
+            <div class="category-card"><div style="display:flex; align-items:center; gap:20px;"><div class="cat-icon">${c.i}</div><b>${c.t}</b></div><div style="font-size:10px; color:gray;">АКТИВНОСТЬ</div></div>
+        `).join('');
 
-        function renderCats() {
-            const list = document.getElementById('categories-list');
-            list.innerHTML = CATEGORIES.map(c => `
-                <div class="category-card">
-                    <div style="display:flex; align-items:center; gap:20px;">
-                        <div class="cat-icon">${c.icon}</div>
-                        <div class="cat-title">${c.title}</div>
-                    </div>
-                    <div class="cat-stats">АКТИВНОСТЬ</div>
-                </div>
-            `).join('');
-        }
-
-        window.onload = renderCats;
         window.addEventListener('keydown', (e) => { if(e.key === 'Escape') window.parent.postMessage('closeForum', '*'); });
+
+        // --- 2. ГЛОБАЛЬНЫЙ ЧАТ (С ЗАЩИТОЙ ОТ ОШИБОК) ---
+        try {
+            const myName = "ИГРОК_" + Math.floor(Math.random() * 999);
+            const gun = Gun(['https://gun-manhattan.herokuapp.com/gun', 'https://gun-us.herokuapp.com/gun']);
+            const chatNode = gun.get('teams_war_v11_final');
+
+            function send() {
+                const inp = document.getElementById('chat-input');
+                if(inp.value.trim()){
+                    const now = new Date();
+                    chatNode.set({
+                        n: myName,
+                        t: inp.value,
+                        d: now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes()
+                    });
+                    inp.value = "";
+                }
+            }
+
+            chatNode.map().on(function(data, id) {
+                if(!data || !data.t || document.getElementById(id)) return;
+                const win = document.getElementById('chat-window');
+                const msg = document.createElement('div');
+                msg.id = id;
+                msg.className = 'chat-msg';
+                msg.innerHTML = `<b>${data.n}</b>: ${data.t}`;
+                win.appendChild(msg);
+                win.scrollTop = win.scrollHeight;
+                document.getElementById('conn-info').innerText = "[ONLINE]";
+                document.getElementById('conn-info').style.color = "#777c4e";
+            });
+        } catch(e) {
+            console.log("Ошибка чата, но сайт работает.");
+            document.getElementById('conn-info').innerText = "[OFFLINE]";
+        }
     </script>
 </body>
 </html>
