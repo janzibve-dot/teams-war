@@ -2,211 +2,68 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TEAMS WAR | ФОРУМ (forv12)</title>
+    <title>TEAMS WAR | GLOBAL FORUM (forv12)</title>
     <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
-        /* Шрифт Sangyo из основного сайта */
-        @font-face {
-            font-family: 'Sangyo';
-            src: url('ofont.ru_Sangyo.ttf') format('truetype');
-            font-weight: normal; font-style: normal;
-        }
-
-        :root {
-            --bg-black: #050505;
-            --block-bg: #0d0d0d;
-            --custom-green: #777c4e;
-            --custom-red: #bc0000;
-            --border-glow: rgba(188, 0, 0, 0.4);
-            --text-gray: #888;
-            --font-main: 'Sangyo', 'Oswald', sans-serif;
-        }
-
+        @font-face { font-family: 'Sangyo'; src: url('ofont.ru_Sangyo.ttf') format('truetype'); }
+        :root { --bg-black: #050505; --block-bg: #0d0d0d; --custom-green: #777c4e; --custom-red: #bc0000; --border-glow: rgba(188, 0, 0, 0.4); --font-main: 'Sangyo', sans-serif; }
         * { box-sizing: border-box; }
-        body {
-            background-color: var(--bg-black);
-            color: white;
-            margin: 0;
-            font-family: var(--font-main);
-            overflow-x: hidden;
-            text-transform: uppercase;
-        }
-
-        /* --- ХЕДЕР --- */
-        header {
-            position: sticky; top: 0; z-index: 1500;
-            padding: 20px 40px; background: #050505;
-            border-bottom: 3px solid var(--custom-red);
-            display: flex; align-items: center; justify-content: space-between;
-        }
-
-        .nav-container { display: flex; align-items: center; flex: 1; gap: 20px; margin-right: 40px; }
-        .logo-static { font-size: 28px; font-weight: 700; letter-spacing: 2px; white-space: nowrap; margin-right: 40px; cursor: pointer; }
-        .logo-static .t { color: var(--custom-green); text-shadow: 0 0 15px rgba(119, 124, 78, 0.5); }
-        .logo-static .w { color: var(--custom-red); text-shadow: 0 0 15px rgba(188, 0, 0, 0.5); }
-
-        .nav-btn { flex: 1; text-align: center; padding: 12px 0; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); font-size: 14px; transition: 0.3s; cursor: pointer; }
-        .nav-btn:hover { background: var(--custom-red); color: white; }
-        .reg-btn { background: var(--custom-red); color: white; border: none; padding: 12px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: var(--font-main); transition: 0.3s; }
-        .reg-btn:hover { background: white; color: black; }
-        .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; flex-shrink: 0; }
-
-        /* --- ОСНОВНОЙ КОНТЕНТ --- */
-        .main-layout { display: grid; grid-template-columns: 1fr 350px; gap: 30px; max-width: 1400px; margin: 40px auto; padding: 0 20px; }
-        .section-header { font-size: 18px; font-weight: bold; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
-        .section-header::before { content: ''; width: 4px; height: 24px; background: var(--custom-red); display: block; }
-
-        .category-card, .sidebar-block, .stat-box {
-            background: var(--block-bg); border: 1px solid var(--custom-red); box-shadow: 0 0 10px var(--border-glow); border-radius: 8px; transition: 0.3s;
-        }
-
-        .category-card { padding: 20px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-        .category-card:hover { box-shadow: 0 0 20px rgba(188, 0, 0, 0.6); transform: translateX(5px); }
-
-        .cat-info { display: flex; align-items: center; gap: 20px; }
-        .cat-icon { width: 45px; height: 45px; background: #111; border: 1px solid #222; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--text-gray); }
-        .cat-title { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
-        .cat-desc { font-size: 11px; color: var(--text-gray); text-transform: none; font-family: sans-serif; }
-        .cat-stats { text-align: right; font-size: 12px; color: var(--text-gray); }
-        .cat-stats b { color: white; display: block; font-size: 14px; }
-
-        /* БОКОВАЯ ПАНЕЛЬ */
-        .sidebar-block { padding: 20px; margin-bottom: 25px; }
-        .block-title { font-size: 14px; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px; }
-
-        /* ЧАТ */
-        .mini-chat { height: 350px; overflow-y: auto; font-size: 13px; color: #aaa; margin-bottom: 15px; padding-right: 5px; font-family: sans-serif; }
-        .chat-msg { margin-bottom: 12px; text-transform: none; }
-        .chat-msg b { color: var(--custom-red); text-transform: uppercase; }
-
-        .chat-input { background: #111; border: 1px solid var(--custom-red); color: white; width: 100%; padding: 10px; border-radius: 4px; font-size: 12px; box-shadow: 0 0 5px var(--border-glow); font-family: var(--font-main); }
-
-        /* СТАТИСТИКА */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center; }
-        .stat-box { padding: 15px; }
-        .stat-val { font-size: 20px; font-weight: bold; color: white; display: block; }
-        .stat-label { font-size: 10px; color: var(--text-gray); margin-top: 5px; }
-
-        /* ФУТЕР */
-        .footer-wrap { padding: 40px; border-top: 4px solid var(--custom-red); margin-top: 60px; }
-        .footer-signature { width: 5cm; height: 5mm; margin: 0 auto; background-color: transparent; color: var(--custom-red); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); white-space: nowrap; }
-
-        /* ВЫХОД */
-        .exit-btn { position: fixed; bottom: 30px; right: 30px; background: var(--custom-red); color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 5000; box-shadow: 0 0 15px var(--border-glow); font-family: var(--font-main); transition: 0.3s; }
-        .exit-btn:hover { background: white; color: black; transform: scale(1.05); }
+        body { background-color: var(--bg-black); color: white; margin: 0; font-family: var(--font-main); text-transform: uppercase; overflow-x: hidden; }
+        header { position: sticky; top: 0; padding: 20px 40px; background: #000; border-bottom: 3px solid var(--custom-red); display: flex; align-items: center; justify-content: space-between; }
+        .main-layout { display: grid; grid-template-columns: 1fr 350px; gap: 30px; padding: 40px; }
+        .category-card, .sidebar-block { background: var(--block-bg); border: 1px solid var(--custom-red); box-shadow: 0 0 10px var(--border-glow); border-radius: 8px; padding: 20px; margin-bottom: 15px; }
+        .mini-chat { height: 350px; overflow-y: auto; font-family: sans-serif; font-size: 13px; margin-bottom: 10px; border-bottom: 1px solid #222; }
+        .chat-msg { margin-bottom: 10px; border-left: 2px solid var(--custom-green); padding-left: 10px; text-transform: none; }
+        .chat-input { background: #000; border: 1px solid var(--custom-red); color: white; width: 100%; padding: 12px; }
+        .exit-btn { position: fixed; bottom: 30px; right: 30px; background: var(--custom-red); color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 5000; }
     </style>
 </head>
 <body>
-
     <header>
-        <div class="nav-container">
-            <div class="logo-static"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-            <a href="#" class="nav-btn">ГЛАВНАЯ</a>
-            <a href="#" class="nav-btn">РЕЙТИНГ</a>
-            <a href="#" class="nav-btn">ПОИСК</a>
-            <a href="#" class="nav-btn">ВХОД</a>
-            <button class="reg-btn">РЕГИСТРАЦИЯ</button>
-        </div>
-        <div class="age-limit">6+</div>
+        <div style="font-size:28px;"><span style="color:var(--custom-green)">TEAMS</span> <span style="color:var(--custom-red)">WAR</span></div>
+        <div id="status" style="color:gray; font-size:12px;">ПОДКЛЮЧЕНИЕ...</div>
     </header>
-
     <main class="main-layout">
         <section>
-            <div class="section-header">РАЗДЕЛЫ ФОРУМА</div>
-            <div class="category-card">
-                <div class="cat-info">
-                    <div class="cat-icon">🛡️</div>
-                    <div><div class="cat-title">Новости игры</div><div class="cat-desc">Официальные объявления и обновления</div></div>
-                </div>
-                <div class="cat-stats"><b>0 тем</b> АКТИВНОСТЬ</div>
-            </div>
-            <div class="category-card">
-                <div class="cat-info">
-                    <div class="cat-icon">⚔️</div>
-                    <div><div class="cat-title">Тактика и стратегии</div><div class="cat-desc">Обсуждение механик</div></div>
-                </div>
-                <div class="cat-stats"><b>0 тем</b> АКТИВНОСТЬ</div>
-            </div>
-            <div class="category-card">
-                <div class="cat-info">
-                    <div class="cat-icon">👥</div>
-                    <div><div class="cat-title">Кланы и альянсы</div><div class="cat-desc">Общение между кланами</div></div>
-                </div>
-                <div class="cat-stats"><b>0 тем</b> АКТИВНОСТЬ</div>
-            </div>
-            <div class="category-card">
-                <div class="cat-info">
-                    <div class="cat-icon">⚡</div>
-                    <div><div class="cat-title">Техническая поддержка</div><div class="cat-desc">Баг-репорты</div></div>
-                </div>
-                <div class="cat-stats"><b>0 тем</b> АКТИВНОСТЬ</div>
-            </div>
-            <div class="category-card">
-                <div class="cat-info">
-                    <div class="cat-icon">💬</div>
-                    <div><div class="cat-title">Флудилка</div><div class="cat-desc">Любые темы</div></div>
-                </div>
-                <div class="cat-stats"><b>0 тем</b> АКТИВНОСТЬ</div>
-            </div>
+            <div style="font-size:18px; font-weight:bold; margin-bottom:25px;">РАЗДЕЛЫ ФОРУМА</div>
+            <div class="category-card">НОВОСТИ ИГРЫ</div>
+            <div class="category-card">ТЕХНИЧЕСКАЯ ПОДДЕРЖКА</div>
         </section>
-
         <aside>
             <div class="sidebar-block">
-                <div class="block-title">ОБЩИЙ ЧАТ <span id="status" style="font-size:9px; color:gray;">[ПОИСК СЕТИ...]</span></div>
-                <div class="mini-chat" id="main-chat">
-                    <div class="chat-msg"><b>СИСТЕМА</b>: Подключение к терминалу...</div>
-                </div>
-                <input type="text" id="chat-input" class="chat-input" placeholder="Введите сообщение..." onkeydown="if(event.key==='Enter') sendMsg()">
-            </div>
-            <div class="sidebar-block">
-                <div class="block-title">СТАТИСТИКА</div>
-                <div class="stats-grid">
-                    <div class="stat-box"><span class="stat-val">148</span><span class="stat-label">В СЕТИ</span></div>
-                    <div class="stat-box"><span class="stat-val">0</span><span class="stat-label">ТЕМ</span></div>
-                </div>
+                <div style="font-size:14px; font-weight:bold; margin-bottom:15px;">ОБЩИЙ ЧАТ</div>
+                <div class="mini-chat" id="chat-win"></div>
+                <input type="text" id="chat-inp" class="chat-input" placeholder="СООБЩЕНИЕ... (ENTER)" onkeydown="if(event.key==='Enter') send()">
             </div>
         </aside>
     </main>
-
-    <div class="footer-wrap"><div class="footer-signature">NIKS ON GAME</div></div>
-    <button class="exit-btn" onclick="window.parent.postMessage('closeForum', '*')">ВЫХОД С ФОРУМА</button>
+    <button class="exit-btn" onclick="window.parent.postMessage('closeForum', '*')">ВЫХОД</button>
 
     <script>
-        // ГЕНЕРАЦИЯ ИМЕНИ ДЛЯ ТЕСТА
-        const nick = "БОЕЦ_" + Math.floor(Math.random() * 999);
-
-        // ПОДКЛЮЧЕНИЕ К ОБЛАКУ (ДЛЯ ВИДИМОСТИ ВСЕМ)
+        // ГЛОБАЛЬНЫЙ ЧАТ (forv12)
         const gun = Gun(['https://gun-manhattan.herokuapp.com/gun', 'https://gun-us.herokuapp.com/gun']);
-        const chatDb = gun.get('teams_war_global_v12');
+        const chat = gun.get('teams_war_global_v12_final'); // Уникальный ключ для связи
+        const myNick = "БОЕЦ_" + Math.floor(Math.random() * 999);
 
-        // ОТПРАВКА
-        function sendMsg() {
-            const input = document.getElementById('chat-input');
-            if(input.value.trim() !== "") {
-                chatDb.set({
-                    name: nick,
-                    text: input.value,
-                    time: new Date().toLocaleTimeString().slice(0,5)
-                });
-                input.value = "";
+        function send() {
+            const inp = document.getElementById('chat-inp');
+            if(inp.value.trim()){
+                chat.set({ n: myNick, t: inp.value, d: Date.now() });
+                inp.value = "";
             }
         }
 
-        // ПРИЕМ (СЛУШАЕМ ОБЛАКО)
-        chatDb.map().on(function(data, id) {
-            if(!data || !data.text || document.getElementById(id)) return;
-            const chat = document.getElementById('main-chat');
+        chat.map().on((data, id) => {
+            if(!data || !data.t || document.getElementById(id)) return;
             const msg = document.createElement('div');
             msg.id = id;
             msg.className = 'chat-msg';
-            msg.innerHTML = `<b>${data.name}</b>: ${data.text}`;
-            chat.appendChild(msg);
-            chat.scrollTop = chat.scrollHeight;
-            document.getElementById('status').innerText = "[В СЕТИ]";
+            msg.innerHTML = `<b>${data.n}</b>: ${data.t}`;
+            document.getElementById('chat-win').appendChild(msg);
+            document.getElementById('status').innerText = "В СЕТИ";
             document.getElementById('status').style.color = "#777c4e";
+            document.getElementById('chat-win').scrollTop = 9999;
         });
-
-        window.addEventListener('keydown', (e) => { if(e.key === 'Escape') window.parent.postMessage('closeForum', '*'); });
     </script>
 </body>
 </html>
