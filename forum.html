@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TEAMS WAR | ULTIMATE FORUM (v15)</title>
+    <title>TEAMS WAR | FORUM v15.1 FIX</title>
     <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
         @font-face { font-family: 'Sangyo'; src: url('Found/GamestationTextoblique.otf') format('truetype'); }
@@ -13,7 +13,6 @@
         * { box-sizing: border-box; }
         body { background: var(--bg); color: white; margin: 0; font-family: var(--font); text-transform: uppercase; overflow-x: hidden; }
         
-        /* --- ШАПКА --- */
         header { position: sticky; top: 0; z-index: 1000; padding: 15px 40px; background: #000; border-bottom: 3px solid var(--red); display: flex; align-items: center; justify-content: space-between; }
         .nav-link { padding: 10px 20px; border: 1px solid rgba(188,0,0,0.2); cursor: pointer; font-size: 13px; transition: 0.3s; }
         .nav-link:hover, .nav-link.active { background: var(--red); box-shadow: 0 0 15px var(--red); }
@@ -21,21 +20,17 @@
         .main-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; padding: 30px 40px; max-width: 1600px; margin: 0 auto; }
         .card { background: var(--card); border: 1px solid var(--red); box-shadow: 0 0 10px var(--glow); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
         
-        /* --- ЧАТ --- */
         .chat-area { height: 400px; overflow-y: auto; font-family: sans-serif; font-size: 13px; border-bottom: 1px solid #222; margin-bottom: 10px; }
         .msg { margin-bottom: 12px; border-left: 2px solid var(--green); padding-left: 10px; text-transform: none; }
-        .msg b { color: var(--red); cursor: pointer; text-transform: uppercase; }
+        .msg b { color: var(--red); text-transform: uppercase; }
         .msg-meta { font-size: 9px; color: #555; display: block; }
 
-        /* --- ФОРМЫ --- */
         .input { background: #000; border: 1px solid var(--red); color: white; width: 100%; padding: 12px; margin-bottom: 10px; font-family: var(--font); }
         .btn { background: var(--red); color: white; border: none; padding: 12px; cursor: pointer; width: 100%; font-family: var(--font); transition: 0.3s; }
-        .btn:hover { background: white; color: black; }
+        .btn:disabled { background: #333; cursor: not-allowed; }
 
-        /* --- СТРАНИЦЫ (SCREENS) --- */
         .screen { display: none; }
         .screen.active { display: block; }
-        .user-row { display: flex; align-items: center; gap: 15px; padding: 15px; border-bottom: 1px solid #222; }
         .avatar { width: 50px; height: 50px; border: 1px solid var(--green); border-radius: 4px; object-fit: cover; }
         
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 5000; display: none; align-items: center; justify-content: center; }
@@ -44,13 +39,13 @@
 </head>
 <body>
 
-    <div id="auth-box" class="overlay" style="display: flex;">
+    <div id="auth-box" class="overlay">
         <div class="card" style="width: 400px; text-align: center;">
             <h2 id="at">ВХОД</h2>
             <div id="reg-ext" style="display: none;"><input type="email" id="a-email" class="input" placeholder="EMAIL"></div>
             <input type="text" id="a-login" class="input" placeholder="ЛОГИН">
             <input type="password" id="a-pass" class="input" placeholder="ПАРОЛЬ">
-            <button class="btn" onclick="processAuth()">ПОДТВЕРДИТЬ</button>
+            <button id="auth-submit" class="btn" onclick="processAuth()">ПОДТВЕРДИТЬ</button>
             <p onclick="toggleReg()" style="font-size: 10px; margin-top: 15px; cursor: pointer;">НЕТ АККАУНТА? РЕГИСТРАЦИЯ</p>
         </div>
     </div>
@@ -59,7 +54,6 @@
         <div style="display:flex; gap:10px;">
             <div class="nav-link active" onclick="tab('main')">РАЗДЕЛЫ</div>
             <div class="nav-link" onclick="tab('rating')">РЕЙТИНГ</div>
-            <div class="nav-link" onclick="tab('friends')">ДРУЗЬЯ</div>
             <div class="nav-link" onclick="tab('profile')">ПРОФИЛЬ</div>
         </div>
         <div style="text-align: right; font-size: 12px;">
@@ -71,55 +65,30 @@
         <section>
             <div id="s-main" class="screen active">
                 <div style="display:flex; justify-content:space-between; margin-bottom:20px">
-                    <input type="text" id="topic-search" class="input" style="width:60%" placeholder="ПОИСК ПО ТЕМАМ..." oninput="searchTopics()">
-                    <button class="btn" style="width:35%" onclick="createTopic()">+ СОЗДАТЬ ТЕМУ</button>
+                    <h2 style="margin:0">РАЗДЕЛЫ ФОРУМА</h2>
+                    <button class="btn" style="width:200px" onclick="createTopic()">+ СОЗДАТЬ ТЕМУ</button>
                 </div>
                 <div id="topics-render"></div>
             </div>
 
             <div id="s-profile" class="screen">
-                <div class="card" style="display:flex; gap:20px;">
-                    <img id="p-img" src="Icons/Fav.png" class="avatar" style="width:120px; height:120px;">
-                    <div>
-                        <h2 id="p-nick">NICKNAME</h2>
-                        <input type="file" id="p-upload" style="font-size:10px;">
-                        <div style="margin-top:15px; border-top:1px solid #333; padding-top:10px;">
-                            <input type="password" id="p-old" class="input" placeholder="СТАРЫЙ ПАРОЛЬ">
-                            <input type="password" id="p-new" class="input" placeholder="НОВЫЙ ПАРОЛЬ">
-                            <button class="btn" onclick="updatePass()">СМЕНИТЬ ПАРОЛЬ</button>
-                        </div>
-                    </div>
-                </div>
                 <div class="card">
-                    <h4>УВЕДОМЛЕНИЯ</h4>
-                    <div id="notifs" style="font-size:11px; font-family:sans-serif; height:100px; overflow-y:auto;"></div>
+                    <h2 id="p-nick">NICKNAME</h2>
+                    <button class="btn" style="width:200px" onclick="logout()">ВЫЙТИ ИЗ СИСТЕМЫ</button>
                 </div>
-                <button class="btn" onclick="logout()">ВЫЙТИ ИЗ СИСТЕМЫ</button>
             </div>
 
             <div id="s-rating" class="screen">
-                <h2>ТАБЛИЦА ЛИДЕРОВ</h2>
+                <h2>РЕЙТИНГ БОЙЦОВ</h2>
                 <div id="rating-list" class="card"></div>
-            </div>
-
-            <div id="s-friends" class="screen">
-                <h2>ЛЮДИ И ДРУЗЬЯ</h2>
-                <input type="text" id="u-search" class="input" placeholder="НАЙТИ ИГРОКА ПО НИКУ..." oninput="searchUsers()">
-                <div id="friends-render" class="card" style="margin-top:20px;"></div>
             </div>
         </section>
 
         <aside>
             <div class="card">
-                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:10px;">
-                    <b>ОБЩИЙ ЧАТ</b> <span id="online" style="color:var(--green)">В СЕТИ</span>
-                </div>
+                <b>ОБЩИЙ ЧАТ</b> <span id="status-tag" style="color:gray; font-size:9px;">[ПОДКЛЮЧЕНИЕ...]</span>
                 <div id="chat" class="chat-area"></div>
                 <input type="text" id="chat-in" class="input" placeholder="СООБЩЕНИЕ..." onkeydown="if(event.key==='Enter') sendChat()">
-            </div>
-            <div class="card">
-                <b>СВЕЖИЕ ТЕМЫ</b>
-                <div id="recent" style="font-size:11px; margin-top:10px; font-family:sans-serif;"></div>
             </div>
         </aside>
     </main>
@@ -127,12 +96,17 @@
     <div class="exit-btn" onclick="window.parent.postMessage('closeForum', '*')">ВЫХОД</div>
 
     <script>
-        // --- СИСТЕМА (Gun.js) ---
-        const gun = Gun(['https://gun-manhattan.herokuapp.com/gun', 'https://gun-us.herokuapp.com/gun']);
+        // Используем 4 независимых сервера для стабильности
+        const gun = Gun([
+            'https://gun-manhattan.herokuapp.com/gun',
+            'https://gun-us.herokuapp.com/gun',
+            'https://gun-eu.herokuapp.com/gun',
+            'https://gun-server.herokuapp.com/gun'
+        ]);
         const db = {
-            users: gun.get('tw_v15_users'),
-            chat: gun.get('tw_v15_chat'),
-            topics: gun.get('tw_v15_topics')
+            users: gun.get('tw_final_v15_users'),
+            chat: gun.get('tw_final_v15_chat'),
+            topics: gun.get('tw_final_v15_topics')
         };
 
         let user = JSON.parse(localStorage.getItem('tw_sess')) || null;
@@ -142,8 +116,7 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('s-'+id).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            event.target.classList.add('active');
-            if(id === 'rating') renderRating();
+            if(event) event.target.classList.add('active');
         }
 
         function toggleReg() {
@@ -153,90 +126,95 @@
         }
 
         function processAuth() {
-            const login = document.getElementById('a-login').value.trim();
+            const login = document.getElementById('a-login').value.trim().toLowerCase();
             const pass = document.getElementById('a-pass').value;
             const email = document.getElementById('a-email').value;
+            const btn = document.getElementById('auth-submit');
+
+            if(!login || !pass) return alert("ЗАПОЛНИТЕ ПОЛЯ!");
+            btn.disabled = true;
+            btn.innerText = "ОБРАБОТКА...";
 
             if(isReg) {
-                const newUser = { login, pass, email, pts: 10, avatar: 'Icons/Fav.png', notifs: ["ДОБРО ПОЖАЛОВАТЬ!"] };
-                db.users.get(login).put(newUser);
-                alert("РЕГИСТРАЦИЯ УСПЕШНА. ПИСЬМО ОТПРАВЛЕНО НА " + email);
-                location.reload();
+                // РЕГИСТРАЦИЯ с обратным вызовом (ack) для подтверждения записи
+                const newUser = { login, pass, email, pts: 10, avatar: 'Icons/Fav.png' };
+                db.users.get(login).put(newUser, (ack) => {
+                    if(ack.err) {
+                        alert("ОШИБКА СЕТИ: " + ack.err);
+                        btn.disabled = false;
+                        btn.innerText = "ПОДТВЕРДИТЬ";
+                    } else {
+                        alert("РЕГИСТРАЦИЯ УСПЕШНА! ТЕПЕРЬ ВОЙДИТЕ.");
+                        location.reload();
+                    }
+                });
             } else {
-                db.users.get(login).once(d => {
+                // ВХОД
+                db.users.get(login).once((d) => {
                     if(d && d.pass === pass) {
                         user = d;
                         localStorage.setItem('tw_sess', JSON.stringify(d));
-                        document.getElementById('auth-box').style.display = 'none';
-                        syncUI();
-                    } else alert("ОШИБКА!");
+                        location.reload();
+                    } else {
+                        alert("НЕВЕРНЫЙ ЛОГИН ИЛИ ПАРОЛЬ!");
+                        btn.disabled = false;
+                        btn.innerText = "ПОДТВЕРДИТЬ";
+                    }
                 });
             }
         }
 
-        function syncUI() {
-            if(!user) return;
-            document.getElementById('auth-box').style.display = 'none';
-            document.getElementById('u-login').innerText = user.login;
-            document.getElementById('u-pts').innerText = user.pts + " БАЛЛОВ";
-            document.getElementById('p-nick').innerText = user.login;
-            document.getElementById('p-img').src = user.avatar;
-            loadGlobalData();
-        }
-
         function sendChat() {
             const inp = document.getElementById('chat-in');
-            if(!inp.value.trim()) return;
-            const now = new Date();
+            if(!inp.value.trim() || !user) return;
             db.chat.set({
                 u: user.login, t: inp.value, 
-                date: now.toLocaleDateString(), time: now.toLocaleTimeString().slice(0,5)
+                date: new Date().toLocaleDateString(), 
+                time: new Date().toLocaleTimeString().slice(0,5)
             });
             inp.value = "";
-            addPts(1, "АКТИВНОСТЬ В ЧАТЕ");
         }
 
         function createTopic() {
             const title = prompt("ЗАГОЛОВОК:");
-            if(!title) return;
+            if(!title || !user) return;
             db.topics.set({
                 title, author: user.login, av: user.avatar, 
-                date: new Date().toLocaleString(), id: Date.now()
+                date: new Date().toLocaleString()
             });
-            addPts(10, "СОЗДАНИЕ ТЕМЫ");
         }
 
-        function loadGlobalData() {
-            db.chat.map().on((data, id) => {
+        // Запуск системы
+        if(!user) {
+            document.getElementById('auth-box').style.display = 'flex';
+        } else {
+            document.getElementById('u-login').innerText = user.login;
+            document.getElementById('u-pts').innerText = user.pts + " БАЛЛОВ";
+            document.getElementById('p-nick').innerText = user.login;
+            
+            // Загрузка данных
+            db.chat.map().once((data, id) => {
                 if(!data || !data.t || document.getElementById(id)) return;
                 const div = document.createElement('div');
                 div.id = id; div.className = 'msg';
                 div.innerHTML = `<span class="msg-meta">${data.date} | ${data.time}</span><b>${data.u}</b>: ${data.t}`;
                 document.getElementById('chat').appendChild(div);
                 document.getElementById('chat').scrollTop = 9999;
+                document.getElementById('status-tag').innerText = "[В СЕТИ]";
+                document.getElementById('status-tag').style.color = "#777c4e";
             });
 
             db.topics.map().on((data, id) => {
                 if(!data || !data.title || document.getElementById('t'+id)) return;
                 const div = document.createElement('div');
-                div.id = 't'+id; div.className = 'user-row card';
-                div.innerHTML = `<img src="${data.av}" class="avatar"><div><b>${data.title}</b><br><small>АВТОР: ${data.author} | ${data.date}</small></div>`;
+                div.id = 't'+id; div.className = 'card';
+                div.innerHTML = `<b>${data.title}</b><br><small>АВТОР: ${data.author} | ${data.date}</small>`;
                 document.getElementById('topics-render').prepend(div);
             });
         }
 
-        function addPts(n, reason) {
-            user.pts += n;
-            db.users.get(user.login).get('pts').put(user.pts);
-            const log = document.getElementById('notifs');
-            log.innerHTML = `<div>+${n} БАЛЛОВ: ${reason}</div>` + log.innerHTML;
-            document.getElementById('u-pts').innerText = user.pts + " БАЛЛОВ";
-            localStorage.setItem('tw_sess', JSON.stringify(user));
-        }
-
         function logout() { localStorage.removeItem('tw_sess'); location.reload(); }
-        
-        window.onload = () => { if(user) syncUI(); };
+        window.addEventListener('keydown', (e) => { if(e.key === 'Escape') window.parent.postMessage('closeForum', '*'); });
     </script>
 </body>
 </html>
