@@ -2,272 +2,241 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TEAMS WAR | FORUM ENGINE v14</title>
+    <title>TEAMS WAR | ULTIMATE FORUM (v15)</title>
     <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
         @font-face { font-family: 'Sangyo'; src: url('Found/GamestationTextoblique.otf') format('truetype'); }
         :root {
-            --bg-black: #050505; --block-bg: #0d0d0d; --custom-green: #777c4e;
-            --custom-red: #bc0000; --border-glow: rgba(188, 0, 0, 0.4);
-            --font-main: 'Sangyo', sans-serif;
+            --bg: #050505; --card: #0d0d0d; --green: #777c4e; --red: #bc0000;
+            --glow: rgba(188, 0, 0, 0.4); --font: 'Sangyo', sans-serif;
         }
         * { box-sizing: border-box; }
-        body { background: var(--bg-black); color: white; margin: 0; font-family: var(--font-main); text-transform: uppercase; overflow-x: hidden; }
+        body { background: var(--bg); color: white; margin: 0; font-family: var(--font); text-transform: uppercase; overflow-x: hidden; }
         
-        /* --- ИНТЕРФЕЙС ТЕРМИНАЛА --- */
-        header { position: sticky; top: 0; z-index: 1500; padding: 20px 40px; background: #000; border-bottom: 3px solid var(--custom-red); display: flex; align-items: center; justify-content: space-between; }
-        .nav-container { display: flex; align-items: center; flex: 1; gap: 15px; }
-        .nav-btn { flex: 1; text-align: center; padding: 10px; color: white; border: 1px solid rgba(188,0,0,0.2); font-size: 14px; cursor: pointer; transition: 0.3s; }
-        .nav-btn:hover, .nav-btn.active { background: var(--custom-red); box-shadow: 0 0 15px var(--custom-red); }
+        /* --- ШАПКА --- */
+        header { position: sticky; top: 0; z-index: 1000; padding: 15px 40px; background: #000; border-bottom: 3px solid var(--red); display: flex; align-items: center; justify-content: space-between; }
+        .nav-link { padding: 10px 20px; border: 1px solid rgba(188,0,0,0.2); cursor: pointer; font-size: 13px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { background: var(--red); box-shadow: 0 0 15px var(--red); }
         
-        .main-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; padding: 30px 50px; max-width: 1600px; margin: 0 auto; }
-        .card { background: var(--block-bg); border: 1px solid var(--custom-red); box-shadow: 0 0 10px var(--border-glow); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .main-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; padding: 30px 40px; max-width: 1600px; margin: 0 auto; }
+        .card { background: var(--card); border: 1px solid var(--red); box-shadow: 0 0 10px var(--glow); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
         
         /* --- ЧАТ --- */
-        .chat-box { height: 400px; overflow-y: auto; font-family: sans-serif; font-size: 13px; border-bottom: 1px solid #222; margin-bottom: 10px; padding-right: 5px; }
-        .msg { margin-bottom: 12px; border-left: 2px solid var(--custom-green); padding-left: 10px; text-transform: none; }
-        .msg b { color: var(--custom-red); cursor: pointer; text-transform: uppercase; }
-        .msg-info { font-size: 9px; color: #555; display: block; }
-        .input-area { background: #000; border: 1px solid var(--custom-red); color: white; width: 100%; padding: 12px; font-family: var(--font-main); }
+        .chat-area { height: 400px; overflow-y: auto; font-family: sans-serif; font-size: 13px; border-bottom: 1px solid #222; margin-bottom: 10px; }
+        .msg { margin-bottom: 12px; border-left: 2px solid var(--green); padding-left: 10px; text-transform: none; }
+        .msg b { color: var(--red); cursor: pointer; text-transform: uppercase; }
+        .msg-meta { font-size: 9px; color: #555; display: block; }
 
-        /* --- МОДАЛКИ --- */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; align-items: center; justify-content: center; }
-        .auth-form { width: 450px; text-align: center; }
-        .btn-action { background: var(--custom-red); color: white; border: none; padding: 12px 30px; cursor: pointer; font-family: var(--font-main); width: 100%; margin-top: 10px; }
+        /* --- ФОРМЫ --- */
+        .input { background: #000; border: 1px solid var(--red); color: white; width: 100%; padding: 12px; margin-bottom: 10px; font-family: var(--font); }
+        .btn { background: var(--red); color: white; border: none; padding: 12px; cursor: pointer; width: 100%; font-family: var(--font); transition: 0.3s; }
+        .btn:hover { background: white; color: black; }
 
-        .hidden { display: none; }
+        /* --- СТРАНИЦЫ (SCREENS) --- */
         .screen { display: none; }
         .screen.active { display: block; }
-
-        /* Стили разделов из ТЗ */
-        .topic-item { display: flex; align-items: center; gap: 20px; padding: 15px; border-bottom: 1px solid #111; cursor: pointer; }
-        .topic-item:hover { background: rgba(188,0,0,0.05); }
-        .user-avatar { width: 50px; height: 50px; border: 1px solid var(--custom-green); border-radius: 4px; object-fit: cover; }
+        .user-row { display: flex; align-items: center; gap: 15px; padding: 15px; border-bottom: 1px solid #222; }
+        .avatar { width: 50px; height: 50px; border: 1px solid var(--green); border-radius: 4px; object-fit: cover; }
         
-        .exit-btn { position: fixed; bottom: 20px; right: 20px; background: var(--custom-red); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; z-index: 10000; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 5000; display: none; align-items: center; justify-content: center; }
+        .exit-btn { position: fixed; bottom: 20px; right: 20px; background: var(--red); color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; z-index: 6000; }
     </style>
 </head>
 <body>
 
-    <div id="auth-modal" class="overlay">
-        <div class="card auth-form">
-            <h2 id="auth-title">ТЕРМИНАЛ: ВХОД</h2>
-            <div id="reg-fields" class="hidden">
-                <input type="email" id="auth-email" class="input-area" placeholder="EMAIL" style="margin-bottom:10px">
-            </div>
-            <input type="text" id="auth-login" class="input-area" placeholder="ЛОГИН" style="margin-bottom:10px">
-            <input type="password" id="auth-pass" class="input-area" placeholder="ПАРОЛЬ" style="margin-bottom:10px">
-            <button class="btn-action" onclick="handleAuth()">ПОДТВЕРДИТЬ</button>
-            <p id="auth-switch" style="font-size:10px; margin-top:15px; cursor:pointer" onclick="toggleAuthMode()">НЕТ АККАУНТА? РЕГИСТРАЦИЯ</p>
+    <div id="auth-box" class="overlay" style="display: flex;">
+        <div class="card" style="width: 400px; text-align: center;">
+            <h2 id="at">ВХОД</h2>
+            <div id="reg-ext" style="display: none;"><input type="email" id="a-email" class="input" placeholder="EMAIL"></div>
+            <input type="text" id="a-login" class="input" placeholder="ЛОГИН">
+            <input type="password" id="a-pass" class="input" placeholder="ПАРОЛЬ">
+            <button class="btn" onclick="processAuth()">ПОДТВЕРДИТЬ</button>
+            <p onclick="toggleReg()" style="font-size: 10px; margin-top: 15px; cursor: pointer;">НЕТ АККАУНТА? РЕГИСТРАЦИЯ</p>
         </div>
     </div>
 
     <header>
-        <div class="nav-container">
-            <div style="font-size:24px; margin-right:20px;"><span style="color:var(--custom-green)">TEAMS</span> <span style="color:var(--custom-red)">WAR</span></div>
-            <div class="nav-btn active" onclick="showScreen('home')">РАЗДЕЛЫ</div>
-            <div class="nav-btn" onclick="showScreen('rating')">РЕЙТИНГ</div>
-            <div class="nav-btn" onclick="showScreen('friends')">ДРУЗЬЯ</div>
-            <div class="nav-btn" onclick="showScreen('profile')">ПРОФИЛЬ</div>
+        <div style="display:flex; gap:10px;">
+            <div class="nav-link active" onclick="tab('main')">РАЗДЕЛЫ</div>
+            <div class="nav-link" onclick="tab('rating')">РЕЙТИНГ</div>
+            <div class="nav-link" onclick="tab('friends')">ДРУЗЬЯ</div>
+            <div class="nav-link" onclick="tab('profile')">ПРОФИЛЬ</div>
         </div>
-        <div id="user-info" style="text-align:right; font-size:12px;">
-            <span id="my-name" style="color:var(--custom-green)">ГОСТЬ</span> | <span id="my-points" style="color:var(--custom-red)">0 БАЛЛОВ</span>
+        <div style="text-align: right; font-size: 12px;">
+            <span id="u-login" style="color:var(--green)">ГОСТЬ</span> | <span id="u-pts" style="color:var(--red)">0 БАЛЛОВ</span>
         </div>
     </header>
 
     <main class="main-layout">
         <section>
-            <div id="screen-home" class="screen active">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
-                    <h2 style="margin:0">РАЗДЕЛЫ ФОРУМА</h2>
-                    <button class="nav-btn" style="max-width:200px" onclick="openCreateTopic()">+ СОЗДАТЬ ТЕМУ</button>
+            <div id="s-main" class="screen active">
+                <div style="display:flex; justify-content:space-between; margin-bottom:20px">
+                    <input type="text" id="topic-search" class="input" style="width:60%" placeholder="ПОИСК ПО ТЕМАМ..." oninput="searchTopics()">
+                    <button class="btn" style="width:35%" onclick="createTopic()">+ СОЗДАТЬ ТЕМУ</button>
                 </div>
-                <div id="topics-list">
-                    </div>
+                <div id="topics-render"></div>
             </div>
 
-            <div id="screen-profile" class="screen">
-                <h2>ЛИЧНОЕ ДЕЛО</h2>
-                <div class="card" style="display:flex; gap:30px">
-                    <img id="prof-img" src="Icons/Fav.png" class="user-avatar" style="width:150px; height:150px">
-                    <div style="flex:1">
-                        <h3 id="prof-nick-title">ЛОГИН</h3>
-                        <input type="file" id="avatar-input" style="font-size:10px; margin-bottom:15px">
-                        <div style="border-top:1px solid #222; padding-top:15px">
-                            <h4>СМЕНА ПАРОЛЯ</h4>
-                            <input type="password" id="pass-old" class="input-area" placeholder="СТАРЫЙ ПАРОЛЬ" style="margin-bottom:10px">
-                            <input type="password" id="pass-new" class="input-area" placeholder="НОВЫЙ ПАРОЛЬ">
-                            <button class="btn-action" onclick="changePassword()">ОБНОВИТЬ</button>
+            <div id="s-profile" class="screen">
+                <div class="card" style="display:flex; gap:20px;">
+                    <img id="p-img" src="Icons/Fav.png" class="avatar" style="width:120px; height:120px;">
+                    <div>
+                        <h2 id="p-nick">NICKNAME</h2>
+                        <input type="file" id="p-upload" style="font-size:10px;">
+                        <div style="margin-top:15px; border-top:1px solid #333; padding-top:10px;">
+                            <input type="password" id="p-old" class="input" placeholder="СТАРЫЙ ПАРОЛЬ">
+                            <input type="password" id="p-new" class="input" placeholder="НОВЫЙ ПАРОЛЬ">
+                            <button class="btn" onclick="updatePass()">СМЕНИТЬ ПАРОЛЬ</button>
                         </div>
                     </div>
                 </div>
                 <div class="card">
-                    <h4>ЛОГ УВЕДОМЛЕНИЙ</h4>
-                    <div id="notif-log" style="font-family:sans-serif; font-size:12px; height:150px; overflow-y:auto"></div>
+                    <h4>УВЕДОМЛЕНИЯ</h4>
+                    <div id="notifs" style="font-size:11px; font-family:sans-serif; height:100px; overflow-y:auto;"></div>
                 </div>
+                <button class="btn" onclick="logout()">ВЫЙТИ ИЗ СИСТЕМЫ</button>
             </div>
 
-            <div id="screen-rating" class="screen">
-                <h2>РЕЙТИНГ БОЙЦОВ</h2>
-                <div id="rating-table" class="card"></div>
+            <div id="s-rating" class="screen">
+                <h2>ТАБЛИЦА ЛИДЕРОВ</h2>
+                <div id="rating-list" class="card"></div>
             </div>
-            
-            <div id="screen-friends" class="screen">
-                <h2>ВАШИ ДРУЗЬЯ</h2>
-                <input type="text" id="friend-search" class="input-area" placeholder="ПОИСК ПО НИКУ..." oninput="searchUsers()">
-                <div id="friends-list" class="card" style="margin-top:20px"></div>
+
+            <div id="s-friends" class="screen">
+                <h2>ЛЮДИ И ДРУЗЬЯ</h2>
+                <input type="text" id="u-search" class="input" placeholder="НАЙТИ ИГРОКА ПО НИКУ..." oninput="searchUsers()">
+                <div id="friends-render" class="card" style="margin-top:20px;"></div>
             </div>
         </section>
 
         <aside>
             <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
-                    <span style="font-size:14px; font-weight:bold">ОБЩИЙ ЧАТ</span>
-                    <span id="online-count" style="color:var(--custom-green); font-size:10px">ONLINE: 148</span>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:10px;">
+                    <b>ОБЩИЙ ЧАТ</b> <span id="online" style="color:var(--green)">В СЕТИ</span>
                 </div>
-                <div class="chat-box" id="global-chat"></div>
-                <input type="text" id="chat-inp" class="input-area" placeholder="СООБЩЕНИЕ... (ENTER)" onkeydown="if(event.key==='Enter') sendChat()">
+                <div id="chat" class="chat-area"></div>
+                <input type="text" id="chat-in" class="input" placeholder="СООБЩЕНИЕ..." onkeydown="if(event.key==='Enter') sendChat()">
             </div>
-            
             <div class="card">
-                <div style="font-size:14px; font-weight:bold; margin-bottom:10px">СВЕЖИЕ ТЕМЫ</div>
-                <div id="recent-topics" style="font-size:11px; font-family:sans-serif"></div>
+                <b>СВЕЖИЕ ТЕМЫ</b>
+                <div id="recent" style="font-size:11px; margin-top:10px; font-family:sans-serif;"></div>
             </div>
         </aside>
     </main>
 
-    <button class="exit-btn" onclick="window.parent.postMessage('closeForum', '*')">ВЫХОД</button>
+    <div class="exit-btn" onclick="window.parent.postMessage('closeForum', '*')">ВЫХОД</div>
 
     <script>
-        // --- БАЗА ДАННЫХ (GUN.JS) ---
+        // --- СИСТЕМА (Gun.js) ---
         const gun = Gun(['https://gun-manhattan.herokuapp.com/gun', 'https://gun-us.herokuapp.com/gun']);
         const db = {
-            chat: gun.get('tw_final_chat_v14'),
-            topics: gun.get('tw_final_topics_v14'),
-            users: gun.get('tw_final_users_v14')
+            users: gun.get('tw_v15_users'),
+            chat: gun.get('tw_v15_chat'),
+            topics: gun.get('tw_v15_topics')
         };
 
-        let user = JSON.parse(localStorage.getItem('tw_user_session')) || null;
-        let isRegMode = false;
+        let user = JSON.parse(localStorage.getItem('tw_sess')) || null;
+        let isReg = false;
 
-        function init() {
-            if(!user) {
-                document.getElementById('auth-modal').style.display = 'flex';
-            } else {
-                updateUI();
-                syncData();
-            }
+        function tab(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('s-'+id).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            event.target.classList.add('active');
+            if(id === 'rating') renderRating();
         }
 
-        function toggleAuthMode() {
-            isRegMode = !isRegMode;
-            document.getElementById('auth-title').innerText = isRegMode ? "ТЕРМИНАЛ: РЕГИСТРАЦИЯ" : "ТЕРМИНАЛ: ВХОД";
-            document.getElementById('reg-fields').classList.toggle('hidden');
-            document.getElementById('auth-switch').innerText = isRegMode ? "ЕСТЬ АККАУНТ? ВХОД" : "НЕТ АККАУНТА? РЕГИСТРАЦИЯ";
+        function toggleReg() {
+            isReg = !isReg;
+            document.getElementById('at').innerText = isReg ? "РЕГИСТРАЦИЯ" : "ВХОД";
+            document.getElementById('reg-ext').style.display = isReg ? "block" : "none";
         }
 
-        function handleAuth() {
-            const nick = document.getElementById('auth-login').value.trim();
-            const pass = document.getElementById('auth-pass').value;
-            const email = document.getElementById('auth-email').value;
+        function processAuth() {
+            const login = document.getElementById('a-login').value.trim();
+            const pass = document.getElementById('a-pass').value;
+            const email = document.getElementById('a-email').value;
 
-            if(isRegMode) {
-                const newUser = { nick, pass, email, points: 10, avatar: 'Icons/Fav.png', friends: {}, notifications: ["ДОБРО ПОЖАЛОВАТЬ!"] };
-                db.users.get(nick).put(newUser);
+            if(isReg) {
+                const newUser = { login, pass, email, pts: 10, avatar: 'Icons/Fav.png', notifs: ["ДОБРО ПОЖАЛОВАТЬ!"] };
+                db.users.get(login).put(newUser);
                 alert("РЕГИСТРАЦИЯ УСПЕШНА. ПИСЬМО ОТПРАВЛЕНО НА " + email);
-                toggleAuthMode();
+                location.reload();
             } else {
-                db.users.get(nick).once(d => {
+                db.users.get(login).once(d => {
                     if(d && d.pass === pass) {
                         user = d;
-                        localStorage.setItem('tw_user_session', JSON.stringify(d));
-                        location.reload();
-                    } else alert("ОШИБКА ДОСТУПА!");
+                        localStorage.setItem('tw_sess', JSON.stringify(d));
+                        document.getElementById('auth-box').style.display = 'none';
+                        syncUI();
+                    } else alert("ОШИБКА!");
                 });
             }
         }
 
-        function updateUI() {
-            document.getElementById('my-name').innerText = user.nick;
-            document.getElementById('my-points').innerText = user.points + " БАЛЛОВ";
-            document.getElementById('prof-nick-title').innerText = user.nick;
-            document.getElementById('prof-img').src = user.avatar;
-            document.getElementById('auth-modal').style.display = 'none';
+        function syncUI() {
+            if(!user) return;
+            document.getElementById('auth-box').style.display = 'none';
+            document.getElementById('u-login').innerText = user.login;
+            document.getElementById('u-pts').innerText = user.pts + " БАЛЛОВ";
+            document.getElementById('p-nick').innerText = user.login;
+            document.getElementById('p-img').src = user.avatar;
+            loadGlobalData();
         }
 
-        // --- ЧАТ (ЛОГИН/ВРЕМЯ/ДАТА) ---
         function sendChat() {
-            const inp = document.getElementById('chat-inp');
-            if(inp.value.trim()) {
-                const now = new Date();
-                db.chat.set({
-                    u: user.nick,
-                    t: inp.value,
-                    time: now.toLocaleTimeString().slice(0,5),
-                    date: now.toLocaleDateString()
-                });
-                addPoints(1, "АКТИВНОСТЬ В ЧАТЕ");
-                inp.value = "";
-            }
+            const inp = document.getElementById('chat-in');
+            if(!inp.value.trim()) return;
+            const now = new Date();
+            db.chat.set({
+                u: user.login, t: inp.value, 
+                date: now.toLocaleDateString(), time: now.toLocaleTimeString().slice(0,5)
+            });
+            inp.value = "";
+            addPts(1, "АКТИВНОСТЬ В ЧАТЕ");
         }
 
-        // --- ТЕМЫ ---
-        function openCreateTopic() {
-            const title = prompt("ЗАГОЛОВОК ТЕМЫ:");
-            const text = prompt("ТЕКСТ ТЕМЫ:");
-            if(title && text) {
-                db.topics.set({
-                    title, text, author: user.nick, 
-                    authorImg: user.avatar, 
-                    date: new Date().toLocaleString(),
-                    id: Date.now()
-                });
-                addPoints(10, "СОЗДАНИЕ ТЕМЫ");
-            }
+        function createTopic() {
+            const title = prompt("ЗАГОЛОВОК:");
+            if(!title) return;
+            db.topics.set({
+                title, author: user.login, av: user.avatar, 
+                date: new Date().toLocaleString(), id: Date.now()
+            });
+            addPts(10, "СОЗДАНИЕ ТЕМЫ");
         }
 
-        function syncData() {
-            // Синхронизация чата
+        function loadGlobalData() {
             db.chat.map().on((data, id) => {
                 if(!data || !data.t || document.getElementById(id)) return;
                 const div = document.createElement('div');
                 div.id = id; div.className = 'msg';
-                div.innerHTML = `<span class="msg-info">${data.date} | ${data.time}</span><b>${data.u}</b>: ${data.t}`;
-                const box = document.getElementById('global-chat');
-                box.appendChild(div); box.scrollTop = 9999;
+                div.innerHTML = `<span class="msg-meta">${data.date} | ${data.time}</span><b>${data.u}</b>: ${data.t}`;
+                document.getElementById('chat').appendChild(div);
+                document.getElementById('chat').scrollTop = 9999;
             });
 
-            // Синхронизация тем
             db.topics.map().on((data, id) => {
                 if(!data || !data.title || document.getElementById('t'+id)) return;
                 const div = document.createElement('div');
-                div.id = 't'+id; div.className = 'topic-item';
-                div.innerHTML = `<img src="${data.authorImg}" class="user-avatar"><div><b>${data.title}</b><br><span style="font-size:10px; color:gray">АВТОР: ${data.author} | ${data.date}</span></div>`;
-                document.getElementById('topics-list').prepend(div);
-                
-                const recent = document.createElement('div');
-                recent.innerHTML = `> ${data.title}`;
-                document.getElementById('recent-topics').prepend(recent);
+                div.id = 't'+id; div.className = 'user-row card';
+                div.innerHTML = `<img src="${data.av}" class="avatar"><div><b>${data.title}</b><br><small>АВТОР: ${data.author} | ${data.date}</small></div>`;
+                document.getElementById('topics-render').prepend(div);
             });
         }
 
-        function addPoints(pts, reason) {
-            user.points += pts;
-            db.users.get(user.nick).get('points').put(user.points);
-            const log = document.getElementById('notif-log');
-            log.innerHTML = `<div>+${pts} БАЛЛОВ: ${reason}</div>` + log.innerHTML;
-            document.getElementById('my-points').innerText = user.points + " БАЛЛОВ";
-            localStorage.setItem('tw_user_session', JSON.stringify(user));
+        function addPts(n, reason) {
+            user.pts += n;
+            db.users.get(user.login).get('pts').put(user.pts);
+            const log = document.getElementById('notifs');
+            log.innerHTML = `<div>+${n} БАЛЛОВ: ${reason}</div>` + log.innerHTML;
+            document.getElementById('u-pts').innerText = user.pts + " БАЛЛОВ";
+            localStorage.setItem('tw_sess', JSON.stringify(user));
         }
 
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('screen-' + id).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-        }
-
-        window.onload = init;
+        function logout() { localStorage.removeItem('tw_sess'); location.reload(); }
+        
+        window.onload = () => { if(user) syncUI(); };
     </script>
 </body>
 </html>
