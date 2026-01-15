@@ -2,8 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TEAMS WAR | FORUM (forv11)</title>
-    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+    <title>TEAMS WAR | FORUM ENGINE (forv8)</title>
     <style>
         @font-face {
             font-family: 'Sangyo';
@@ -45,31 +44,73 @@
 
         /* --- МАКЕТ --- */
         .main-layout { display: grid; grid-template-columns: 1fr 350px; gap: 30px; max-width: 1400px; margin: 40px auto; padding: 0 20px; }
-        .category-card, .sidebar-block, .stat-box {
+        .category-card, .sidebar-block, .stat-box, .auth-card, .modal-content {
             background: var(--block-bg); border: 1px solid var(--custom-red); box-shadow: 0 0 10px var(--border-glow); border-radius: 8px; transition: 0.3s;
         }
 
+        /* --- СТИЛИ КОНТЕНТА --- */
         .section-header { font-size: 18px; font-weight: bold; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
         .section-header::before { content: ''; width: 4px; height: 24px; background: var(--custom-red); display: block; }
         .category-card { padding: 20px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
         .category-card:hover { transform: translateX(5px); box-shadow: 0 0 20px var(--custom-red); }
+        .cat-icon { width: 45px; height: 45px; background: #111; border: 1px solid #222; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .cat-stats { text-align: right; font-size: 12px; color: var(--text-gray); }
 
-        /* --- ЧАТ --- */
+        /* --- ЧАТ И СТАТИСТИКА --- */
         .sidebar-block { padding: 20px; margin-bottom: 25px; }
-        .mini-chat { height: 350px; overflow-y: auto; font-size: 13px; font-family: sans-serif; margin-bottom: 10px; padding-right: 5px; border-bottom: 1px solid #111; }
-        .chat-msg { margin-bottom: 10px; border-left: 2px solid var(--custom-green); padding-left: 10px; text-transform: none; line-height: 1.4; }
-        .chat-msg b { color: var(--custom-red); text-transform: uppercase; }
-        .chat-input { background: #000; border: 1px solid var(--custom-red); color: white; width: 100%; padding: 12px; font-family: var(--font-main); }
+        .block-title { font-size: 14px; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .mini-chat { height: 300px; overflow-y: auto; font-size: 13px; font-family: sans-serif; margin-bottom: 10px; }
+        .chat-msg { margin-bottom: 8px; border-left: 2px solid var(--custom-green); padding-left: 8px; text-transform: none; }
+        .chat-msg b { cursor: pointer; color: var(--custom-red); text-transform: uppercase; }
+        .chat-time { font-size: 9px; color: #444; display: block; }
+        .chat-input { background: #000; border: 1px solid var(--custom-red); color: white; width: 100%; padding: 10px; font-family: var(--font-main); }
 
-        .footer-wrap { padding: 40px; border-top: 4px solid var(--custom-red); margin-top: 60px; text-align: center; }
-        .footer-signature { width: 5cm; height: 5mm; margin: 0 auto; color: var(--custom-red); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); }
-
-        .exit-btn { position: fixed; bottom: 30px; right: 30px; background: var(--custom-red); color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 5000; box-shadow: 0 0 15px var(--border-glow); font-family: var(--font-main); }
+        /* --- МОДАЛЬНЫЕ ОКНА / ЭКРАНЫ --- */
         .screen { display: none; }
         .screen.active { display: block; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; }
+        .auth-card { width: 400px; padding: 40px; text-align: center; }
+        .form-input { background: #000; border: 1px solid #333; color: white; padding: 15px; width: 100%; margin-bottom: 15px; font-family: var(--font-main); }
+        .form-input:focus { border-color: var(--custom-red); outline: none; }
+
+        /* --- ПРОФИЛЬ --- */
+        .profile-header { display: flex; gap: 30px; align-items: center; margin-bottom: 40px; }
+        .avatar-main { width: 150px; height: 150px; border: 2px solid var(--custom-green); border-radius: 8px; object-fit: cover; }
+        .notif-log { height: 200px; overflow-y: auto; background: #000; padding: 10px; font-size: 12px; border: 1px solid #222; }
+        .notif-item { margin-bottom: 8px; color: var(--custom-green); border-bottom: 1px solid #111; padding-bottom: 4px; }
+
+        /* --- РЕЙТИНГ --- */
+        .leader-row { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #222; }
+        .leader-row:hover { background: rgba(119, 124, 78, 0.1); }
+
+        /* ТЕМЫ */
+        .topic-list-item { background: #0d0d0d; border: 1px solid #222; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+        .author-mini { width: 40px; height: 40px; border-radius: 4px; border: 1px solid var(--custom-green); }
+
+        .exit-btn { position: fixed; bottom: 30px; right: 30px; background: var(--custom-red); color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 3000; box-shadow: 0 0 15px var(--border-glow); }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
+
+    <div id="auth-overlay" class="overlay">
+        <div class="auth-card">
+            <h2 id="auth-title">ВХОД В ТЕРМИНАЛ</h2>
+            <div id="login-fields">
+                <input type="text" id="auth-login" class="form-input" placeholder="ЛОГИН">
+                <input type="password" id="auth-pass" class="form-input" placeholder="ПАРОЛЬ">
+                <button class="reg-btn" style="width:100%" onclick="login()">АВТОРИЗАЦИЯ</button>
+                <p style="font-size:10px; margin-top:20px; cursor:pointer" onclick="switchAuth(true)">НЕТ АККАУНТА? РЕГИСТРАЦИЯ</p>
+            </div>
+            <div id="reg-fields" class="hidden">
+                <input type="text" id="reg-login" class="form-input" placeholder="ЛОГИН">
+                <input type="email" id="reg-email" class="form-input" placeholder="EMAIL">
+                <input type="password" id="reg-pass" class="form-input" placeholder="ПАРОЛЬ">
+                <button class="reg-btn" style="width:100%; background:var(--custom-green)" onclick="register()">СОЗДАТЬ АККАУНТ</button>
+                <p style="font-size:10px; margin-top:20px; cursor:pointer" onclick="switchAuth(false)">УЖЕ ЕСТЬ АККАУНТ? ВХОД</p>
+            </div>
+        </div>
+    </div>
 
     <header>
         <div class="nav-container">
@@ -77,103 +118,327 @@
             <div class="nav-btn active" id="btn-home" onclick="showScreen('home')">ГЛАВНАЯ</div>
             <div class="nav-btn" id="btn-rating" onclick="showScreen('rating')">РЕЙТИНГ</div>
             <div class="nav-btn" id="btn-search" onclick="showScreen('search')">ПОИСК</div>
-            <div class="nav-btn" id="btn-profile" onclick="showScreen('profile')">ВХОД</div>
-            <button class="reg-btn">РЕГИСТРАЦИЯ</button>
+            <div class="nav-btn" id="btn-profile" onclick="showScreen('profile')">ПРОФИЛЬ</div>
         </div>
-        <div class="age-limit">6+</div>
+        <div id="user-controls" style="display:flex; align-items:center; gap:15px;">
+            <div id="top-user-info" style="font-size:12px; text-align:right">
+                <span id="display-name" style="color:var(--custom-green); font-weight:900">ГОСТЬ</span><br>
+                <span id="display-points" style="color:var(--custom-red)">0 БАЛЛОВ</span>
+            </div>
+            <button class="reg-btn" id="auth-trigger" onclick="toggleAuthModal()">ВХОД</button>
+        </div>
     </header>
 
     <main class="main-layout">
         <section id="content-master">
+            
             <div id="screen-home" class="screen active">
                 <div class="section-header">РАЗДЕЛЫ ФОРУМА</div>
-                <div id="cat-render-area"></div>
+                <div id="categories-list">
+                    </div>
             </div>
-            <div id="screen-rating" class="screen"><div class="section-header">РЕЙТИНГ БОЙЦОВ</div><p>ЗАГРУЗКА ДАННЫХ...</p></div>
-            <div id="screen-search" class="screen"><div class="section-header">ПОИСК</div><p>ПОИСК ПО БАЗЕ...</p></div>
-            <div id="screen-profile" class="screen"><div class="section-header">ЛИЧНЫЙ КАБИНЕТ</div><p>ВОЙДИТЕ В СИСТЕМУ.</p></div>
+
+            <div id="screen-topics" class="screen">
+                <div class="section-header" id="current-cat-name">ТЕМЫ РАЗДЕЛА</div>
+                <button class="reg-btn" style="margin-bottom:20px;" onclick="openCreateTopic()">+ СОЗДАТЬ ТЕМУ</button>
+                <div id="topics-render"></div>
+            </div>
+
+            <div id="screen-profile" class="screen">
+                <div class="section-header">ЛИЧНОЕ ДЕЛО</div>
+                <div class="profile-header">
+                    <img id="profile-img" src="avatar-placeholder.png" class="avatar-main">
+                    <div>
+                        <h2 id="prof-login">ЛОГИН</h2>
+                        <p id="prof-email" style="text-transform:lowercase; color:#555">email@example.com</p>
+                        <input type="file" id="avatar-upload" accept="image/*" style="font-size:10px;">
+                    </div>
+                </div>
+                
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div class="sidebar-block">
+                        <div class="block-title">СМЕНА ПАРОЛЯ</div>
+                        <input type="password" id="old-p" class="form-input" placeholder="СТАРЫЙ ПАРОЛЬ">
+                        <input type="password" id="new-p" class="form-input" placeholder="НОВЫЙ ПАРОЛЬ">
+                        <button class="reg-btn" onclick="changePass()">ОБНОВИТЬ</button>
+                    </div>
+                    <div class="sidebar-block">
+                        <div class="block-title">ЛОГ УВЕДОМЛЕНИЙ</div>
+                        <div id="notifications" class="notif-log"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="screen-rating" class="screen">
+                <div class="section-header">ТАБЛИЦА ЛИДЕРОВ</div>
+                <div id="rating-table" class="sidebar-block"></div>
+            </div>
+
         </section>
 
         <aside>
             <div class="sidebar-block">
-                <div class="block-title">ОБЩИЙ ЧАТ <span id="conn-info" style="color:gray; font-size:9px;">[CONNECTING...]</span></div>
-                <div class="mini-chat" id="chat-window">
-                    <div class="chat-msg"><b>СИСТЕМА</b>: ПОДКЛЮЧЕНИЕ К КАНАЛУ...</div>
-                </div>
-                <input type="text" id="chat-input" class="chat-input" placeholder="Введите сообщение... (ENTER)" onkeydown="if(event.key==='Enter') send()">
+                <div class="block-title">ОБЩИЙ ЧАТ <span style="font-size:9px; color:var(--custom-green)">ONLINE: <span id="online-val">148</span></span></div>
+                <div class="mini-chat" id="chat-box"></div>
+                <input type="text" id="chat-input" class="chat-input" placeholder="СООБЩЕНИЕ... (ENTER)" onkeydown="if(event.key==='Enter') sendChat()">
             </div>
+
             <div class="sidebar-block">
-                <div class="block-title">СТАТИСТИКА</div>
-                <div style="text-align:center; padding:10px;">
-                    <span style="font-size:30px; font-weight:bold;">148</span><br>
-                    <span style="font-size:10px; color:gray;">БОЙЦОВ В СЕТИ</span>
-                </div>
+                <div class="block-title">ПОСЛЕДНИЕ ТЕМЫ</div>
+                <div id="recent-topics-log" style="font-size:11px; font-family:sans-serif;"></div>
             </div>
         </aside>
     </main>
 
-    <div class="footer-wrap"><div class="footer-signature">NIKS ON GAME</div></div>
-    
     <button class="exit-btn" onclick="window.parent.postMessage('closeForum', '*')">ВЫХОД С ФОРУМА</button>
 
     <script>
-        // --- 1. ФУНКЦИИ ИНТЕРФЕЙСА (РАБОТАЮТ ВСЕГДА) ---
+        // --- БАЗА ДАННЫХ (LOCALSTORAGE) ---
+        let db = {
+            users: JSON.parse(localStorage.getItem('tw_users')) || [],
+            topics: JSON.parse(localStorage.getItem('tw_topics')) || [],
+            currentUser: JSON.parse(localStorage.getItem('tw_curr')) || null
+        };
+
+        const CATEGORIES = [
+            { id: 'news', title: 'Новости игры', desc: 'Обновления и объявления', icon: '🛡️' },
+            { id: 'tactic', title: 'Тактика и стратегии', desc: 'Обсуждение механик', icon: '⚔️' },
+            { id: 'clans', title: 'Кланы и альянсы', desc: 'Поиск соклановцев', icon: '👥' },
+            { id: 'support', title: 'Техподдержка', desc: 'Вопросы и баги', icon: '⚡' },
+            { id: 'flood', title: 'Флудилка', desc: 'Общение обо всем', icon: '💬' }
+        ];
+
+        // --- ИНИЦИАЛИЗАЦИЯ ---
+        function init() {
+            renderCategories();
+            updateUI();
+            renderChat();
+            renderRecentTopics();
+            if (db.currentUser) {
+                showScreen('home');
+            } else {
+                toggleAuthModal();
+            }
+        }
+
+        function updateUI() {
+            if (db.currentUser) {
+                document.getElementById('display-name').innerText = db.currentUser.login;
+                document.getElementById('display-points').innerText = `${db.currentUser.points} БАЛЛОВ`;
+                document.getElementById('auth-trigger').innerText = "ВЫЙТИ";
+                document.getElementById('auth-trigger').onclick = logout;
+                // Профиль
+                document.getElementById('prof-login').innerText = db.currentUser.login;
+                document.getElementById('prof-email').innerText = db.currentUser.email;
+                document.getElementById('profile-img').src = db.currentUser.avatar || 'avatar-placeholder.png';
+                renderNotifs();
+            } else {
+                document.getElementById('display-name').innerText = "ГОСТЬ";
+                document.getElementById('display-points').innerText = "0 БАЛЛОВ";
+                document.getElementById('auth-trigger').innerText = "ВХОД";
+                document.getElementById('auth-trigger').onclick = toggleAuthModal;
+            }
+        }
+
+        // --- НАВИГАЦИЯ ---
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen-' + id).classList.add('active');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            const btn = document.getElementById('btn-' + id);
-            if(btn) btn.classList.add('active');
+            const activeBtn = document.getElementById('btn-' + id);
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            if (id === 'rating') renderRating();
         }
 
-        const cats = [
-            { t: 'Новости игры', i: '🛡️' },
-            { t: 'Тактика и стратегии', i: '⚔️' },
-            { t: 'Кланы и альянсы', i: '👥' },
-            { t: 'Техническая поддержка', i: '⚡' },
-            { t: 'Флудилка', i: '💬' }
-        ];
-        document.getElementById('cat-render-area').innerHTML = cats.map(c => `
-            <div class="category-card"><div style="display:flex; align-items:center; gap:20px;"><div class="cat-icon">${c.i}</div><b>${c.t}</b></div><div style="font-size:10px; color:gray;">АКТИВНОСТЬ</div></div>
-        `).join('');
+        // --- АВТОРИЗАЦИЯ ---
+        function toggleAuthModal() {
+            const modal = document.getElementById('auth-overlay');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
 
-        window.addEventListener('keydown', (e) => { if(e.key === 'Escape') window.parent.postMessage('closeForum', '*'); });
+        function switchAuth(isReg) {
+            document.getElementById('login-fields').classList.toggle('hidden', isReg);
+            document.getElementById('reg-fields').classList.toggle('hidden', !isReg);
+            document.getElementById('auth-title').innerText = isReg ? "РЕГИСТРАЦИЯ" : "ВХОД В ТЕРМИНАЛ";
+        }
 
-        // --- 2. ГЛОБАЛЬНЫЙ ЧАТ (С ЗАЩИТОЙ ОТ ОШИБОК) ---
-        try {
-            const myName = "ИГРОК_" + Math.floor(Math.random() * 999);
-            const gun = Gun(['https://gun-manhattan.herokuapp.com/gun', 'https://gun-us.herokuapp.com/gun']);
-            const chatNode = gun.get('teams_war_v11_final');
+        function register() {
+            const l = document.getElementById('reg-login').value;
+            const e = document.getElementById('reg-email').value;
+            const p = document.getElementById('reg-pass').value;
+            if (!l || !e || !p) return alert("ЗАПОЛНИТЕ ВСЕ ПОЛЯ");
+            
+            const newUser = { login: l, email: e, pass: p, avatar: '', points: 0, notifications: ["ДОБРО ПОЖАЛОВАТЬ В TEAMS WAR!"], friends: [] };
+            db.users.push(newUser);
+            save();
+            alert("РЕГИСТРАЦИЯ УСПЕШНА. ПИСЬМО ОТПРАВЛЕНО (ЭМУЛЯЦИЯ)");
+            switchAuth(false);
+        }
 
-            function send() {
-                const inp = document.getElementById('chat-input');
-                if(inp.value.trim()){
-                    const now = new Date();
-                    chatNode.set({
-                        n: myName,
-                        t: inp.value,
-                        d: now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes()
-                    });
-                    inp.value = "";
-                }
+        function login() {
+            const l = document.getElementById('auth-login').value;
+            const p = document.getElementById('auth-pass').value;
+            const user = db.users.find(u => u.login === l && u.pass === p);
+            if (user) {
+                db.currentUser = user;
+                save();
+                toggleAuthModal();
+                updateUI();
+                location.reload();
+            } else alert("ОШИБКА ДОСТУПА");
+        }
+
+        function logout() {
+            db.currentUser = null;
+            localStorage.removeItem('tw_curr');
+            location.reload();
+        }
+
+        // --- ТЕМЫ ---
+        function renderCategories() {
+            const cont = document.getElementById('categories-list');
+            cont.innerHTML = CATEGORIES.map(c => `
+                <div class="category-card" onclick="openCat('${c.id}', '${c.title}')">
+                    <div style="display:flex; align-items:center; gap:20px;">
+                        <div class="cat-icon">${c.icon}</div>
+                        <div>
+                            <div style="font-weight:bold">${c.title}</div>
+                            <div style="font-size:11px; color:#555">${c.desc}</div>
+                        </div>
+                    </div>
+                    <div class="cat-stats"><b>${db.topics.filter(t => t.cat === c.id).length} ТЕМ</b> АКТИВНОСТЬ</div>
+                </div>
+            `).join('');
+        }
+
+        function openCat(id, title) {
+            currentCat = id;
+            document.getElementById('current-cat-name').innerText = title;
+            showScreen('topics');
+            renderTopicsList();
+        }
+
+        let currentCat = '';
+        function renderTopicsList() {
+            const cont = document.getElementById('topics-render');
+            const catTopics = db.topics.filter(t => t.cat === currentCat);
+            cont.innerHTML = catTopics.map(t => `
+                <div class="topic-list-item">
+                    <img src="${t.authorImg || 'avatar-placeholder.png'}" class="author-mini">
+                    <div style="flex:1">
+                        <div style="font-size:16px; color:white">${t.title}</div>
+                        <div style="font-size:10px; color:var(--custom-green)">АВТОР: ${t.author} | ${t.date}</div>
+                    </div>
+                    ${(db.currentUser && (db.currentUser.login === t.author || db.currentUser.login === 'ADMIN')) ? 
+                        `<button onclick="deleteTopic(${t.id})" style="background:none; border:1px solid red; color:red; cursor:pointer">УДАЛИТЬ</button>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function openCreateTopic() {
+            const title = prompt("ВВЕДИТЕ ЗАГОЛОВОК ТЕМЫ:");
+            if (title && db.currentUser) {
+                const newT = {
+                    id: Date.now(),
+                    cat: currentCat,
+                    title: title,
+                    author: db.currentUser.login,
+                    authorImg: db.currentUser.avatar,
+                    date: new Date().toLocaleString()
+                };
+                db.topics.push(newT);
+                addPoints(10, "СОЗДАНИЕ ТЕМЫ");
+                save();
+                renderTopicsList();
+                renderRecentTopics();
             }
-
-            chatNode.map().on(function(data, id) {
-                if(!data || !data.t || document.getElementById(id)) return;
-                const win = document.getElementById('chat-window');
-                const msg = document.createElement('div');
-                msg.id = id;
-                msg.className = 'chat-msg';
-                msg.innerHTML = `<b>${data.n}</b>: ${data.t}`;
-                win.appendChild(msg);
-                win.scrollTop = win.scrollHeight;
-                document.getElementById('conn-info').innerText = "[ONLINE]";
-                document.getElementById('conn-info').style.color = "#777c4e";
-            });
-        } catch(e) {
-            console.log("Ошибка чата, но сайт работает.");
-            document.getElementById('conn-info').innerText = "[OFFLINE]";
         }
+
+        function deleteTopic(id) {
+            if(confirm("УДАЛИТЬ ТЕМУ?")) {
+                db.topics = db.topics.filter(t => t.id !== id);
+                save();
+                renderTopicsList();
+            }
+        }
+
+        // --- ЧАТ ---
+        function sendChat() {
+            if (!db.currentUser) return alert("ВОЙДИТЕ ДЛЯ ПИСЬМА В ЧАТ");
+            const inp = document.getElementById('chat-input');
+            if (inp.value.trim()) {
+                const msg = { user: db.currentUser.login, text: inp.value, time: new Date().toLocaleTimeString() };
+                let messages = JSON.parse(localStorage.getItem('tw_chat')) || [];
+                messages.push(msg);
+                localStorage.setItem('tw_chat', JSON.stringify(messages));
+                inp.value = '';
+                addPoints(1, "АКТИВНОСТЬ В ЧАТЕ");
+                renderChat();
+            }
+        }
+
+        function renderChat() {
+            const box = document.getElementById('chat-box');
+            let messages = JSON.parse(localStorage.getItem('tw_chat')) || [];
+            box.innerHTML = messages.map(m => `
+                <div class="chat-msg"><span class="chat-time">${m.time}</span><b>${m.user}</b>: ${m.text}</div>
+            `).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // --- ВСПОМОГАТЕЛЬНЫЕ ---
+        function addPoints(count, reason) {
+            db.currentUser.points += count;
+            db.currentUser.notifications.unshift(`${reason}: +${count} БАЛЛОВ`);
+            const idx = db.users.findIndex(u => u.login === db.currentUser.login);
+            db.users[idx] = db.currentUser;
+            save();
+            updateUI();
+        }
+
+        function renderNotifs() {
+            const box = document.getElementById('notifications');
+            box.innerHTML = db.currentUser.notifications.map(n => `<div class="notif-item">> ${n}</div>`).join('');
+        }
+
+        function renderRating() {
+            const box = document.getElementById('rating-table');
+            const sorted = [...db.users].sort((a,b) => b.points - a.points);
+            box.innerHTML = sorted.map((u, i) => `
+                <div class="leader-row">
+                    <span>#${i+1} ${u.login}</span>
+                    <span style="color:var(--custom-red)">${u.points}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderRecentTopics() {
+            const box = document.getElementById('recent-topics-log');
+            const last = db.topics.slice(-5).reverse();
+            box.innerHTML = last.map(t => `<div style="cursor:pointer; margin-bottom:5px; border-bottom:1px solid #111" onclick="openCat('${t.cat}', 'ТЕМЫ')">> ${t.title}</div>`).join('');
+        }
+
+        function save() {
+            localStorage.setItem('tw_users', JSON.stringify(db.users));
+            localStorage.setItem('tw_topics', JSON.stringify(db.topics));
+            if (db.currentUser) localStorage.setItem('tw_curr', JSON.stringify(db.currentUser));
+        }
+
+        // Смена аватара
+        document.getElementById('avatar-upload')?.addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                db.currentUser.avatar = event.target.result;
+                addPoints(5, "ОБНОВЛЕНИЕ ПРОФИЛЯ");
+                save();
+                updateUI();
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+        window.onload = init;
+        window.addEventListener('keydown', (e) => { if(e.key === 'Escape') window.parent.postMessage('closeForum', '*'); });
     </script>
 </body>
 </html>
