@@ -54,6 +54,9 @@
         .nav-btn { flex: 1; text-align: center; padding: 12px 0; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); font-size: 14px; transition: 0.3s; cursor: pointer; }
         .nav-btn:hover { background: var(--custom-red); color: white; }
 
+        .btn-forum { animation: red-pulse 2s infinite ease-in-out; border: 1px solid var(--custom-red) !important; }
+        @keyframes red-pulse { 0% { transform: scale(1); box-shadow: 0 0 0px rgba(188, 0, 0, 0); } 50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(188, 0, 0, 0.6); } 100% { transform: scale(1); box-shadow: 0 0 0px rgba(188, 0, 0, 0); } }
+
         .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; flex-shrink: 0; }
 
         /* --- ГИЛЬЗЫ --- */
@@ -65,6 +68,7 @@
         #play { position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: 80px; }
         .hero-char { position: absolute; bottom: 2.6cm; height: 88vh; z-index: -1; pointer-events: none; right: 0; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); }
         
+        /* Flex-контейнеры уже обеспечивают центрирование по поперечной оси (align-items: center) */
         .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
         .main-title .t { color: var(--custom-green); text-shadow: 0 0 30px rgba(119, 124, 78, 0.4); }
@@ -122,12 +126,14 @@
             pointer-events: none; z-index: 1;
         }
 
+        /* ОБНОВЛЕНО: ПОЗИЦИЯ И ПРОЗРАЧНОСТЬ НАДПИСИ НА ГИЛЬЗЕ (v104) */
         .shell-text {
             position: absolute;
+            /* Центр + смещение: вверх на 2мм, вправо на 4мм */
             top: calc(50% - 2mm);
             left: calc(50% + 4mm);
             transform: translate(-50%, -50%);
-            opacity: 0.7; 
+            opacity: 0.7; /* Прозрачность уменьшена, надпись ярче */
             font-size: 10px; font-weight: 900; letter-spacing: 1px;
             z-index: 1.5; pointer-events: none; white-space: nowrap;
         }
@@ -151,9 +157,10 @@
         .footer-nav { display: flex; gap: 30px; margin-bottom: 60px; }
         .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 25px; color: #777; text-decoration: none; font-size: 16px; display: flex; align-items: center; justify-content: center; }
 
+        /* ОБНОВЛЕНО: УБРАН ФОН У ПОДПИСИ (v104) */
         .footer-signature {
             width: 5cm; height: 5mm; margin: 30px auto 0;
-            background-color: transparent; 
+            background-color: transparent; /* Фон теперь прозрачный */
             color: var(--custom-red);
             display: flex; align-items: center; justify-content: center;
             font-size: 12px; font-weight: 900; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); white-space: nowrap;
@@ -170,6 +177,7 @@
             <a href="#top" class="nav-btn">ИГРАТЬ</a>
             <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
             <a href="#faq" class="nav-btn">FAQ</a>
+            <a href="#community" class="nav-btn btn-forum">ФОРУМ</a>
         </div>
         <div class="age-limit">6+</div>
     </header>
@@ -255,6 +263,40 @@
                         </div>
                         <div class="faq-answer"><div class="faq-answer-inner">ОБРАТИТЕСЬ В ТЕХПОДДЕРЖКУ.</div></div>
                     </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>04 // Баг</span>
+                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
+                            <span>▼</span>
+                        </div>
+                        <div class="faq-answer"><div class="faq-answer-inner">СООБЩИТЕ В ПОДДЕРЖКУ.</div></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>05 // Жалоба</span>
+                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
+                            <span>▼</span>
+                        </div>
+                        <div class="faq-answer"><div class="faq-answer-inner">ОТПРАВЬТЕ ЖАЛОБУ В ТЕХПОДДЕРЖКУ.</div></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>06 // Связаться с поддержкой</span>
+                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
+                            <span>▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">КАНАЛЫ СВЯЗИ:<div class="faq-social-row"><a href="https://t.me/niks_on_game" class="faq-social-btn"><svg viewBox="0 0 24 24" width="24" fill="white"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-2.003 9.464c-.149.659-.541.823-1.091.515l-3.056-2.251-1.474 1.42c-.163.163-.299.299-.614.299l.22-3.111 5.662-5.116c.246-.219-.054-.341-.381-.123l-7.001 4.407-3.012-.942c-.655-.205-.668-.655.137-.97l11.77-4.536c.544-.205 1.021.123.843.943z"/></svg></a></div></div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>07 // Новости</span>
+                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
+                            <span>▼</span>
+                        </div>
+                        <div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/devblog/" class="faq-link">ДНЕВНИКИ РАЗРАБОТКИ</a></div></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -286,6 +328,7 @@
             q.addEventListener('click', () => {
                 const answer = q.nextElementSibling, isActive = q.classList.contains('active');
                 document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = '0');
+                document.querySelectorAll('.faq-question').forEach(btn => btn.classList.remove('active'));
                 if (!isActive) { q.classList.add('active'); answer.style.maxHeight = answer.scrollHeight + "px"; }
             });
         });
