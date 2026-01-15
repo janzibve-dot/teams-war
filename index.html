@@ -54,9 +54,6 @@
         .nav-btn { flex: 1; text-align: center; padding: 12px 0; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); font-size: 14px; transition: 0.3s; cursor: pointer; }
         .nav-btn:hover { background: var(--custom-red); color: white; }
 
-        .btn-forum { animation: red-pulse 2s infinite ease-in-out; border: 1px solid var(--custom-red) !important; }
-        @keyframes red-pulse { 0% { transform: scale(1); box-shadow: 0 0 0px rgba(188, 0, 0, 0); } 50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(188, 0, 0, 0.6); } 100% { transform: scale(1); box-shadow: 0 0 0px rgba(188, 0, 0, 0); } }
-
         .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; flex-shrink: 0; }
 
         /* --- ГИЛЬЗЫ --- */
@@ -149,23 +146,6 @@
         .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
         .faq-link { color: var(--custom-red); text-decoration: underline; transition: 0.3s; }
 
-        /* --- СТИЛИ ОКНА ФОРУМА (Overlay) --- */
-        #forum-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 5, 5, 0.98); z-index: 5000;
-            display: none; flex-direction: column; padding: 40px;
-            border: 4px solid var(--custom-red);
-        }
-        .forum-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--custom-red); padding-bottom: 20px; }
-        .exit-btn { background: var(--custom-red); color: white; border: none; padding: 10px 40px; font-size: 20px; font-weight: 900; cursor: pointer; font-family: var(--font-main); transition: 0.3s; }
-        .exit-btn:hover { background: white; color: black; }
-        .forum-grid { display: grid; grid-template-columns: 300px 1fr 300px; gap: 30px; height: 100%; }
-        .forum-nav-btn { background: #111; border: 1px solid #333; color: white; padding: 20px; width: 100%; text-align: left; cursor: pointer; margin-bottom: 10px; }
-        .forum-nav-btn.active { border-color: var(--custom-green); color: var(--custom-green); background: rgba(119, 124, 78, 0.1); }
-        .chat-box { flex: 1; background: rgba(255,255,255,0.02); border: 1px solid #222; margin-bottom: 20px; padding: 20px; overflow-y: auto; }
-        .forum-input { background: #000; border: 1px solid #444; color: white; padding: 15px; width: 100%; margin-bottom: 10px; font-family: var(--font-main); }
-        .forum-btn { background: var(--custom-red); color: white; border: none; padding: 15px 30px; cursor: pointer; font-weight: 700; width: 100%; }
-
         /* --- ФУТЕР --- */
         footer { padding: 100px 40px 60px; border-top: 4px solid var(--custom-red); background: transparent; }
         .footer-nav { display: flex; gap: 30px; margin-bottom: 60px; }
@@ -190,7 +170,6 @@
             <a href="#top" class="nav-btn">ИГРАТЬ</a>
             <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
             <a href="#faq" class="nav-btn">FAQ</a>
-            <a href="javascript:void(0)" onclick="openForum()" class="nav-btn btn-forum">ФОРУМ</a>
         </div>
         <div class="age-limit">6+</div>
     </header>
@@ -290,34 +269,6 @@
         </footer>
     </div>
 
-    <div id="forum-overlay">
-        <div class="forum-header">
-            <h1 style="color:var(--custom-green); margin:0;">ТЕРМИНАЛ ФОРУМА</h1>
-            <button class="exit-btn" onclick="closeForum()">ВЫХОД [ESC]</button>
-        </div>
-        <div class="forum-grid">
-            <div class="forum-sidebar">
-                <button class="forum-nav-btn active">ОБЩИЙ ЧАТ</button>
-                <button class="forum-nav-btn">ТЕМЫ ФОРУМА</button>
-                <button class="forum-nav-btn">РЕЙТИНГ ИГРОКОВ</button>
-                <button class="forum-nav-btn">ПРОФИЛЬ</button>
-            </div>
-            <div style="display:flex; flex-direction:column;">
-                <div class="chat-box" id="forum-chat">
-                    <div style="color:var(--custom-green); font-size:14px; margin-bottom:10px;">[SYSTEM 14.01.26]: ПОДКЛЮЧЕНИЕ К СЕРВЕРУ УСТАНОВЛЕНО. ДОБРО ПОЖАЛОВАТЬ.</div>
-                </div>
-                <input type="text" class="forum-input" placeholder="Введите сообщение...">
-                <button class="forum-btn">ОТПРАВИТЬ В ЧАТ</button>
-            </div>
-            <div style="border:1px solid var(--custom-red); padding:20px; background:rgba(188,0,0,0.05);">
-                <h3 style="color:var(--custom-red); margin-top:0;">СТАТУС</h3>
-                <div style="font-size:14px; margin-bottom:10px;">ОНЛАЙН: <span style="color:var(--custom-green)">127</span></div>
-                <div style="font-size:14px;">БАЛЛЫ: 0</div>
-                <button class="forum-btn" style="margin-top:20px; background:#333;" onclick="alert('Форма входа...')">ВХОД / РЕГ</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         function createShell() {
             const container = document.getElementById('shells-container');
@@ -335,21 +286,9 @@
             q.addEventListener('click', () => {
                 const answer = q.nextElementSibling, isActive = q.classList.contains('active');
                 document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = '0');
-                document.querySelectorAll('.faq-question').forEach(btn => btn.classList.remove('active'));
                 if (!isActive) { q.classList.add('active'); answer.style.maxHeight = answer.scrollHeight + "px"; }
             });
         });
-
-        // ФУНКЦИИ ФОРУМА
-        function openForum() { 
-            document.getElementById('forum-overlay').style.display = 'flex'; 
-            document.body.style.overflow = 'hidden'; 
-        }
-        function closeForum() { 
-            document.getElementById('forum-overlay').style.display = 'none'; 
-            document.body.style.overflow = 'auto'; 
-        }
-        window.addEventListener('keydown', (e) => { if(e.key === "Escape") closeForum(); });
     </script>
 </body>
 </html>
