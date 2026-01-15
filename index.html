@@ -5,42 +5,138 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
     <style>
-        @font-face { font-family: 'Sangyo'; src: url('ofont.ru_Sangyo.ttf') format('truetype'); }
-        :root { --bg: #050505; --custom-green: #777c4e; --custom-red: #bc0000; --text-white: #ffffff; --font-main: 'Sangyo', sans-serif; }
-        body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text-white); font-family: var(--font-main); text-transform: uppercase; overflow: hidden; }
-        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -5; background-image: url('bg.jpg.png'); background-size: cover; filter: brightness(0.2) blur(6px); }
-        header { position: sticky; top: 0; z-index: 1500; padding: 20px 40px; background: #000; border-bottom: 3px solid var(--custom-red); display: flex; align-items: center; justify-content: space-between; }
-        .nav-container { display: flex; align-items: center; flex: 1; gap: 20px; }
-        .logo-static { font-size: 28px; font-weight: 700; margin-right: 40px; }
-        .nav-btn { flex: 1; text-align: center; padding: 12px 0; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); font-size: 14px; cursor: pointer; }
-        .btn-forum { animation: pulse 2s infinite; border: 1px solid var(--custom-red) !important; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); box-shadow: 0 0 20px var(--custom-red); } }
+        @font-face {
+            font-family: 'Sangyo';
+            src: url('ofont.ru_Sangyo.ttf') format('truetype');
+            font-weight: normal; font-style: normal;
+        }
+
+        :root {
+            --bg: #050505;
+            --custom-green: #777c4e;
+            --custom-red: #bc0000;
+            --text-white: #ffffff;
+            --font-main: 'Sangyo', 'Oswald', sans-serif;
+        }
+
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg);
+            color: var(--text-white);
+            font-family: var(--font-main);
+            text-transform: uppercase;
+            font-size: 18px; line-height: 1.4;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -5;
+            background-image: url('bg.jpg.png'); background-size: cover; background-position: center;
+            filter: brightness(0.2) blur(6px);
+        }
+
+        /* --- ХЕДЕР --- */
+        header {
+            position: sticky; top: 0; z-index: 1500;
+            padding: 20px 40px; background: #050505;
+            border-bottom: 3px solid var(--custom-red);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .nav-container { display: flex; align-items: center; flex: 1; gap: 20px; margin-right: 40px; }
+        .logo-static { font-size: 28px; font-weight: 700; letter-spacing: 2px; white-space: nowrap; margin-right: 40px; }
+        .logo-static .t { color: var(--custom-green); text-shadow: 0 0 15px rgba(119, 124, 78, 0.5); }
+        .logo-static .w { color: var(--custom-red); text-shadow: 0 0 15px rgba(188, 0, 0, 0.5); }
+
+        .nav-btn {
+            flex: 1; text-align: center; padding: 12px 0; color: white;
+            text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2);
+            font-size: 14px; transition: 0.3s; cursor: pointer;
+        }
+        .nav-btn:hover { background: var(--custom-red); color: white; }
+
+        /* Анимированная кнопка Форума */
+        .btn-forum {
+            animation: red-pulse 2s infinite ease-in-out;
+            border: 1px solid var(--custom-red) !important;
+        }
+
+        @keyframes red-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(188, 0, 0, 0.6); }
+        }
+
+        /* --- ГЛАВНЫЙ ЭКРАН --- */
         #play { position: relative; min-height: 100vh; display: flex; align-items: center; padding-left: 80px; }
-        .hero-char { position: absolute; bottom: 2.6cm; height: 88vh; right: 0; z-index: -1; }
-        .battle-btn { width: 300px; padding: 25px 0; background: var(--custom-red); color: white; font-size: 30px; text-decoration: none; text-align: center; display: block; margin-top: 30px; }
-        /* ОКНО ФОРУМА */
-        #forum-portal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: none; background: rgba(0,0,0,0.98); border: none; }
+
+        .hero-char {
+            position: absolute; bottom: 2.6cm; height: 88vh; right: 0; z-index: -1;
+            pointer-events: none;
+        }
+
+        .main-title { font-size: clamp(80px, 12vw, 160px); display: flex; flex-direction: column; align-items: center; }
+
+        .battle-btn {
+            width: 100%; padding: 25px 0; background: var(--custom-red); color: white;
+            font-size: 30px; text-decoration: none; text-align: center; display: block;
+            margin-top: 30px; transition: 0.3s;
+        }
+        .battle-btn:hover { background: white; color: black; transform: scale(1.05); }
+
+        .red-boundary-line { position: absolute; bottom: 2.6cm; left: 0; width: 100%; height: 1.5mm; background: var(--custom-red); }
+
+        /* --- ПОРТАЛ ФОРУМА (IFRAME) --- */
+        #forum-portal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9999; display: none; /* Скрыто по умолчанию */
+            background: rgba(0,0,0,0.96); border: none;
+        }
     </style>
 </head>
 <body>
+
     <header>
         <div class="nav-container">
-            <div class="logo-static"><span style="color:var(--custom-green)">TEAMS</span> <span style="color:var(--custom-red)">WAR</span></div>
+            <div class="logo-static"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
+            <a href="#play" class="nav-btn">ИГРАТЬ</a>
+            <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
             <a href="javascript:void(0)" onclick="openForum()" class="nav-btn btn-forum">ФОРУМ</a>
         </div>
     </header>
+
     <section id="play">
         <img src="new-right-char.png" class="hero-char">
-        <div style="z-index:10">
-            <h1 style="font-size:100px; margin:0;"><span style="color:var(--custom-green)">TEAMS</span><br><span style="color:var(--custom-red)">WAR</span></h1>
+        <div class="main-title">
+            <span style="color:var(--custom-green)">TEAMS</span>
+            <span style="color:var(--custom-red)">WAR</span>
             <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
         </div>
+        <div class="red-boundary-line"></div>
     </section>
+
     <iframe id="forum-portal" src="forum.html"></iframe>
+
     <script>
-        function openForum() { document.getElementById('forum-portal').style.display = 'block'; }
-        function closeForum() { document.getElementById('forum-portal').style.display = 'none'; }
-        window.addEventListener('message', (e) => { if(e.data === 'closeForum') closeForum(); });
+        // Функция открытия форума
+        function openForum() {
+            document.getElementById('forum-portal').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Запрещаем прокрутку основного сайта
+        }
+
+        // Функция закрытия форума
+        function closeForum() {
+            document.getElementById('forum-portal').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Возвращаем прокрутку
+        }
+
+        // Слушаем сообщение от файла forum.html для закрытия портала
+        window.addEventListener('message', (event) => {
+            if (event.data === 'closeForum') {
+                closeForum();
+            }
+        });
     </script>
 </body>
 </html>
