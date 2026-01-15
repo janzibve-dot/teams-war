@@ -2,353 +2,165 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | OFFICIAL TERMINAL</title>
+    <title>TEAMS WAR | REAL-TIME FORUM (forv10)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
-        /* Шрифт Sangyo */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
             font-weight: normal; font-style: normal;
         }
 
-        :root { 
-            --bg: #050505; 
-            --custom-green: #777c4e; 
-            --custom-red: #bc0000;   
-            --text-white: #ffffff; 
+        :root {
+            --bg-black: #050505;
+            --block-bg: #0d0d0d;
+            --custom-green: #777c4e;
+            --custom-red: #bc0000;
+            --border-glow: rgba(188, 0, 0, 0.4);
+            --text-gray: #888;
             --font-main: 'Sangyo', 'Oswald', sans-serif;
-            --gold-glow: rgba(212, 175, 55, 0.5);
         }
-        
-        * { box-sizing: border-box; scroll-behavior: smooth; }
-        html { scroll-padding-top: 100px; }
 
+        * { box-sizing: border-box; }
         body {
-            margin: 0; padding: 0; 
-            background-color: var(--bg); color: var(--text-white);
-            font-family: var(--font-main); text-transform: uppercase;
-            font-size: 18px; line-height: 1.4; overflow-x: hidden;
-        }
-
-        body::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -5; background-image: url('bg.jpg.png');
-            background-size: cover; background-position: center; filter: brightness(0.2) blur(6px);
+            background-color: var(--bg-black); color: white; margin: 0;
+            font-family: var(--font-main); overflow-x: hidden; text-transform: uppercase;
         }
 
         /* --- ХЕДЕР --- */
         header {
             position: sticky; top: 0; z-index: 1500;
-            padding: 20px 40px; background: #050505;
+            padding: 20px 40px; background: #000;
             border-bottom: 3px solid var(--custom-red);
             display: flex; align-items: center; justify-content: space-between;
         }
-
         .nav-container { display: flex; align-items: center; flex: 1; gap: 20px; margin-right: 40px; }
-        
-        .logo-static { font-size: 28px; font-weight: 700; letter-spacing: 2px; white-space: nowrap; margin-right: 40px; }
+        .logo-static { font-size: 28px; font-weight: 700; letter-spacing: 2px; white-space: nowrap; margin-right: 40px; cursor: pointer; }
         .logo-static .t { color: var(--custom-green); text-shadow: 0 0 15px rgba(119, 124, 78, 0.5); }
         .logo-static .w { color: var(--custom-red); text-shadow: 0 0 15px rgba(188, 0, 0, 0.5); }
-
         .nav-btn { flex: 1; text-align: center; padding: 12px 0; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.2); font-size: 14px; transition: 0.3s; cursor: pointer; }
-        .nav-btn:hover { background: var(--custom-red); color: white; }
+        .nav-btn:hover, .nav-btn.active { background: var(--custom-red); color: white; }
 
-        .btn-forum { animation: red-pulse 2s infinite ease-in-out; border: 1px solid var(--custom-red) !important; }
-        @keyframes red-pulse { 0% { transform: scale(1); box-shadow: 0 0 0px rgba(188, 0, 0, 0); } 50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(188, 0, 0, 0.6); } 100% { transform: scale(1); box-shadow: 0 0 0px rgba(188, 0, 0, 0); } }
-
-        .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; flex-shrink: 0; }
-
-        /* --- ГИЛЬЗЫ --- */
-        #shells-container { position: fixed; top: 90px; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 100; }
-        .shell { position: absolute; width: 4px; height: 12px; background: linear-gradient(to bottom, #d4af37, #b8860b); border-radius: 1px; opacity: 0.8; }
-        @keyframes shell-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
-
-        /* --- ГЛАВНЫЙ ЭКРАН --- */
-        #play { position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: 80px; }
-        .hero-char { position: absolute; bottom: 2.6cm; height: 88vh; z-index: -1; pointer-events: none; right: 0; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); }
-        
-        /* Flex-контейнеры уже обеспечивают центрирование по поперечной оси (align-items: center) */
-        .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
-        .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
-        .main-title .t { color: var(--custom-green); text-shadow: 0 0 30px rgba(119, 124, 78, 0.4); }
-        .war-btn-wrap { display: flex; flex-direction: column; align-items: center; width: min-content; }
-        .main-title .w { color: var(--custom-red); text-shadow: 0 0 30px rgba(188, 0, 0, 0.4); }
-
-        .battle-btn { width: 100%; margin-top: 30px; display: block; padding: 25px 0; background: var(--custom-red); color: white; font-size: 30px; font-weight: 700; text-decoration: none; text-align: center; transition: 0.3s; z-index: 10; }
-        .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
-        .red-boundary-line { position: absolute; bottom: 2.6cm; left: 0; width: 100%; height: 1.5mm; background: var(--custom-red); z-index: 5; box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); }
-
-        /* --- ОБЕРТКА КОНТЕНТА --- */
-        .site-content-wrapper { background: rgba(5, 5, 5, 0.9); position: relative; z-index: 10; margin-top: -2.6cm; }
-        section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
-        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
-
-        .section-label { color: var(--custom-green); font-size: 22px; font-weight: 700; margin-bottom: 10px; display: block; }
-        .stats-grid { display: flex; gap: 20px; margin-bottom: 50px; }
-        .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; text-decoration: none; color: white; transition: 0.3s; background: rgba(255,255,255,0.02); }
-        .stat-btn:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.1); }
-        .stat-num { font-size: 32px; font-weight: 700; display: block; color: var(--custom-red); margin-bottom: 5px; }
-
-        .teams-row { display: flex; gap: 40px; margin: 50px 0; }
-        .team-card { flex: 1; border: 1px solid #222; padding: 40px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); transition: 0.3s ease; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-        .team-card img { height: calc(140px + 7mm); width: auto; opacity: 1; transition: 0.4s ease-in-out; }
-        .team-card:hover img { transform: scale(1.15); }
-
-        .team-card.alpha { border-left: 6px solid var(--custom-green); }
-        .team-card.alpha:hover { border: 1px solid var(--custom-green); border-left: 6px solid var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.3); }
-        .team-card.terror { border-right: 6px solid var(--custom-red); text-align: right; }
-        .team-card.terror:hover { border: 1px solid var(--custom-red); border-right: 6px solid var(--custom-red); box-shadow: 0 0 20px rgba(188, 0, 0, 0.3); }
-        .team-name { font-size: 44px; font-weight: 700; margin-bottom: 20px; display: block; }
-
-        .modes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin: 60px 0; }
-        .mode-item { border: 1px solid #222; padding: 30px; transition: 0.3s; background: rgba(0,0,0,0.4); text-align: center; }
-        .mode-item:hover { border-color: var(--custom-red); }
-        .mode-item h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
-        .mode-item p { font-size: 18px; color: #aaa; text-transform: uppercase; margin: 0; }
-
-        /* --- FAQ --- */
-        #faq { margin-top: -2.75cm; border-top: 1mm solid var(--custom-red); padding-top: 0.75cm !important; min-height: auto; }
-        .faq-title-horiz { font-size: 100px; color: var(--custom-green); text-align: left; margin-bottom: 40px; font-weight: 900; text-shadow: 0 0 15px rgba(119, 124, 78, 0.3); }
-        .faq-item { border-bottom: 1px solid #222; margin-bottom: 15px; width: calc(100% - 10mm); margin-left: auto; }
-
-        .faq-question { 
-            padding: 30px; display: flex; justify-content: space-between; align-items: center; 
-            cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02);
-            border: 1px solid transparent; position: relative; overflow: hidden;
+        /* --- МАКЕТ --- */
+        .main-layout { display: grid; grid-template-columns: 1fr 350px; gap: 30px; max-width: 1400px; margin: 40px auto; padding: 0 20px; }
+        .category-card, .sidebar-block, .stat-box {
+            background: var(--block-bg); border: 1px solid var(--custom-red); box-shadow: 0 0 10px var(--border-glow); border-radius: 8px; transition: 0.3s;
         }
 
-        .faq-question::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('shell.png'); background-repeat: no-repeat;
-            background-position: center; background-size: contain; opacity: 0.27; 
-            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); transform: scale(1.3); 
-            pointer-events: none; z-index: 1;
-        }
+        .section-header { font-size: 18px; font-weight: bold; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .section-header::before { content: ''; width: 4px; height: 24px; background: var(--custom-red); display: block; }
+        .category-card { padding: 20px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
 
-        .shell-text {
-            position: absolute;
-            top: calc(50% - 2mm);
-            left: calc(50% + 4mm);
-            transform: translate(-50%, -50%);
-            opacity: 0.7; 
-            font-size: 10px; font-weight: 900; letter-spacing: 1px;
-            z-index: 1.5; pointer-events: none; white-space: nowrap;
-        }
-        .shell-text .t { color: var(--custom-green); }
-        .shell-text .w { color: var(--custom-red); }
+        /* --- ЧАТ --- */
+        .sidebar-block { padding: 20px; margin-bottom: 25px; display: flex; flex-direction: column; }
+        .block-title { font-size: 14px; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 10px; display: flex; justify-content: space-between; }
+        .mini-chat { height: 380px; overflow-y: auto; font-size: 13px; font-family: sans-serif; margin-bottom: 10px; padding-right: 5px; }
+        .chat-msg { margin-bottom: 10px; border-left: 2px solid var(--custom-green); padding-left: 10px; text-transform: none; line-height: 1.4; animation: fadeIn 0.3s ease; }
+        .chat-msg b { color: var(--custom-red); text-transform: uppercase; }
+        .chat-time { font-size: 9px; color: #444; display: block; }
+        .chat-input { background: #000; border: 1px solid var(--custom-red); color: white; width: 100%; padding: 12px; font-family: var(--font-main); }
 
-        .faq-question span { position: relative; z-index: 2; }
-        .faq-item:hover .faq-question { border: 1px solid var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.4); color: var(--custom-green); }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; background: #555; }
+        .status-online { background: var(--custom-green); box-shadow: 0 0 5px var(--custom-green); }
 
-        .social-links-wrap { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px; width: 100%; }
-        .social-link-btn { background: transparent; border: none; cursor: pointer; transition: 0.3s; padding: 5px; text-decoration: none; }
-        .social-link-btn img { width: 80px; height: auto; display: block; filter: drop-shadow(0 0 10px rgba(119, 124, 78, 0.3)); }
-        .social-link-btn:hover img { transform: scale(1.1); filter: drop-shadow(0 0 20px var(--custom-green)); }
+        .footer-wrap { padding: 40px; border-top: 4px solid var(--custom-red); margin-top: 60px; }
+        .footer-signature { width: 5cm; height: 5mm; margin: 0 auto; color: var(--custom-red); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); }
 
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); }
-        .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
-        .faq-link { color: var(--custom-red); text-decoration: underline; transition: 0.3s; }
-
-        /* --- ФУТЕР --- */
-        footer { padding: 100px 40px 60px; border-top: 4px solid var(--custom-red); background: transparent; }
-        .footer-nav { display: flex; gap: 30px; margin-bottom: 60px; }
-        .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 25px; color: #777; text-decoration: none; font-size: 16px; display: flex; align-items: center; justify-content: center; }
-
-        .footer-signature {
-            width: 5cm; height: 5mm; margin: 30px auto 0;
-            background-color: transparent; 
-            color: var(--custom-red);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 900; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); white-space: nowrap;
-        }
-
-        /* --- ПОРТАЛ ФОРУМА (v112) --- */
-        #forum-portal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999; display: none; background: rgba(0,0,0,0.96);
-            border: none;
-        }
-
-        @keyframes text-pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 30px rgba(188, 0, 0, 0.5); } 50% { opacity: 0.8; text-shadow: 0 0 60px rgba(188, 0, 0, 0.8); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } }
+        .exit-btn { position: fixed; bottom: 30px; right: 30px; background: var(--custom-red); color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 3000; }
     </style>
 </head>
-<body id="top">
+<body>
 
     <header>
         <div class="nav-container">
             <div class="logo-static"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-            <a href="#top" class="nav-btn">ИГРАТЬ</a>
-            <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
-            <a href="#faq" class="nav-btn">FAQ</a>
-            <a href="javascript:void(0)" onclick="openForum()" class="nav-btn btn-forum">ФОРУМ</a>
+            <div class="nav-btn active">ГЛАВНАЯ</div>
+            <div class="nav-btn">РЕЙТИНГ</div>
+            <div class="nav-btn">ПРОФИЛЬ</div>
         </div>
-        <div class="age-limit">6+</div>
+        <div style="font-size:12px; text-align:right">
+            <span id="my-nick" style="color:var(--custom-green); font-weight:900">ПОДКЛЮЧЕНИЕ...</span><br>
+            <span id="conn-status" style="font-size:9px;"><span class="status-dot"></span>ПОИСК СЕТИ</span>
+        </div>
     </header>
 
-    <div id="shells-container"></div>
-
-    <section id="play">
-        <img src="new-right-char.png" class="hero-char" alt="Боец">
-        <div class="hero-content-group">
-            <div class="main-title">
-                <span class="t">TEAMS</span>
-                <div class="war-btn-wrap">
-                    <span class="w">WAR</span>
-                    <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
-                    <div class="social-links-wrap">
-                        <a href="https://vk.com/niksongame" target="_blank" class="social-link-btn"><img src="ВК.png" alt="VK"></a>
-                        <a href="https://t.me/niks_on_game" target="_blank" class="social-link-btn"><img src="ТГ.png" alt="Telegram"></a>
-                        <a href="https://www.youtube.com/@NiksOnGame" target="_blank" class="social-link-btn"><img src="ЮТ.png" alt="YouTube"></a>
-                        <a href="https://rutube.ru/channel/12011050/" target="_blank" class="social-link-btn"><img src="Рут.png" alt="Rutube"></a>
-                        <a href="https://www.tiktok.com/@niksongame" target="_blank" class="social-link-btn"><img src="Тик ток.png" alt="TikTok"></a>
-                        <a href="https://live.vkvideo.ru/niksongame" target="_blank" class="social-link-btn"><img src="ВКВидео.png" alt="VK Video"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="red-boundary-line"></div>
-    </section>
-
-    <div class="site-content-wrapper">
-        <section id="about" class="full-section">
-            <h2 class="big-title">ОБ ИГРЕ</h2>
-            <div class="stats-grid">
-                <a href="#" class="stat-btn"><span class="stat-num">2</span>КОМАНДЫ</a>
-                <a href="#" class="stat-btn"><span class="stat-num">7+</span>РЕЖИМОВ</a>
-                <a href="#" class="stat-btn"><span class="stat-num">50+</span>ОРУЖИЕ</a>
-                <a href="#" class="stat-btn"><span class="stat-num">127+</span>ОПЕРАТИВНИКОВ</a>
-                <a href="#" class="stat-btn"><span class="stat-num">10+</span>КАРТ</a>
-            </div>
-            <p style="font-size: 24px; color: #ddd; border-left: 6px solid var(--custom-red); padding-left: 40px;">ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ. ОБЪЕДИНЯЙТЕСЬ В КЛАНЫ, ЧТОБЫ ПОБЕДИТЬ ПРОТИВНИКА.</p>
-            <div class="teams-row">
-                <div class="team-card alpha">
-                    <div style="text-align: left;">
-                        <span class="team-name" style="color:var(--custom-green); display: block; margin-bottom: 10px; text-shadow: 0 0 15px rgba(119, 124, 78, 0.6);">АЛЬФА</span>
-                        <p style="color:#888; font-size:18px; text-transform: none; font-weight: 600;">ЭЛИТНЫЙ СПЕЦНАЗ, ПРОТИВОСТОЯЩИЙ ПОСТОЯННОЙ<br>угрозе со стороны боевиков.</p>
-                    </div>
-                    <img src="T_TeamAlphaIcon.png" alt="">
-                </div>
-                <div class="team-card terror">
-                    <img src="T_TeamTerrorIcon.png" alt="">
-                    <div style="text-align: right;">
-                        <span class="team-name" style="color:var(--custom-red); display: block; margin-bottom: 10px; text-shadow: 0 0 15px rgba(188, 0, 0, 0.6);">БОЕВИКИ</span>
-                        <p style="color:#888; font-size:18px; text-transform: none; font-weight: 600;">ПРОТИВОБОРСТВУЮЩАЯ СТОРОНА, СОЗДАЮЩАЯ<br>постоянные угрозы мировому порядку.</p>
-                    </div>
-                </div>
-            </div>
+    <main class="main-layout">
+        <section>
+            <div class="section-header">РАЗДЕЛЫ ФОРУМА</div>
+            <div id="cat-list"></div>
         </section>
 
-        <section id="faq" class="full-section">
-            <div id="faq-section">
-                <div class="faq-title-horiz">FAQ</div>
-                <div class="faq-list">
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>01 // Системные требования</span>
-                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-                            <span>▼</span>
-                        </div>
-                        <div class="faq-answer"><div class="faq-answer-inner">СИСТЕМНЫЕ ТРЕБОВАНИЯ ИГРЫ НА <a href="https://vkplay.ru/play/game/teams-war/" class="faq-link">VK Play</a></div></div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>02 // Как скачать?</span>
-                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-                            <span>▼</span>
-                        </div>
-                        <div class="faq-answer"><div class="faq-answer-inner">ИСПОЛЬЗУЙТЕ ЛАУНЧЕР VK PLAY.</div></div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>03 // Игра не запускается</span>
-                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-                            <span>▼</span>
-                        </div>
-                        <div class="faq-answer"><div class="faq-answer-inner">ОБРАТИТЕСЬ В ТЕХПОДДЕРЖКУ.</div></div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>04 // Баг</span>
-                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-                            <span>▼</span>
-                        </div>
-                        <div class="faq-answer"><div class="faq-answer-inner">СООБЩИТЕ В ПОДДЕРЖКУ.</div></div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>05 // Жалоба</span>
-                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-                            <span>▼</span>
-                        </div>
-                        <div class="faq-answer"><div class="faq-answer-inner">ОТПРАВЬТЕ ЖАЛОБУ В ТЕХПОДДЕРЖКУ.</div></div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>06 // Связаться с поддержкой</span>
-                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-                            <span>▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            <div class="faq-answer-inner">КАНАЛЫ СВЯЗИ:<div class="faq-social-row"><a href="https://t.me/niks_on_game" class="faq-social-btn"><svg viewBox="0 0 24 24" width="24" fill="white"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-2.003 9.464c-.149.659-.541.823-1.091.515l-3.056-2.251-1.474 1.42c-.163.163-.299.299-.614.299l.22-3.111 5.662-5.116c.246-.219-.054-.341-.381-.123l-7.001 4.407-3.012-.942c-.655-.205-.668-.655.137-.97l11.77-4.536c.544-.205 1.021.123.843.943z"/></svg></a></div></div>
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>07 // Новости</span>
-                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-                            <span>▼</span>
-                        </div>
-                        <div class="faq-answer"><div class="faq-answer-inner"><a href="https://vkplay.ru/play/game/teams-war/devblog/" class="faq-link">ДНЕВНИКИ РАЗРАБОТКИ</a></div></div>
-                    </div>
+        <aside>
+            <div class="sidebar-block">
+                <div class="block-title">ОБЩИЙ ЧАТ <span style="font-size:9px; color:var(--custom-green)">REAL-TIME v10</span></div>
+                <div class="mini-chat" id="chat-window">
+                    <div class="chat-msg"><b>СИСТЕМА</b>: ИНИЦИАЛИЗАЦИЯ КАНАЛА СВЯЗИ...</div>
                 </div>
+                <input type="text" id="chat-input" class="chat-input" placeholder="СООБЩЕНИЕ... (ENTER)" onkeydown="if(event.key==='Enter') send()">
             </div>
-        </section>
+        </aside>
+    </main>
 
-        <footer>
-            <div class="footer-nav">
-                <a href="privacy.html" class="footer-btn">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
-                <a href="terms.html" class="footer-btn">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
-                <a href="rules.html" class="footer-btn">ПРАВИЛА</a>
-            </div>
-            <div class="footer-signature">NIKS ON GAME</div>
-        </footer>
-    </div>
-
-    <iframe id="forum-portal" src="forum.html"></iframe>
+    <div class="footer-wrap"><div class="footer-signature">NIKS ON GAME</div></div>
+    <button class="exit-btn" onclick="window.parent.postMessage('closeForum', '*')">ВЫХОД</button>
 
     <script>
-        function createShell() {
-            const container = document.getElementById('shells-container');
-            const shell = document.createElement('div');
-            shell.className = 'shell';
-            shell.style.left = Math.random() * 100 + 'vw';
-            const duration = 2.5 + Math.random() * 2;
-            shell.style.animation = `shell-fall ${duration}s linear forwards`;
-            container.appendChild(shell);
-            setTimeout(() => shell.remove(), duration * 1000);
-        }
-        setInterval(createShell, 400);
+        // ГЕНЕРАЦИЯ ВРЕМЕННОГО НИКА (Для теста)
+        const myName = "ИГРОК_" + Math.floor(Math.random() * 999);
+        document.getElementById('my-nick').innerText = myName;
 
-        document.querySelectorAll('.faq-question').forEach(q => {
-            q.addEventListener('click', () => {
-                const answer = q.nextElementSibling, isActive = q.classList.contains('active');
-                document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = '0');
-                if (!isActive) { q.classList.add('active'); answer.style.maxHeight = answer.scrollHeight + "px"; }
-            });
+        // --- ГЛОБАЛЬНАЯ БАЗА (С ТРЕМЯ РЕЗЕРВНЫМИ СЕРВЕРАМИ) ---
+        const gun = Gun([
+            'https://gun-manhattan.herokuapp.com/gun',
+            'https://gun-us.herokuapp.com/gun',
+            'https://gun-eu.herokuapp.com/gun'
+        ]);
+        const chat = gun.get('teams_war_v10_global');
+
+        // ОТПРАВКА
+        function send() {
+            const input = document.getElementById('chat-input');
+            if(input.value.trim()){
+                const now = new Date();
+                const time = now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
+                
+                chat.set({
+                    name: myName,
+                    text: input.value,
+                    time: time,
+                    date: Date.now()
+                });
+                input.value = "";
+            }
+        }
+
+        // ПРИЕМ СООБЩЕНИЙ (МЕТОД .on - СЛУШАЕТ ВСЕГДА)
+        chat.map().on(function(data, id) {
+            if(!data || !data.text) return;
+            
+            // Если сообщение уже есть на экране - не дублируем
+            if(document.getElementById(id)) return;
+
+            const win = document.getElementById('chat-window');
+            const msg = document.createElement('div');
+            msg.id = id;
+            msg.className = 'chat-msg';
+            msg.innerHTML = `<span class="chat-time">${data.time}</span><b>${data.name}</b>: ${data.text}`;
+            win.appendChild(msg);
+            win.scrollTop = win.scrollHeight;
+
+            // Как только получили хоть одно сообщение от сети - зажигаем онлайн
+            document.getElementById('conn-status').innerHTML = '<span class="status-dot status-online"></span>В СЕТИ';
         });
 
-        // ФУНКЦИИ УПРАВЛЕНИЯ ФОРУМОМ
-        function openForum() { 
-            document.getElementById('forum-portal').style.display = 'block'; 
-            document.body.style.overflow = 'hidden'; 
-        }
-        function closeForum() { 
-            document.getElementById('forum-portal').style.display = 'none'; 
-            document.body.style.overflow = 'auto'; 
-        }
-        // Слушаем сигнал закрытия от файла forum.html
-        window.addEventListener('message', function(e) { if(e.data === 'closeForum') closeForum(); });
+        // Просто для красоты отрисуем разделы
+        const cats = ['Новости игры', 'Тактика и стратегии', 'Кланы и альянсы', 'Техподдержка', 'Флудилка'];
+        document.getElementById('cat-list').innerHTML = cats.map(c => `
+            <div class="category-card"><div style="font-weight:bold">${c}</div><div style="font-size:10px;color:#555">АКТИВНОСТЬ: НИЗКАЯ</div></div>
+        `).join('');
+
+        window.addEventListener('keydown', (e) => { if(e.key === 'Escape') window.parent.postMessage('closeForum', '*'); });
     </script>
 </body>
 </html>
