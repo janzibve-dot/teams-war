@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TEAMS WAR | ФОРУМ</title>
+    <title>TEAMS WAR | ФОРУМ (DEV MODE)</title>
     <style>
         :root {
             --green: #777c4e;
@@ -88,14 +88,6 @@
         .avatar-circle { width: 80px; height: 80px; border: 2px solid var(--green); margin: 0 auto 10px; overflow: hidden; background: #222; }
         .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- ОКНА АВТОРИЗАЦИИ --- */
-        .auth-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 100;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .auth-card { background: #080808; border: 2px solid var(--red); padding: 40px; width: 400px; text-align: center; }
-
         /* --- УВЕДОМЛЕНИЯ --- */
         .notification-log { font-size: 11px; color: #888; margin-top: 20px; max-height: 150px; overflow-y: auto; }
 
@@ -103,25 +95,6 @@
     </style>
 </head>
 <body>
-
-    <div id="auth-screen" class="auth-overlay">
-        <div class="auth-card">
-            <h2 id="auth-title">ВХОД В ТЕРМИНАЛ</h2>
-            <div id="login-form">
-                <input type="text" id="log-user" class="forum-input" placeholder="ЛОГИН">
-                <input type="password" id="log-pass" class="forum-input" placeholder="ПАРОЛЬ">
-                <button class="forum-input" style="background:var(--red); cursor:pointer; margin-top:15px;" onclick="handleLogin()">ВОЙТИ</button>
-                <p style="font-size:10px; margin-top:20px; cursor:pointer;" onclick="toggleAuth(true)">НЕТ АККАУНТА? РЕГИСТРАЦИЯ</p>
-            </div>
-            <div id="reg-form" class="hidden">
-                <input type="text" id="reg-user" class="forum-input" placeholder="ЛОГИН">
-                <input type="email" id="reg-email" class="forum-input" placeholder="E-MAIL">
-                <input type="password" id="reg-pass" class="forum-input" placeholder="ПАРОЛЬ">
-                <button class="forum-input" style="background:var(--green); cursor:pointer; margin-top:15px;" onclick="handleRegister()">СОЗДАТЬ АККАУНТ</button>
-                <p style="font-size:10px; margin-top:20px; cursor:pointer;" onclick="toggleAuth(false)">УЖЕ ЕСТЬ АККАУНТ? ВХОД</p>
-            </div>
-        </div>
-    </div>
 
     <div class="forum-header">
         <h1 style="color: var(--green); margin: 0;">ТЕРМИНАЛ ФОРУМА [ONLINE: <span id="online-count">127</span>]</h1>
@@ -140,7 +113,7 @@
         <div class="content-area">
             <div id="tab-chat" class="chat-container">
                 <div class="chat-messages" id="chat-list">
-                    <div class="msg"><div class="msg-info">SYSTEM [15.01.2026]</div>ДОБРО ПОЖАЛОВАТЬ В ТЕРМИНАЛ TEAMS WAR.</div>
+                    <div class="msg"><div class="msg-info">SYSTEM [15.01.2026]</div>РЕЖИМ РАЗРАБОТКИ АКТИВИРОВАН. ОКНО ВХОДА СКРЫТО.</div>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <input type="text" id="chat-input" class="forum-input" placeholder="ВВЕДИТЕ СООБЩЕНИЕ...">
@@ -151,77 +124,44 @@
             <div id="tab-profile" class="hidden">
                 <h2>РЕДАКТИРОВАНИЕ ЛИЧНОГО ДЕЛА</h2>
                 <div class="avatar-circle" style="width:150px; height:150px;">
-                    <img id="profile-img-big" src="">
+                    <img id="profile-img-big" src="avatar-placeholder.png">
                 </div>
+                <p style="font-size:10px;">ЗАГРУЗИТЬ ФОТО С ПК:</p>
                 <input type="file" id="avatar-input" accept="image/*" style="margin-bottom:20px;">
+                
                 <input type="password" id="old-pass" class="forum-input" placeholder="СТАРЫЙ ПАРОЛЬ">
                 <input type="password" id="new-pass" class="forum-input" placeholder="НОВЫЙ ПАРОЛЬ">
-                <button class="exit-btn" style="margin-top:20px; width:100%;" onclick="updateProfile()">ОБНОВИТЬ ДАННЫЕ</button>
+                <button class="exit-btn" style="margin-top:20px; width:100%;" onclick="alert('ДАННЫЕ СОХРАНЕНЫ (DEV MODE)')">ОБНОВИТЬ ДАННЫЕ</button>
             </div>
 
-            <div id="tab-topics" class="hidden"><h2>ТЕМЫ В РАЗРАБОТКЕ...</h2></div>
+            <div id="tab-topics" class="hidden"><h2>РАЗДЕЛ ТЕМ ГОТОВИТСЯ...</h2></div>
             <div id="tab-rating" class="hidden"><h2>ТАБЛИЦА ЛИДЕРОВ...</h2></div>
             <div id="tab-friends" class="hidden"><h2>СПИСОК КОНТАКТОВ...</h2></div>
         </div>
 
         <div class="stats-panel">
             <div class="user-mini-profile">
-                <div class="avatar-circle"><img id="user-avatar-mini" src=""></div>
-                <div id="current-user-name" style="color:var(--green); font-weight:900;">ГОСТЬ</div>
+                <div class="avatar-circle"><img id="user-avatar-mini" src="avatar-placeholder.png"></div>
+                <div id="current-user-name" style="color:var(--green); font-weight:900;">ТЕСТИРОВЩИК</div>
                 <div style="font-size:12px; margin-top:5px;">РЕЙТИНГ: <span id="user-rating" style="color:var(--red)">0</span></div>
             </div>
             <div style="font-size:12px; border-top:1px solid #333; padding-top:10px;">
                 ЛОГ ОПОВЕЩЕНИЙ:
                 <div id="notif-log" class="notification-log">
-                    <div>СИСТЕМА: ЖДЕМ ВАШЕЙ АКТИВНОСТИ.</div>
+                    <div>СИСТЕМА: ДОБРО ПОЖАЛОВАТЬ, АДМИН.</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- ЛОГИКА БАЗЫ ДАННЫХ (ЭМУЛЯЦИЯ) ---
-        let users = JSON.parse(localStorage.getItem('tw_users')) || [];
-        let currentUser = null;
-
-        function toggleAuth(isReg) {
-            document.getElementById('login-form').classList.toggle('hidden', isReg);
-            document.getElementById('reg-form').classList.toggle('hidden', !isReg);
-            document.getElementById('auth-title').innerText = isReg ? "РЕГИСТРАЦИЯ" : "ВХОД В ТЕРМИНАЛ";
-        }
-
-        function handleRegister() {
-            const user = document.getElementById('reg-user').value;
-            const email = document.getElementById('reg-email').value;
-            const pass = document.getElementById('reg-pass').value;
-
-            if(user && email && pass) {
-                users.push({ login: user, email: email, pass: pass, avatar: '', rating: 0, points: 0 });
-                localStorage.setItem('tw_users', JSON.stringify(users));
-                alert("РЕГИСТРАЦИЯ УСПЕШНА! ПИСЬМО (ЭМУЛЯЦИЯ) ОТПРАВЛЕНО НА " + email);
-                toggleAuth(false);
-            }
-        }
-
-        function handleLogin() {
-            const user = document.getElementById('log-user').value;
-            const pass = document.getElementById('log-pass').value;
-
-            const found = users.find(u => u.login === user && u.pass === pass);
-            if(found) {
-                currentUser = found;
-                document.getElementById('auth-screen').classList.add('hidden');
-                document.getElementById('current-user-name').innerText = currentUser.login;
-                document.getElementById('user-rating').innerText = currentUser.rating;
-                addNotification("ВХОД ВЫПОЛНЕН УСПЕШНО.");
-            } else {
-                alert("НЕВЕРНЫЙ ЛОГИН ИЛИ ПАРОЛЬ!");
-            }
-        }
+        // Временный пользователь для тестов
+        let currentUser = { login: "ТЕСТИРОВЩИК", rating: 0 };
 
         function showTab(tabId) {
             document.querySelectorAll('.content-area > div').forEach(div => div.classList.add('hidden'));
             document.getElementById('tab-' + tabId).classList.remove('hidden');
+            
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
         }
@@ -235,10 +175,10 @@
 
         function sendChatMessage() {
             const input = document.getElementById('chat-input');
-            if(input.value && currentUser) {
+            if(input.value) {
                 const list = document.getElementById('chat-list');
                 const now = new Date();
-                const timeStr = now.toLocaleTimeString() + " " + now.toLocaleDateString();
+                const timeStr = now.toLocaleTimeString();
                 
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'msg';
@@ -249,14 +189,12 @@
             }
         }
 
-        // Загрузка аватара
+        // Загрузка аватара (DEV MODE)
         document.getElementById('avatar-input').addEventListener('change', function(e) {
             const reader = new FileReader();
             reader.onload = function(event) {
                 document.getElementById('profile-img-big').src = event.target.result;
                 document.getElementById('user-avatar-mini').src = event.target.result;
-                currentUser.avatar = event.target.result;
-                localStorage.setItem('tw_users', JSON.stringify(users));
                 addNotification("АВАТАР ОБНОВЛЕН.");
             };
             reader.readAsDataURL(e.target.files[0]);
