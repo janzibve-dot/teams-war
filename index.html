@@ -10,7 +10,7 @@
             setTimeout(() => {
                 const cleanURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
                 window.history.replaceState(null, null, cleanURL.replace('index.html', ''));
-            }, 10); 
+            }, 10);
         }
         cleanURL();
         window.addEventListener('hashchange', cleanURL);
@@ -49,7 +49,6 @@
             background-size: cover; background-position: center; filter: brightness(0.2) blur(6px);
         }
 
-        /* --- ХЕДЕР --- */
         header {
             position: sticky; top: 0; z-index: 1500;
             padding: 20px 40px; background: #050505;
@@ -66,16 +65,14 @@
         .nav-btn:hover { background: var(--custom-red); color: white; }
 
         .btn-forum { animation: red-pulse 2s infinite ease-in-out; border: 1px solid var(--custom-red) !important; }
-        @keyframes red-pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(188, 0, 0, 0.6); } 100% { transform: scale(1); } }
+        @keyframes red-pulse { 0% { transform: scale(1); box-shadow: 0 0 0px rgba(188, 0, 0, 0); } 50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(188, 0, 0, 0.6); } 100% { transform: scale(1); box-shadow: 0 0 0px rgba(188, 0, 0, 0); } }
 
         .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; flex-shrink: 0; }
 
-        /* --- ГИЛЬЗЫ --- */
         #shells-container { position: fixed; top: 90px; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 100; }
         .shell { position: absolute; width: 4px; height: 12px; background: linear-gradient(to bottom, #d4af37, #b8860b); border-radius: 1px; opacity: 0.8; }
         @keyframes shell-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        /* --- ГЛАВНЫЙ ЭКРАН --- */
         #play { position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: 80px; }
         .hero-char { position: absolute; bottom: 2.6cm; height: 88vh; z-index: -1; pointer-events: none; right: 0; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); }
         
@@ -89,11 +86,13 @@
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
         .red-boundary-line { position: absolute; bottom: 2.6cm; left: 0; width: 100%; height: 1.5mm; background: var(--custom-red); z-index: 5; box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); }
 
-        /* --- ОБЕРТКА КОНТЕНТА --- */
         .site-content-wrapper { background: rgba(5, 5, 5, 0.9); position: relative; z-index: 10; margin-top: -2.6cm; }
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
-        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
+        
+        /* ПРАВКА: Подъем секции ОБ ИГРЕ */
+        #about.full-section { padding-top: 25px; }
 
+        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
         .stats-grid { display: flex; gap: 20px; margin-bottom: 50px; }
         .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; text-decoration: none; color: white; transition: 0.3s; background: rgba(255,255,255,0.02); }
         .stat-btn:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.1); }
@@ -107,22 +106,21 @@
         .team-card.terror { border-right: 6px solid var(--custom-red); text-align: right; }
         .team-name { font-size: 44px; font-weight: 700; margin-bottom: 20px; display: block; }
 
-        /* --- ПРАВКА: БЛОК МЕДИА --- */
-        /* Здесь мы опускаем линию и задаем отступ */
-        #media.full-section { 
+        /* ПРАВКА: БЛОК МЕДИА */
+        #media { 
             margin-top: -10cm; 
-            border-top: 3px solid var(--custom-red); /* Линия в самом верху блока */
-            padding-top: 1cm; /* Ровно 1 см от линии до слова МЕДИА */
+            border-top: 3px solid var(--custom-red); 
+            padding-top: 1cm; 
         }
         .media-tape { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; scrollbar-width: thin; scrollbar-color: var(--custom-red) transparent; justify-content: flex-start; }
         .media-tape img, .media-tape video { height: 250px; border: 2px solid #222; transition: 0.3s; cursor: pointer; object-fit: cover; }
-        .media-tape img:hover, .media-tape video:hover { border-color: var(--custom-red); transform: scale(1.02); }
+        .media-tape img:hover { border-color: var(--custom-red); transform: scale(1.02); }
 
-        /* МОДАЛЬНОЕ ОКНО */
+        /* FULLSCREEN MODAL */
         .media-modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; cursor: pointer; }
         .media-modal-content { max-width: 90%; max-height: 90%; border: 2px solid var(--custom-red); box-shadow: 0 0 50px rgba(188, 0, 0, 0.5); }
 
-        /* --- FAQ (Все 7 блоков) --- */
+        /* --- FAQ --- */
         #faq { margin-top: -2.75cm; border-top: 1mm solid var(--custom-red); padding-top: 0.75cm !important; min-height: auto; }
         .faq-title-horiz { font-size: 100px; color: var(--custom-green); text-align: left; margin-bottom: 40px; font-weight: 900; text-shadow: 0 0 15px rgba(119, 124, 78, 0.3); }
         .faq-item { border-bottom: 1px solid #222; margin-bottom: 15px; width: calc(100% - 10mm); margin-left: auto; }
@@ -130,22 +128,19 @@
         .faq-question::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('shell.png'); background-repeat: no-repeat; background-position: center; background-size: contain; opacity: 0.27; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); transform: scale(1.3); pointer-events: none; z-index: 1; }
         .shell-text { position: absolute; top: calc(50% - 2mm); left: calc(50% + 4mm); transform: translate(-50%, -50%); opacity: 0.7; font-size: 10px; font-weight: 900; letter-spacing: 1px; z-index: 1.5; pointer-events: none; white-space: nowrap; }
         .shell-text .t { color: var(--custom-green); } .shell-text .w { color: var(--custom-red); }
-        .faq-question span { position: relative; z-index: 2; }
-        .faq-item:hover .faq-question { border: 1px solid var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.4); color: var(--custom-green); }
-
-        /* СОЦСЕТИ - 80px */
+        
+        /* СОЦСЕТИ 80px */
         .social-links-wrap { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px; width: 100%; }
-        .social-link-btn img { width: 80px; height: auto; display: block; filter: drop-shadow(0 0 10px rgba(119, 124, 78, 0.3)); transition: 0.3s; }
+        .social-link-btn img { width: 80px; height: auto; display: block; filter: drop-shadow(0 0 10px rgba(119, 124, 78, 0.3)); }
         .social-link-btn:hover img { transform: scale(1.1); filter: drop-shadow(0 0 20px var(--custom-green)); }
 
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); }
         .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
 
-        /* ФУТЕР */
         footer { padding: 100px 40px 60px; border-top: 4px solid var(--custom-red); background: transparent; }
         .footer-nav { display: flex; gap: 30px; margin-bottom: 60px; }
         .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 25px; color: #777; text-decoration: none; font-size: 16px; display: flex; align-items: center; justify-content: center; }
-        .footer-signature { width: 5cm; height: 5mm; margin: 30px auto 0; background-color: transparent; color: var(--custom-red); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); }
+        .footer-signature { width: 5cm; height: 5mm; margin: 30px auto 0; background-color: transparent; color: var(--custom-red); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; letter-spacing: 2px; }
 
         @keyframes text-pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 30px rgba(188, 0, 0, 0.5); } 50% { opacity: 0.8; text-shadow: 0 0 60px rgba(188, 0, 0, 0.8); } }
     </style>
@@ -175,12 +170,12 @@
                     <span class="w">WAR</span>
                     <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
                     <div class="social-links-wrap">
-                        <a href="https://vk.com/niksongame" target="_blank" class="social-link-btn"><img src="ВК.png" alt="VK"></a>
-                        <a href="https://t.me/niks_on_game" target="_blank" class="social-link-btn"><img src="ТГ.png" alt="Telegram"></a>
-                        <a href="https://www.youtube.com/@NiksOnGame" target="_blank" class="social-link-btn"><img src="ЮТ.png" alt="YouTube"></a>
-                        <a href="https://rutube.ru/channel/12011050/" target="_blank" class="social-link-btn"><img src="Рут.png" alt="Rutube"></a>
-                        <a href="https://www.tiktok.com/@niksongame" target="_blank" class="social-link-btn"><img src="Тик ток.png" alt="TikTok"></a>
-                        <a href="https://live.vkvideo.ru/niksongame" target="_blank" class="social-link-btn"><img src="ВКВидео.png" alt="VK Video"></a>
+                        <a href="https://vk.com/niksongame" target="_blank" class="social-link-btn"><img src="ВК.png"></a>
+                        <a href="https://t.me/niks_on_game" target="_blank" class="social-link-btn"><img src="ТГ.png"></a>
+                        <a href="https://www.youtube.com/@NiksOnGame" target="_blank" class="social-link-btn"><img src="ЮТ.png"></a>
+                        <a href="https://rutube.ru/channel/12011050/" target="_blank" class="social-link-btn"><img src="Рут.png"></a>
+                        <a href="https://www.tiktok.com/@niksongame" target="_blank" class="social-link-btn"><img src="Тик ток.png"></a>
+                        <a href="https://live.vkvideo.ru/niksongame" target="_blank" class="social-link-btn"><img src="ВКВидео.png"></a>
                     </div>
                 </div>
             </div>
@@ -222,35 +217,37 @@
         </section>
 
         <section id="faq" class="full-section">
-            <div class="faq-title-horiz">FAQ</div>
-            <div class="faq-list">
-                <div class="faq-item">
-                    <div class="faq-question"><span>01 // Системные требования</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
-                    <div class="faq-answer"><div class="faq-answer-inner">СИСТЕМНЫЕ ТРЕБОВАНИЯ ИГРЫ НА <a href="https://vkplay.ru/play/game/teams-war/" class="faq-link">VK Play</a></div></div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question"><span>02 // Как скачать?</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
-                    <div class="faq-answer"><div class="faq-answer-inner">ИСПОЛЬЗУЙТЕ ЛАУНЧЕР VK PLAY.</div></div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question"><span>03 // Игра не запускается</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
-                    <div class="faq-answer"><div class="faq-answer-inner">ОБРАТИТЕСЬ В ТЕХПОДДЕРЖКУ.</div></div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question"><span>04 // Баг</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
-                    <div class="faq-answer"><div class="faq-answer-inner">СООБЩИТЕ В ПОДДЕРЖКУ.</div></div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question"><span>05 // Жалоба</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
-                    <div class="faq-answer"><div class="faq-answer-inner">ОТПРАВЬТЕ ЖАЛОБУ В ТЕХПОДДЕРЖКУ.</div></div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question"><span>06 // Связаться с поддержкой</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
-                    <div class="faq-answer"><div class="faq-answer-inner">КАНАЛЫ СВЯЗИ В ТЕЛЕГРАМ.</div></div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question"><span>07 // Новости</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
-                    <div class="faq-answer"><div class="faq-answer-inner">ДНЕВНИКИ РАЗРАБОТКИ НА VK PLAY.</div></div>
+            <div id="faq-section">
+                <div class="faq-title-horiz">FAQ</div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question"><span>01 // Системные требования</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
+                        <div class="faq-answer"><div class="faq-answer-inner">Смотрите на VK Play.</div></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>02 // Как скачать?</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
+                        <div class="faq-answer"><div class="faq-answer-inner">Используйте лаунчер.</div></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>03 // Игра не запускается</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
+                        <div class="faq-answer"><div class="faq-answer-inner">Обратитесь в поддержку.</div></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>04 // Баг</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
+                        <div class="faq-answer"><div class="faq-answer-inner">Сообщите нам.</div></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>05 // Жалоба</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
+                        <div class="faq-answer"><div class="faq-answer-inner">Отправьте тикет.</div></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>06 // Связаться с поддержкой</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
+                        <div class="faq-answer"><div class="faq-answer-inner">Каналы связи в ТГ.</div></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question"><span>07 // Новости</span><div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div><span>▼</span></div>
+                        <div class="faq-answer"><div class="faq-answer-inner">Дневники на VK Play.</div></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -277,6 +274,18 @@
             c.innerHTML = type === 'img' ? `<img src="${src}" class="media-modal-content">` : `<video src="${src}" controls autoplay class="media-modal-content"></video>`;
             m.style.display = 'flex';
         }
+
+        function createShell() {
+            const container = document.getElementById('shells-container');
+            const shell = document.createElement('div');
+            shell.className = 'shell';
+            shell.style.left = Math.random() * 100 + 'vw';
+            const duration = 2.5 + Math.random() * 2;
+            shell.style.animation = `shell-fall ${duration}s linear forwards`;
+            container.appendChild(shell);
+            setTimeout(() => shell.remove(), duration * 1000);
+        }
+        setInterval(createShell, 400);
 
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
