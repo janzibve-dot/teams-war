@@ -104,9 +104,9 @@
         .team-card.terror { border-right: 6px solid var(--custom-red); text-align: right; }
         .team-name { font-size: 44px; font-weight: 700; margin-bottom: 20px; display: block; }
 
-        /* --- БЛОК МЕДИА (ИСПРАВЛЕНО) --- */
+        /* --- БЛОК МЕДИА (ПРАВКА: ПОДНЯТО НА 5 СМ) --- */
         #media { 
-            margin-top: 1cm; /* Опущено на 4см относительно предыдущего -3см */
+            margin-top: -4cm; /* Поднято на 5см (было 1cm) */
             border-top: 3px solid var(--custom-red); 
             padding-top: 1cm; 
             position: relative;
@@ -125,9 +125,9 @@
         .fs-content { max-width: 90%; max-height: 90%; border: 2px solid var(--custom-red); }
         .fs-close { position: absolute; top: 30px; right: 40px; color: var(--custom-red); font-size: 50px; cursor: pointer; }
 
-        /* --- FAQ (ИСПРАВЛЕНО) --- */
+        /* --- FAQ --- */
         #faq { 
-            margin-top: 0; /* Убрано агрессивное наложение на Медиа */
+            margin-top: 0; 
             border-top: 1mm solid var(--custom-red); 
             padding-top: 1cm !important; 
             min-height: auto; 
@@ -283,7 +283,6 @@
 
     <script src="app.js"></script>
     <script>
-        // ДАННЫЕ ГАЛЕРЕИ (CITE: Player.html)
         const mediaData = [
             { type: 'image', src: 'screenshot1.png', thumb: 'screenshot1.png' },
             { type: 'video', src: 'video1.mp4', thumb: 'screenshot2.png' },
@@ -316,10 +315,8 @@
         document.getElementById('fsClose').onclick = () => fsOverlay.classList.remove('active');
         fsOverlay.onclick = (e) => { if(e.target === fsOverlay) fsOverlay.classList.remove('active'); };
         
-        // ИНИЦИАЛИЗАЦИЯ
         mainBox.innerHTML = `<img src="${mediaData[0].src}">`;
 
-        // FAQ accordion
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
                 const answer = q.nextElementSibling, isActive = q.classList.contains('active');
@@ -329,7 +326,6 @@
             });
         });
 
-        // Shells
         function createShell() {
             const container = document.getElementById('shells-container');
             const shell = document.createElement('div');
