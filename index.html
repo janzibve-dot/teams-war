@@ -118,17 +118,51 @@
             top: -6cm;
         }
 
-        .media-tape { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; scrollbar-width: thin; scrollbar-color: var(--custom-red) transparent; justify-content: flex-start; }
-        .media-tape img, .media-tape video { height: 250px; border: 2px solid #222; transition: 0.3s; cursor: pointer; object-fit: cover; }
-        .media-tape img:hover { border-color: var(--custom-red); transform: scale(1.02); }
+        .media-tape { 
+            display: flex; 
+            gap: 20px; 
+            overflow-x: auto; 
+            padding: 20px 0; 
+            scrollbar-width: thin; 
+            scrollbar-color: var(--custom-red) transparent; 
+            justify-content: flex-start;
+            scroll-behavior: smooth;
+        }
+        .media-tape img, .media-tape video { 
+            height: 250px; 
+            border: 2px solid #222; 
+            transition: 0.3s; 
+            cursor: pointer; 
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .media-tape img:hover, .media-tape video:hover { 
+            border-color: var(--custom-red); 
+            transform: scale(1.02); 
+        }
 
-        /* FULLSCREEN MODAL */
-        .media-modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; cursor: pointer; }
-        .media-modal-content { max-width: 90%; max-height: 90%; border: 2px solid var(--custom-red); box-shadow: 0 0 50px rgba(188, 0, 0, 0.5); }
+        /* МОДАЛЬНОЕ ОКНО (STEAM STYLE) */
+        .media-modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 5000; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+        }
+        .media-modal-content { 
+            max-width: 90%; 
+            max-height: 90%; 
+            border: 2px solid var(--custom-red); 
+            box-shadow: 0 0 50px rgba(188, 0, 0, 0.5); 
+        }
 
-        /* --- ПРАВКА: FAQ (Поднят на 9.5 см) --- */
+        /* --- FAQ --- */
         #faq { 
-            margin-top: -12.25cm; /* Было -2.75cm, подняли на 9.5cm */
+            margin-top: -12.25cm; 
             border-top: 1mm solid var(--custom-red); 
             padding-top: 0.75cm !important; 
             min-height: auto; 
@@ -226,6 +260,7 @@
                 <video src="video1.mp4" poster="screenshot2.png" onclick="openFull(this.src, 'video')"></video>
                 <img src="screenshot3.png" onclick="openFull(this.src, 'img')">
                 <img src="screenshot4.png" onclick="openFull(this.src, 'img')">
+                <img src="screenshot5.png" onclick="openFull(this.src, 'img')">
             </div>
         </section>
 
@@ -284,7 +319,9 @@
         function openFull(src, type) {
             const m = document.getElementById('full-modal');
             const c = document.getElementById('modal-content');
-            c.innerHTML = type === 'img' ? `<img src="${src}" class="media-modal-content">` : `<video src="${src}" controls autoplay class="media-modal-content"></video>`;
+            c.innerHTML = type === 'img' ? 
+                `<img src="${src}" class="media-modal-content">` : 
+                `<video src="${src}" controls autoplay class="media-modal-content"></video>`;
             m.style.display = 'flex';
         }
 
