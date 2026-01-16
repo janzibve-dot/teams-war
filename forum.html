@@ -5,31 +5,27 @@
     <title>TEAMS WAR | FORUM v15.2</title>
     <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
-        @font-face { font-family: 'Sangyo'; src: url('Found/GamestationTextoblique.otf') format('truetype'); }
+        /* ИСПРАВЛЕНО: Путь к шрифту */
+        @font-face { font-family: 'Sangyo'; src: url('ofont.ru_Sangyo.ttf') format('truetype'); }
         :root { --bg: #050505; --card: #0d0d0d; --green: #777c4e; --red: #bc0000; --glow: rgba(188, 0, 0, 0.4); --font: 'Sangyo', sans-serif; }
         * { box-sizing: border-box; }
-        body { background: var(--bg); color: white; margin: 0; font-family: var(--font); text-transform: uppercase; overflow: hidden; }
+        body { background: var(--bg); color: white; margin: 0; font-family: var(--font); text-transform: uppercase; overflow-x: hidden; }
         header { padding: 15px 40px; background: #000; border-bottom: 3px solid var(--red); display: flex; align-items: center; justify-content: space-between; }
-        .nav-link { padding: 10px 20px; border: 1px solid rgba(188,0,0,0.2); cursor: pointer; font-size: 13px; }
-        .main-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; padding: 20px 40px; height: calc(100vh - 80px); }
-        .card { background: var(--card); border: 1px solid var(--red); box-shadow: 0 0 10px var(--glow); border-radius: 8px; padding: 20px; margin-bottom: 15px; }
-        .chat-area { height: 350px; overflow-y: auto; font-family: sans-serif; font-size: 13px; border-bottom: 1px solid #222; }
-        .msg { margin-bottom: 10px; border-left: 2px solid var(--green); padding-left: 10px; text-transform: none; }
-        .input { background: #000; border: 1px solid var(--red); color: white; width: 100%; padding: 12px; margin-bottom: 10px; font-family: var(--font); }
+        .main-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; padding: 20px 40px; }
+        .card { background: var(--card); border: 1px solid var(--red); padding: 20px; border-radius: 8px; margin-bottom: 15px; }
         .btn { background: var(--red); color: white; border: none; padding: 12px; cursor: pointer; width: 100%; font-family: var(--font); }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 5000; display: none; align-items: center; justify-content: center; }
-        .exit-btn { position: fixed; bottom: 20px; right: 20px; background: var(--red); color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; z-index: 6000; }
+        /* ИСПРАВЛЕНО: Кнопка ведет назад на сайт */
+        .exit-btn { position: fixed; bottom: 20px; right: 20px; background: var(--red); color: white !important; padding: 10px 25px; border-radius: 20px; text-decoration: none !important; font-weight: bold; z-index: 6000; box-shadow: 0 0 15px var(--red); }
     </style>
 </head>
 <body>
     <div id="auth-box" class="overlay">
         <div class="card" style="width: 400px; text-align: center;">
-            <h2 id="at">ВХОД</h2>
-            <div id="reg-ext" style="display: none;"><input type="email" id="a-email" class="input" placeholder="EMAIL"></div>
-            <input type="text" id="a-login" class="input" placeholder="ЛОГИН">
-            <input type="password" id="a-pass" class="input" placeholder="ПАРОЛЬ">
-            <button id="as" class="btn" onclick="processAuth()">ПОДТВЕРДИТЬ</button>
-            <p onclick="toggleReg()" style="font-size: 10px; margin-top: 15px; cursor: pointer;">НЕТ АККАУНТА? РЕГИСТРАЦИЯ</p>
+            <h2>ВХОД</h2>
+            <input type="text" id="a-login" style="width:100%; padding:10px; margin:10px 0;" placeholder="ЛОГИН">
+            <input type="password" id="a-pass" style="width:100%; padding:10px; margin:10px 0;" placeholder="ПАРОЛЬ">
+            <button class="btn" onclick="processAuth()">ПОДТВЕРДИТЬ</button>
         </div>
     </div>
     <header>
@@ -38,48 +34,23 @@
     </header>
     <main class="main-layout">
         <section><button class="btn" onclick="alert('ТЕМЫ БУДУТ В v16')">+ СОЗДАТЬ ТЕМУ</button></section>
-        <aside><div class="card"><b>ОБЩИЙ ЧАТ</b><div id="chat" class="chat-area"></div><input type="text" id="chat-in" class="input" placeholder="СООБЩЕНИЕ..." onkeydown="if(event.key==='Enter') sendChat()"></div></aside>
+        <aside><div class="card"><b>ЧАТ</b><div id="chat" style="height:300px; overflow-y:auto; border-bottom:1px solid #222;"></div></div></aside>
     </main>
-    <div class="exit-btn" onclick="window.parent.postMessage('closeForum', '*')">ВЫХОД</div>
+    <a href="index.html" class="exit-btn">ВЕРНУТЬСЯ НА САЙТ</a>
     <script>
-        const gun = Gun(['https://gun-manhattan.herokuapp.com/gun', 'https://gun-us.herokuapp.com/gun']);
+        const gun = Gun(['https://gun-manhattan.herokuapp.com/gun']);
         const db = { users: gun.get('tw_v16_users'), chat: gun.get('tw_v16_chat') };
         let user = JSON.parse(localStorage.getItem('tw_sess')) || null;
-        let isReg = false;
-
-        function toggleReg() { isReg = !isReg; document.getElementById('at').innerText = isReg ? "РЕГИСТРАЦИЯ" : "ВХОД"; document.getElementById('reg-ext').style.display = isReg ? "block" : "none"; }
-        
+        if(!user) document.getElementById('auth-box').style.display = 'flex';
         function processAuth() {
             const login = document.getElementById('a-login').value.trim().toLowerCase();
             const pass = document.getElementById('a-pass').value;
-            if(!login || !pass) return alert("ПОЛЯ ПУСТЫ!");
-            if(isReg) {
-                db.users.get(login).put({ login, pass, pts: 10 }, (ack) => {
-                    if(!ack.err) { alert("УСПЕХ! ТЕПЕРЬ ВОЙДИТЕ."); location.reload(); }
-                });
-            } else {
+            if(login && pass) {
                 db.users.get(login).once(d => {
                     if(d && d.pass === pass) { localStorage.setItem('tw_sess', JSON.stringify(d)); location.reload(); }
                     else alert("ОШИБКА!");
                 });
             }
-        }
-
-        if(!user) document.getElementById('auth-box').style.display = 'flex';
-        else {
-            document.getElementById('u-info').innerText = `${user.login} | ${user.pts} БАЛЛОВ`;
-            db.chat.map().once((data, id) => {
-                if(!data || !data.t || document.getElementById(id)) return;
-                const m = document.createElement('div'); m.id = id; m.className = 'msg';
-                m.innerHTML = `<b>${data.u}</b>: ${data.t}`;
-                document.getElementById('chat').appendChild(m);
-                document.getElementById('chat').scrollTop = 9999;
-            });
-        }
-
-        function sendChat() {
-            const i = document.getElementById('chat-in');
-            if(i.value.trim() && user) { db.chat.set({ u: user.login, t: i.value }); i.value = ""; }
         }
     </script>
 </body>
