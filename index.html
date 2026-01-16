@@ -89,7 +89,6 @@
         .site-content-wrapper { background: rgba(5, 5, 5, 0.9); position: relative; z-index: 10; margin-top: -2.6cm; }
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
         
-        /* ПРАВКА: Подъем секции ОБ ИГРЕ */
         #about.full-section { padding-top: 25px; }
 
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
@@ -106,12 +105,20 @@
         .team-card.terror { border-right: 6px solid var(--custom-red); text-align: right; }
         .team-name { font-size: 44px; font-weight: 700; margin-bottom: 20px; display: block; }
 
-        /* ПРАВКА: БЛОК МЕДИА - ОПУЩЕН НА 7 СМ (было -10cm, стало -3cm) */
+        /* ПРАВКА: БЛОК МЕДИА */
         #media { 
-            margin-top: -3cm; 
+            margin-top: -3cm; /* Красная линия зафиксирована здесь */
             border-top: 3px solid var(--custom-red); 
             padding-top: 1cm; 
+            position: relative;
         }
+        /* Поднимаем только содержимое (заголовок и ленту) на 6 см */
+        #media .big-title, 
+        #media .media-tape { 
+            position: relative;
+            top: -6cm;
+        }
+
         .media-tape { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; scrollbar-width: thin; scrollbar-color: var(--custom-red) transparent; justify-content: flex-start; }
         .media-tape img, .media-tape video { height: 250px; border: 2px solid #222; transition: 0.3s; cursor: pointer; object-fit: cover; }
         .media-tape img:hover { border-color: var(--custom-red); transform: scale(1.02); }
@@ -193,7 +200,7 @@
                 <a href="#" class="stat-btn"><span class="stat-num">127+</span>ОПЕРАТИВНИКОВ</a>
                 <a href="#" class="stat-btn"><span class="stat-num">10+</span>КАРТ</a>
             </div>
-            <p style="font-size: 24px; color: #ddd; border-left: 6px solid var(--custom-red); padding-left: 40px;">ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ.</p>
+            <p style="font-size: 24px; color: #ddd; border-left: 6px solid var(--custom-red); padding-left: 40px;">ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ. ОБЪЕДИНЯЙТЕСЬ В КЛАНЫ, ЧТОБЫ ПОБЕДИТЬ ПРОТИВНИКА.</p>
             <div class="teams-row">
                 <div class="team-card alpha">
                     <span class="team-name" style="color:var(--custom-green);">АЛЬФА</span>
