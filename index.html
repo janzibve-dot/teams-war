@@ -97,15 +97,7 @@
         .stat-btn:hover { border-color: var(--custom-red); background: rgba(188,0,0,0.1); }
         .stat-num { font-size: 32px; font-weight: 700; display: block; color: var(--custom-red); margin-bottom: 5px; }
 
-        .teams-row { display: flex; gap: 40px; margin: 50px 0; }
-        .team-card { flex: 1; border: 1px solid #222; padding: 40px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); transition: 0.3s ease; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-        .team-card img { height: calc(140px + 7mm); width: auto; opacity: 1; transition: 0.4s ease-in-out; }
-        .team-card:hover img { transform: scale(1.15); }
-        .team-card.alpha { border-left: 6px solid var(--custom-green); }
-        .team-card.terror { border-right: 6px solid var(--custom-red); text-align: right; }
-        .team-name { font-size: 44px; font-weight: 700; margin-bottom: 20px; display: block; }
-
-        /* БЛОК МЕДИА */
+        /* --- ПРАВКА: ГАЛЕРЕЯ МЕДИА В СТИЛЕ ТЕРМИНАЛА --- */
         #media { 
             margin-top: -3cm; 
             border-top: 3px solid var(--custom-red); 
@@ -113,52 +105,41 @@
             position: relative;
         }
         #media .big-title, 
-        #media .media-tape { 
+        #media .gallery-wrapper { 
             position: relative;
             top: -6cm;
         }
 
-        .media-tape { 
-            display: flex; 
-            gap: 20px; 
-            overflow-x: auto; 
-            padding: 20px 0; 
-            scrollbar-width: thin; 
-            scrollbar-color: var(--custom-red) transparent; 
-            justify-content: flex-start;
-            scroll-behavior: smooth;
+        .gallery-wrapper { width: 100%; max-width: 1200px; margin: 0; }
+        
+        .main-media {
+            width: 100%; height: 600px; background: #000;
+            border: 2px solid #222; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; overflow: hidden;
         }
-        .media-tape img, .media-tape video { 
-            height: 250px; 
-            border: 2px solid #222; 
-            transition: 0.3s; 
-            cursor: pointer; 
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-        .media-tape img:hover, .media-tape video:hover { 
-            border-color: var(--custom-red); 
-            transform: scale(1.02); 
-        }
+        .main-media img, .main-media video { width: 100%; height: 100%; object-fit: contain; }
 
-        /* МОДАЛЬНОЕ ОКНО (STEAM STYLE) */
-        .media-modal { 
-            display: none; 
-            position: fixed; 
-            z-index: 5000; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
+        .thumbnails-strip {
+            display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px;
+            scrollbar-width: thin; scrollbar-color: var(--custom-red) transparent;
         }
-        .media-modal-content { 
-            max-width: 90%; 
-            max-height: 90%; 
-            border: 2px solid var(--custom-red); 
-            box-shadow: 0 0 50px rgba(188, 0, 0, 0.5); 
+        .thumbnail {
+            min-width: 180px; height: 101px; border: 2px solid #222;
+            cursor: pointer; transition: 0.3s; flex-shrink: 0;
         }
+        .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        .thumbnail:hover, .thumbnail.active { border-color: var(--custom-red); box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); }
+
+        /* ПОЛНОЭКРАННЫЙ РЕЖИМ */
+        .fs-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); z-index: 5000;
+            align-items: center; justify-content: center;
+        }
+        .fs-overlay.active { display: flex; }
+        .fs-content { max-width: 90%; max-height: 90%; border: 2px solid var(--custom-red); }
+        .fs-close { position: absolute; top: 30px; right: 40px; color: var(--custom-red); font-size: 50px; cursor: pointer; font-weight: bold; }
 
         /* --- FAQ --- */
         #faq { 
@@ -220,9 +201,6 @@
                         <a href="https://vk.com/niksongame" target="_blank" class="social-link-btn"><img src="ВК.png"></a>
                         <a href="https://t.me/niks_on_game" target="_blank" class="social-link-btn"><img src="ТГ.png"></a>
                         <a href="https://www.youtube.com/@NiksOnGame" target="_blank" class="social-link-btn"><img src="ЮТ.png"></a>
-                        <a href="https://rutube.ru/channel/12011050/" target="_blank" class="social-link-btn"><img src="Рут.png"></a>
-                        <a href="https://www.tiktok.com/@niksongame" target="_blank" class="social-link-btn"><img src="Тик ток.png"></a>
-                        <a href="https://live.vkvideo.ru/niksongame" target="_blank" class="social-link-btn"><img src="ВКВидео.png"></a>
                     </div>
                 </div>
             </div>
@@ -241,26 +219,15 @@
                 <a href="#" class="stat-btn"><span class="stat-num">10+</span>КАРТ</a>
             </div>
             <p style="font-size: 24px; color: #ddd; border-left: 6px solid var(--custom-red); padding-left: 40px;">ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ. ОБЪЕДИНЯЙТЕСЬ В КЛАНЫ, ЧТОБЫ ПОБЕДИТЬ ПРОТИВНИКА.</p>
-            <div class="teams-row">
-                <div class="team-card alpha">
-                    <span class="team-name" style="color:var(--custom-green);">АЛЬФА</span>
-                    <img src="T_TeamAlphaIcon.png">
-                </div>
-                <div class="team-card terror">
-                    <img src="T_TeamTerrorIcon.png">
-                    <span class="team-name" style="color:var(--custom-red);">БОЕВИКИ</span>
-                </div>
-            </div>
         </section>
 
         <section id="media" class="full-section">
             <h2 class="big-title">МЕДИА</h2>
-            <div class="media-tape">
-                <img src="screenshot1.png" onclick="openFull(this.src, 'img')">
-                <video src="video1.mp4" poster="screenshot2.png" onclick="openFull(this.src, 'video')"></video>
-                <img src="screenshot3.png" onclick="openFull(this.src, 'img')">
-                <img src="screenshot4.png" onclick="openFull(this.src, 'img')">
-                <img src="screenshot5.png" onclick="openFull(this.src, 'img')">
+            <div class="gallery-wrapper">
+                <div class="main-media" id="mainMediaBox">
+                    </div>
+                <div class="thumbnails-strip" id="thumbStrip">
+                    </div>
             </div>
         </section>
 
@@ -310,21 +277,72 @@
         </footer>
     </div>
 
-    <div id="full-modal" class="media-modal" onclick="this.style.display='none'">
-        <div id="modal-content"></div>
+    <div id="fsOverlay" class="fs-overlay">
+        <span class="fs-close" id="fsClose">&times;</span>
+        <div id="fsContent"></div>
     </div>
 
     <script src="app.js"></script>
     <script>
-        function openFull(src, type) {
-            const m = document.getElementById('full-modal');
-            const c = document.getElementById('modal-content');
-            c.innerHTML = type === 'img' ? 
-                `<img src="${src}" class="media-modal-content">` : 
-                `<video src="${src}" controls autoplay class="media-modal-content"></video>`;
-            m.style.display = 'flex';
+        // ДАННЫЕ ГАЛЕРЕИ (Замени ссылки на свои)
+        const mediaData = [
+            { type: 'image', src: 'screenshot1.png', thumb: 'screenshot1.png' },
+            { type: 'video', src: 'video1.mp4', thumb: 'screenshot2.png' },
+            { type: 'image', src: 'screenshot3.png', thumb: 'screenshot3.png' },
+            { type: 'image', src: 'screenshot4.png', thumb: 'screenshot4.png' },
+            { type: 'image', src: 'screenshot5.png', thumb: 'screenshot5.png' }
+        ];
+
+        const thumbStrip = document.getElementById('thumbStrip');
+        const mainMediaBox = document.getElementById('mainMediaBox');
+        const fsOverlay = document.getElementById('fsOverlay');
+        const fsContent = document.getElementById('fsContent');
+
+        // Отрисовка миниатюр
+        mediaData.forEach((item, index) => {
+            const thumb = document.createElement('div');
+            thumb.className = 'thumbnail' + (index === 0 ? ' active' : '');
+            thumb.innerHTML = `<img src="${item.thumb}">`;
+            thumb.onclick = () => switchMedia(index);
+            thumbStrip.appendChild(thumb);
+        });
+
+        function switchMedia(index) {
+            const item = mediaData[index];
+            mainMediaBox.innerHTML = item.type === 'image' 
+                ? `<img src="${item.src}">` 
+                : `<video controls><source src="${item.src}" type="video/mp4"></video>`;
+            
+            document.querySelectorAll('.thumbnail').forEach((t, i) => t.classList.toggle('active', i === index));
         }
 
+        // Открытие на весь экран
+        mainMediaBox.onclick = () => {
+            const activeIdx = Array.from(document.querySelectorAll('.thumbnail')).findIndex(t => t.classList.contains('active'));
+            const item = mediaData[activeIdx];
+            fsContent.innerHTML = item.type === 'image' 
+                ? `<img src="${item.src}" class="fs-content">` 
+                : `<video controls autoplay class="fs-content"><source src="${item.src}" type="video/mp4"></video>`;
+            fsOverlay.classList.add('active');
+        };
+
+        document.getElementById('fsClose').onclick = () => fsOverlay.classList.remove('active');
+        fsOverlay.onclick = (e) => { if(e.target === fsOverlay) fsOverlay.classList.remove('active'); };
+
+        // Инициализация
+        switchMedia(0);
+
+        // СКРИПТ FAQ
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const answer = q.nextElementSibling, isActive = q.classList.contains('active');
+                document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = '0');
+                if (!isActive) { q.classList.add('active'); answer.style.maxHeight = answer.scrollHeight + "px"; }
+                else q.classList.remove('active');
+            });
+        });
+
+        // ГИЛЬЗЫ
         function createShell() {
             const container = document.getElementById('shells-container');
             const shell = document.createElement('div');
@@ -336,15 +354,6 @@
             setTimeout(() => shell.remove(), duration * 1000);
         }
         setInterval(createShell, 400);
-
-        document.querySelectorAll('.faq-question').forEach(q => {
-            q.addEventListener('click', () => {
-                const answer = q.nextElementSibling, isActive = q.classList.contains('active');
-                document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = '0');
-                if (!isActive) { q.classList.add('active'); answer.style.maxHeight = answer.scrollHeight + "px"; }
-                else q.classList.remove('active');
-            });
-        });
     </script>
 </body>
 </html>
