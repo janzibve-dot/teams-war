@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAMS WAR | OFFICIAL TERMINAL</title>
+    
     <script>
-        if (window.location.href.includes('index.html') || window.location.hash) {
-            window.history.replaceState(null, null, window.location.pathname.replace('index.html', ''));
+        function cleanURL() {
+            setTimeout(() => {
+                const cleanURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.replaceState(null, null, cleanURL.replace('index.html', ''));
+            }, 10); // Небольшая задержка, чтобы браузер успел прокрутить к блоку
         }
+        // Очистка при загрузке
+        cleanURL();
+        // Очистка при каждом клике по якорю
+        window.addEventListener('hashchange', cleanURL);
     </script>
+
     <style>
         /* Шрифт Sangyo */
         @font-face {
