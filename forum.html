@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | FORUM & TERMINAL</title>
+    <title>TEAMS WAR | FORUM & TERMINAL v15.4</title>
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
         @font-face {
             font-family: 'Sangyo';
@@ -43,7 +44,7 @@
         .logo-static .t { color: var(--custom-green); }
         .logo-static .w { color: var(--custom-red); }
         
-        .nav-btn { padding: 10px 20px; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.3); font-size: 13px; transition: 0.3s; }
+        .nav-btn { padding: 10px 20px; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.3); font-size: 13px; transition: 0.3s; cursor: pointer; }
         .nav-btn:hover, .btn-active { background: var(--custom-red); border-color: var(--custom-red); }
 
         .online-counter { color: var(--custom-green); font-size: 12px; font-weight: bold; border: 1px solid var(--custom-green); padding: 5px 10px; }
@@ -72,7 +73,7 @@
         .notif-new { border-left: 3px solid var(--custom-red); background: rgba(188,0,0,0.05); }
 
         /* --- ЧАТ --- */
-        .chat-box { height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 10px; }
+        .chat-box { height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 10px; scrollbar-width: thin; scrollbar-color: var(--custom-red) transparent; }
         .chat-msg { font-size: 13px; text-transform: none; border-bottom: 1px solid #1a1a1a; padding-bottom: 5px; }
         .chat-meta { font-size: 10px; color: var(--custom-green); margin-bottom: 3px; }
         .chat-input { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 10px; margin-top: 10px; outline: none; }
@@ -100,7 +101,8 @@
         }
         .modal-content { background: #0a0a0a; border: 2px solid var(--custom-red); padding: 40px; width: 400px; }
         .modal-input { width: 100%; background: #111; border: 1px solid #333; color: white; padding: 12px; margin-bottom: 15px; outline: none; }
-        .modal-btn { width: 100%; background: var(--custom-red); color: white; border: none; padding: 12px; cursor: pointer; font-family: var(--font-main); }
+        .modal-btn { width: 100%; background: var(--custom-red); color: white; border: none; padding: 12px; cursor: pointer; font-family: var(--font-main); transition: 0.3s; }
+        .modal-btn:hover { filter: brightness(1.2); }
 
         .search-bar { width: 100%; padding: 10px; background: #111; border: 1px solid var(--custom-red); color: white; margin-bottom: 20px; }
 
@@ -111,8 +113,8 @@
 <header>
     <div class="nav-container">
         <a href="index.html" class="logo-static"><span class="t">TEAMS</span> <span class="w">WAR</span></a>
-        <a href="#" class="nav-btn" onclick="showModal('auth')">ВХОД</a>
-        <a href="#" class="nav-btn" onclick="showModal('reg')">РЕГИСТРАЦИЯ</a>
+        <a href="#" id="nav-auth-btn" class="nav-btn" onclick="showModal('auth')">ВХОД</a>
+        <a href="#" id="nav-reg-btn" class="nav-btn" onclick="showModal('reg')">РЕГИСТРАЦИЯ</a>
         <a href="index.html" class="nav-btn">ГЛАВНАЯ</a>
         <div class="online-counter">ONLINE: <span id="online-count">127</span></div>
     </div>
@@ -129,7 +131,7 @@
             </div>
             <div id="username-display">ГОСТЬ</div>
             <div class="user-stats">
-                БАЛЛЫ: <span class="points-val">0</span><br>
+                БАЛЛЫ: <span class="points-val" id="user-pts">0</span><br>
                 РЕЙТИНГ: #---
             </div>
             <button class="modal-btn" style="margin-top: 15px; font-size: 10px;" onclick="showModal('profile')">ИЗМЕНИТЬ ПРОФИЛЬ</button>
@@ -159,12 +161,8 @@
         <div class="panel">
             <div class="panel-header">ОБЩИЙ ЧАТ (LIVE)</div>
             <div class="chat-box" id="main-chat">
-                <div class="chat-msg">
-                    <div class="chat-meta">16.01.2026 12:05 | ADMIN</div>
-                    Добро пожаловать в общий чат. Соблюдайте правила!
                 </div>
-            </div>
-            <input type="text" class="chat-input" placeholder="Введите сообщение...">
+            <input type="text" id="chat-input-field" class="chat-input" placeholder="Введите сообщение..." onkeydown="if(event.key==='Enter') sendChatMessage()">
         </div>
 
         <div class="panel" style="margin-top: 20px;">
@@ -213,9 +211,9 @@
 <div id="modal-auth" class="modal-overlay">
     <div class="modal-content">
         <div class="panel-header">ВХОД В ТЕРМИНАЛ</div><br>
-        <input type="text" class="modal-input" placeholder="ЛОГИН">
-        <input type="password" class="modal-input" placeholder="ПАРОЛЬ">
-        <button class="modal-btn">ВОЙТИ</button>
+        <input type="text" id="auth-login" class="modal-input" placeholder="ЛОГИН">
+        <input type="password" id="auth-pass" class="modal-input" placeholder="ПАРОЛЬ">
+        <button class="modal-btn" onclick="handleLogin()">ВОЙТИ</button>
         <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ОТМЕНА</button>
     </div>
 </div>
@@ -223,10 +221,10 @@
 <div id="modal-reg" class="modal-overlay">
     <div class="modal-content">
         <div class="panel-header">РЕГИСТРАЦИЯ</div><br>
-        <input type="text" class="modal-input" placeholder="ЛОГИН">
-        <input type="email" class="modal-input" placeholder="E-MAIL">
-        <input type="password" class="modal-input" placeholder="ПАРОЛЬ">
-        <button class="modal-btn" style="background: var(--custom-green);">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+        <input type="text" id="reg-login" class="modal-input" placeholder="ЛОГИН">
+        <input type="email" id="reg-email" class="modal-input" placeholder="E-MAIL">
+        <input type="password" id="reg-pass" class="modal-input" placeholder="ПАРОЛЬ">
+        <button class="modal-btn" style="background: var(--custom-green);" onclick="handleRegister()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
         <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ОТМЕНА</button>
     </div>
 </div>
@@ -238,12 +236,108 @@
         <input type="file" class="modal-input" accept="image/*">
         <input type="password" class="modal-input" placeholder="СТАРЫЙ ПАРОЛЬ">
         <input type="password" class="modal-input" placeholder="НОВЫЙ ПАРОЛЬ">
-        <button class="modal-btn">СОХРАНИТЬ</button>
+        <button class="modal-btn" onclick="alert('Функция будет доступна в v16')">СОХРАНИТЬ</button>
         <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ЗАКРЫТЬ</button>
+        <button class="modal-btn" style="background:var(--custom-red); margin-top:10px;" onclick="handleLogout()">ВЫЙТИ ИЗ АККАУНТА</button>
     </div>
 </div>
 
 <script>
+    // --- ЛОГИКА БАЗЫ ДАННЫХ (FORUM v15.4) ---
+    const gun = Gun(['https://gun-manhattan.herokuapp.com/gun']);
+    const db = {
+        users: gun.get('tw_v16_users'),
+        chat: gun.get('tw_v16_chat')
+    };
+
+    let userSession = JSON.parse(localStorage.getItem('tw_sess')) || null;
+
+    // Инициализация при загрузке
+    window.onload = () => {
+        updateUI();
+        loadChat();
+    };
+
+    function updateUI() {
+        if(userSession) {
+            document.getElementById('username-display').innerText = userSession.login;
+            document.getElementById('user-pts').innerText = userSession.pts || 10;
+            document.getElementById('nav-auth-btn').style.display = 'none';
+            document.getElementById('nav-reg-btn').style.display = 'none';
+        }
+    }
+
+    function handleRegister() {
+        const login = document.getElementById('reg-login').value.trim().toLowerCase();
+        const email = document.getElementById('reg-email').value.trim();
+        const pass = document.getElementById('reg-pass').value;
+
+        if(!login || !pass) return alert("ЗАПОЛНИТЕ ПОЛЯ!");
+
+        db.users.get(login).once((data) => {
+            if(data) return alert("ЛОГИН ЗАНЯТ!");
+            db.users.get(login).put({ login, pass, email, pts: 10 }, (ack) => {
+                if(!ack.err) {
+                    alert("РЕГИСТРАЦИЯ УСПЕШНА! ВОЙДИТЕ.");
+                    closeModals();
+                }
+            });
+        });
+    }
+
+    function handleLogin() {
+        const login = document.getElementById('auth-login').value.trim().toLowerCase();
+        const pass = document.getElementById('auth-pass').value;
+
+        db.users.get(login).once((data) => {
+            if(data && data.pass === pass) {
+                userSession = data;
+                localStorage.setItem('tw_sess', JSON.stringify(data));
+                location.reload();
+            } else {
+                alert("ОШИБКА ДОСТУПА!");
+            }
+        });
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('tw_sess');
+        location.reload();
+    }
+
+    function loadChat() {
+        const chatBox = document.getElementById('main-chat');
+        db.chat.map().once((data, id) => {
+            if(!data || !data.text || document.getElementById(id)) return;
+            const msgDiv = document.createElement('div');
+            msgDiv.id = id;
+            msgDiv.className = 'chat-msg';
+            msgDiv.innerHTML = `
+                <div class="chat-meta">${data.time} | ${data.user}</div>
+                ${data.text}
+            `;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    }
+
+    function sendChatMessage() {
+        if(!userSession) return alert("ВОЙДИТЕ В ТЕРМИНАЛ!");
+        const input = document.getElementById('chat-input-field');
+        if(!input.value.trim()) return;
+
+        const now = new Date();
+        const timeStr = now.toLocaleDateString() + " " + now.toLocaleTimeString().slice(0,5);
+
+        db.chat.set({
+            user: userSession.login,
+            text: input.value,
+            time: timeStr
+        });
+        input.value = "";
+    }
+
+    // --- ВАШ ОРИГИНАЛЬНЫЙ СКРИПТ ОКРУЖЕНИЯ ---
     function showModal(type) {
         closeModals();
         if(type === 'auth') document.getElementById('modal-auth').style.display = 'flex';
@@ -255,7 +349,6 @@
         document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
     }
 
-    // Симуляция онлайна
     setInterval(() => {
         const count = 120 + Math.floor(Math.random() * 20);
         document.getElementById('online-count').innerText = count;
