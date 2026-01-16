@@ -16,7 +16,7 @@
         /* Шрифт Sangyo */
         @font-face {
             font-family: 'Sangyo';
-            src: url('Found/GamestationTextoblique.otf') format('truetype');
+            src: url('ofont.ru_Sangyo.ttf') format('truetype');
             font-weight: normal; font-style: normal;
         }
 
@@ -82,7 +82,6 @@
         #play { position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: 80px; }
         .hero-char { position: absolute; bottom: 2.6cm; height: 88vh; z-index: -1; pointer-events: none; right: 0; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); }
         
-        /* Flex-контейнеры уже обеспечивают центрирование по поперечной оси (align-items: center) */
         .hero-content-group { display: flex; flex-direction: column; align-items: center; width: min-content; }
         .main-title { font-size: clamp(80px, 12vw, 160px); font-weight: 700; line-height: 0.85; margin: 0; display: flex; flex-direction: column; align-items: center; animation: text-pulse 4s infinite ease-in-out; }
         .main-title .t { color: var(--custom-green); font-family: 'TW', serif; text-shadow: 0 0 30px rgba(119, 124, 78, 0.4); }
@@ -167,166 +166,4 @@
         .faq-link { color: var(--custom-red); text-decoration: underline; transition: 0.3s; }
 
         /* --- ФУТЕР --- */
-        footer { padding: 100px 40px 60px; border-top: 4px solid var(--custom-red); background: transparent; }
-        .footer-nav { display: flex; gap: 30px; margin-bottom: 60px; }
-        .footer-btn { flex: 1; text-align: center; border: 1px solid #222; padding: 25px; color: #777; text-decoration: none; font-size: 16px; display: flex; align-items: center; justify-content: center; }
-
-        /* ОБНОВЛЕНО: УБРАН ФОН У ПОДПИСИ (v104) */
-        .footer-signature {
-            width: 5cm; height: 5mm; margin: 30px auto 0;
-            background-color: transparent; /* Фон теперь прозрачный */
-            color: var(--custom-red);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 900; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); white-space: nowrap;
-        }
-
-        /* ТВОЙ НОВЫЙ ПОРТАЛ ФОРУМА (Overlay) */
-        #forum-portal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999; display: none; background: rgba(0,0,0,0.98); border: none;
-        }
-
-        @keyframes text-pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 30px rgba(188, 0, 0, 0.5); } 50% { opacity: 0.8; text-shadow: 0 0 60px rgba(188, 0, 0, 0.8); } }
-    </style>
-</head>
-<body id="top">
-
-    <header>
-        <div class="nav-container">
-            <div class="logo-static"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-            <a href="#top" class="nav-btn">ИГРАТЬ</a>
-            <a href="#about" class="nav-btn">ОБ ИГРЕ</a>
-            <a href="#faq" class="nav-btn">FAQ</a>
-            <a href="javascript:void(0)" onclick="openForum()" class="nav-btn btn-forum">ФОРУМ</a>
-        </div>
-        <div class="age-limit">6+</div>
-    </header>
-
-    <div id="shells-container"></div>
-
-    <section id="play">
-        <img src="new-right-char.png" class="hero-char" alt="Боец">
-        <div class="hero-content-group">
-            <div class="main-title">
-                <span class="t">TEAMS</span>
-                <div class="war-btn-wrap">
-                    <span class="w">WAR</span>
-                    <a href="https://vkplay.ru/play/game/teams-war/" target="_blank" class="battle-btn">В БОЙ</a>
-                    <div class="social-links-wrap">
-                        <a href="https://vk.com/niksongame" target="_blank" class="social-link-btn"><img src="ВК.png" alt="VK"></a>
-                        <a href="https://t.me/niks_on_game" target="_blank" class="social-link-btn"><img src="ТГ.png" alt="Telegram"></a>
-                        <a href="https://www.youtube.com/@NiksOnGame" target="_blank" class="social-link-btn"><img src="ЮТ.png" alt="YouTube"></a>
-                        <a href="https://rutube.ru/channel/12011050/" target="_blank" class="social-link-btn"><img src="Рут.png" alt="Rutube"></a>
-                        <a href="https://www.tiktok.com/@niksongame" target="_blank" class="social-link-btn"><img src="Тик ток.png" alt="TikTok"></a>
-                        <a href="https://live.vkvideo.ru/niksongame" target="_blank" class="social-link-btn"><img src="ВКВидео.png" alt="VK Video"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="red-boundary-line"></div>
-    </section>
-
-    <div class="site-content-wrapper">
-        <section id="about" class="full-section">
-            <h2 class="big-title">ОБ ИГРЕ</h2>
-            <div class="stats-grid">
-                <a href="#" class="stat-btn"><span class="stat-num">2</span>КОМАНДЫ</a>
-                <a href="#" class="stat-btn"><span class="stat-num">7+</span>РЕЖИМОВ</a>
-                <a href="#" class="stat-btn"><span class="stat-num">50+</span>ОРУЖИЕ</a>
-                <a href="#" class="stat-btn"><span class="stat-num">127+</span>ОПЕРАТИВНИКОВ</a>
-                <a href="#" class="stat-btn"><span class="stat-num">10+</span>КАРТ</a>
-            </div>
-            <p style="font-size: 24px; color: #ddd; border-left: 6px solid var(--custom-red); padding-left: 40px;">ИСПЫТАЙТЕ НАСТОЯЩИЙ АДРЕНАЛИН В ДИНАМИЧНЫХ БОЯХ ПРОТИВ РЕАЛЬНЫХ ИГРОКОВ. ОБЪЕДИНЯЙТЕСЬ В КЛАНЫ, ЧТОБЫ ПОБЕДИТЬ ПРОТИВНИКА.</p>
-            <div class="teams-row">
-                <div class="team-card alpha">
-                    <div style="text-align: left;">
-                        <span class="team-name" style="color:var(--custom-green); display: block; margin-bottom: 10px; text-shadow: 0 0 15px rgba(119, 124, 78, 0.6);">АЛЬФА</span>
-                        <p style="color:#888; font-size:18px; text-transform: none; font-weight: 600;">ЭЛИТНЫЙ СПЕЦНАЗ, ПРОТИВОСТОЯЩИЙ ПОСТОЯННОЙ<br>угрозе со стороны боевиков.</p>
-                    </div>
-                    <img src="T_TeamAlphaIcon.png" alt="">
-                </div>
-                <div class="team-card terror">
-                    <img src="T_TeamTerrorIcon.png" alt="">
-                    <div style="text-align: right;">
-                        <span class="team-name" style="color:var(--custom-red); display: block; margin-bottom: 10px; text-shadow: 0 0 15px rgba(188, 0, 0, 0.6);">БОЕВИКИ</span>
-                        <p style="color:#888; font-size:18px; text-transform: none; font-weight: 600;">ПРОТИВОБОРСТВУЮЩАЯ СТОРОНА, СОЗДАЮЩЕЙ<br>постоянные угрозы мировому порядку.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="faq" class="full-section">
-            <div id="faq-section">
-                <div class="faq-title-horiz">FAQ</div>
-                <div class="faq-list">
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>01 // Системные требования</span>
-                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-                            <span>▼</span>
-                        </div>
-                        <div class="faq-answer"><div class="faq-answer-inner">СИСТЕМНЫЕ ТРЕБОВАНИЯ ИГРЫ НА <a href="https://vkplay.ru/play/game/teams-war/" class="faq-link">VK Play</a></div></div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>02 // Как скачать?</span>
-                            <div class="shell-text"><span class="t">TEAMS</span> <span class="w">WAR</span></div>
-                            <span>▼</span>
-                        </div>
-                        <div class="faq-answer"><div class="faq-answer-inner">ИСПОЛЬЗУЙТЕ ЛАУНЧЕР VK PLAY.</div></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="footer-nav">
-                <a href="privacy.html" class="footer-btn">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</a>
-                <a href="terms.html" class="footer-btn">ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</a>
-                <a href="rules.html" class="footer-btn">ПРАВИЛА</a>
-            </div>
-            <div class="footer-signature">NIKS ON GAME</div>
-        </footer>
-    </div>
-
-    <iframe id="forum-portal" src="forum.html"></iframe>
-
-    <script>
-        // Функция открытия форума
-        function openForum() { 
-            document.getElementById('forum-portal').style.display = 'block'; 
-            document.body.style.overflow = 'hidden'; 
-        }
-        // Функция закрытия (сигнал от forum.html)
-        window.addEventListener('message', (e) => { 
-            if(e.data === 'closeForum') {
-                document.getElementById('forum-portal').style.display = 'none'; 
-                document.body.style.overflow = 'auto'; 
-            }
-        });
-
-        // ТВОИ ГИЛЬЗЫ
-        function createShell() {
-            const container = document.getElementById('shells-container');
-            const shell = document.createElement('div');
-            shell.className = 'shell';
-            shell.style.left = Math.random() * 100 + 'vw';
-            const duration = 2.5 + Math.random() * 2;
-            shell.style.animation = `shell-fall ${duration}s linear forwards`;
-            container.appendChild(shell);
-            setTimeout(() => shell.remove(), duration * 1000);
-        }
-        setInterval(createShell, 400);
-
-        // ТВОЙ FAQ
-        document.querySelectorAll('.faq-question').forEach(q => {
-            q.addEventListener('click', () => {
-                const answer = q.nextElementSibling, isActive = q.classList.contains('active');
-                document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = '0');
-                document.querySelectorAll('.faq-question').forEach(btn => btn.classList.remove('active'));
-                if (!isActive) { q.classList.add('active'); answer.style.maxHeight = answer.scrollHeight + "px"; }
-            });
-        });
-    </script>
-</body>
-</html>
+        footer { padding: 100
