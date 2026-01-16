@@ -120,6 +120,11 @@
         .mode-item h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
         .mode-item p { font-size: 18px; color: #aaa; text-transform: uppercase; margin: 0; }
 
+        /* --- НОВЫЙ БЛОК МЕДИА --- */
+        .media-tape { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; scrollbar-width: thin; scrollbar-color: var(--custom-red) transparent; }
+        .media-tape img { height: 250px; border: 2px solid #222; transition: 0.3s; cursor: pointer; }
+        .media-tape img:hover { border-color: var(--custom-red); transform: scale(1.02); }
+
         /* --- FAQ --- */
         #faq { margin-top: -2.75cm; border-top: 1mm solid var(--custom-red); padding-top: 0.75cm !important; min-height: auto; }
         .faq-title-horiz { font-size: 100px; color: var(--custom-green); text-align: left; margin-bottom: 40px; font-weight: 900; text-shadow: 0 0 15px rgba(119, 124, 78, 0.3); }
@@ -243,6 +248,17 @@
                         <p style="color:#888; font-size:18px; text-transform: none; font-weight: 600;">ПРОТИВОБОРСТВУЮЩАЯ СТОРОНА, СОЗДАЮЩЕЙ<br>постоянные угрозы мировому порядку.</p>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section id="media" class="full-section">
+            <h2 class="big-title">МЕДИА</h2>
+            <div class="media-tape">
+                <img src="screenshot1.png" alt="Screenshot 1">
+                <img src="screenshot2.png" alt="Screenshot 2">
+                <img src="screenshot3.png" alt="Screenshot 3">
+                <img src="screenshot4.png" alt="Screenshot 4">
+                <img src="screenshot5.png" alt="Screenshot 5">
             </div>
         </section>
 
