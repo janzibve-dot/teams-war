@@ -49,7 +49,6 @@
             background-size: cover; background-position: center; filter: brightness(0.2) blur(6px);
         }
 
-        /* --- ХЕДЕР --- */
         header {
             position: sticky; top: 0; z-index: 1500;
             padding: 20px 40px; background: #050505;
@@ -70,12 +69,10 @@
 
         .age-limit { font-size: 18px; font-weight: 700; color: var(--custom-red); border: 4px solid var(--custom-red); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #050505; flex-shrink: 0; }
 
-        /* --- ГИЛЬЗЫ --- */
         #shells-container { position: fixed; top: 90px; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 100; }
         .shell { position: absolute; width: 4px; height: 12px; background: linear-gradient(to bottom, #d4af37, #b8860b); border-radius: 1px; opacity: 0.8; }
         @keyframes shell-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        /* --- ГЛАВНЫЙ ЭКРАН --- */
         #play { position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: 80px; }
         .hero-char { position: absolute; bottom: 2.6cm; height: 88vh; z-index: -1; pointer-events: none; right: 0; filter: drop-shadow(0 0 30px rgba(188, 0, 0, 0.4)); }
         
@@ -89,11 +86,13 @@
         .battle-btn:hover { background: white; color: black; box-shadow: 0 0 50px var(--custom-red); }
         .red-boundary-line { position: absolute; bottom: 2.6cm; left: 0; width: 100%; height: 1.5mm; background: var(--custom-red); z-index: 5; box-shadow: 0 0 15px rgba(188, 0, 0, 0.4); }
 
-        /* --- ОБЕРТКА КОНТЕНТА --- */
         .site-content-wrapper { background: rgba(5, 5, 5, 0.9); position: relative; z-index: 10; margin-top: -2.6cm; }
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
-        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
+        
+        /* ПРАВКА: Подъем секции ОБ ИГРЕ на 2.5 см */
+        #about.full-section { padding-top: 25px; }
 
+        .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
         .section-label { color: var(--custom-green); font-size: 22px; font-weight: 700; margin-bottom: 10px; display: block; }
         .stats-grid { display: flex; gap: 20px; margin-bottom: 50px; }
         .stat-btn { flex: 1; border: 1px solid #333; padding: 30px 10px; text-align: center; text-decoration: none; color: white; transition: 0.3s; background: rgba(255,255,255,0.02); }
@@ -104,24 +103,21 @@
         .team-card { flex: 1; border: 1px solid #222; padding: 40px; position: relative; overflow: hidden; background: rgba(255,255,255,0.02); transition: 0.3s ease; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
         .team-card img { height: calc(140px + 7mm); width: auto; opacity: 1; transition: 0.4s ease-in-out; }
         .team-card:hover img { transform: scale(1.15); }
-
         .team-card.alpha { border-left: 6px solid var(--custom-green); }
         .team-card.terror { border-right: 6px solid var(--custom-red); text-align: right; }
         .team-name { font-size: 44px; font-weight: 700; margin-bottom: 20px; display: block; }
 
-        .modes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin: 60px 0; }
-        .mode-item { border: 1px solid #222; padding: 30px; transition: 0.3s; background: rgba(0,0,0,0.4); text-align: center; }
-        .mode-item:hover { border-color: var(--custom-red); }
-        .mode-item h3 { color: var(--custom-red); margin: 0 0 10px 0; font-size: 22px; }
-        .mode-item p { font-size: 18px; color: #aaa; text-transform: uppercase; margin: 0; }
-
-        /* --- ПРАВКА: СТИЛИ ДЛЯ МЕДИА --- */
-        #media { margin-top: -10cm; border-top: 1mm solid var(--custom-red); }
+        /* ПРАВКА: БЛОК МЕДИА С КРАСНОЙ ЧЕРТОЙ */
+        #media { 
+            margin-top: -10cm; 
+            border-top: 3px solid var(--custom-red); /* Красная черта */
+            padding-top: 1cm; /* Отступ 1 см выше слова МЕДИА */
+        }
         .media-tape { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; scrollbar-width: thin; scrollbar-color: var(--custom-red) transparent; justify-content: flex-start; }
         .media-tape img, .media-tape video { height: 250px; border: 2px solid #222; transition: 0.3s; cursor: pointer; object-fit: cover; }
-        .media-tape img:hover, .media-tape video:hover { border-color: var(--custom-red); transform: scale(1.02); }
+        .media-tape img:hover { border-color: var(--custom-red); transform: scale(1.02); }
 
-        /* МОДАЛЬНОЕ ОКНО (FULLSCREEN) */
+        /* ПРАВКА: МОДАЛЬНОЕ ОКНО (FULLSCREEN) */
         .media-modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; cursor: pointer; }
         .media-modal-content { max-width: 90%; max-height: 90%; border: 2px solid var(--custom-red); box-shadow: 0 0 50px rgba(188, 0, 0, 0.5); }
 
@@ -129,32 +125,17 @@
         #faq { margin-top: -2.75cm; border-top: 1mm solid var(--custom-red); padding-top: 0.75cm !important; min-height: auto; }
         .faq-title-horiz { font-size: 100px; color: var(--custom-green); text-align: left; margin-bottom: 40px; font-weight: 900; text-shadow: 0 0 15px rgba(119, 124, 78, 0.3); }
         .faq-item { border-bottom: 1px solid #222; margin-bottom: 15px; width: calc(100% - 10mm); margin-left: auto; }
-
-        .faq-question { 
-            padding: 30px; display: flex; justify-content: space-between; align-items: center; 
-            cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02);
-            border: 1px solid transparent; position: relative; overflow: hidden;
-        }
-        .faq-question::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('shell.png'); background-repeat: no-repeat;
-            background-position: center; background-size: contain; opacity: 0.27; 
-            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); transform: scale(1.3); 
-            pointer-events: none; z-index: 1;
-        }
-
+        .faq-question { padding: 30px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); border: 1px solid transparent; position: relative; overflow: hidden; }
+        .faq-question::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('shell.png'); background-repeat: no-repeat; background-position: center; background-size: contain; opacity: 0.27; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6)); transform: scale(1.3); pointer-events: none; z-index: 1; }
         .shell-text { position: absolute; top: calc(50% - 2mm); left: calc(50% + 4mm); transform: translate(-50%, -50%); opacity: 0.7; font-size: 10px; font-weight: 900; letter-spacing: 1px; z-index: 1.5; pointer-events: none; white-space: nowrap; }
         .shell-text .t { color: var(--custom-green); }
         .shell-text .w { color: var(--custom-red); }
-
         .faq-question span { position: relative; z-index: 2; }
         .faq-item:hover .faq-question { border: 1px solid var(--custom-green); box-shadow: 0 0 20px rgba(119, 124, 78, 0.4); color: var(--custom-green); }
-
         .social-links-wrap { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px; width: 100%; }
         .social-link-btn { background: transparent; border: none; cursor: pointer; transition: 0.3s; padding: 5px; text-decoration: none; }
         .social-link-btn img { width: 80px; height: auto; display: block; filter: drop-shadow(0 0 10px rgba(119, 124, 78, 0.3)); }
         .social-link-btn:hover img { transform: scale(1.1); filter: drop-shadow(0 0 20px var(--custom-green)); }
-
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); }
         .faq-answer-inner { padding: 40px 30px; font-size: 18px; color: #aaa; text-transform: none; }
         .faq-link { color: var(--custom-red); text-decoration: underline; transition: 0.3s; }
