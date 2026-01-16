@@ -94,7 +94,9 @@
 
         /* --- ОБЕРТКА КОНТЕНТА --- */
         .site-content-wrapper { background: rgba(5, 5, 5, 0.9); position: relative; z-index: 10; margin-top: -2.6cm; }
+        /* ИЗМЕНЕНО: Уменьшен padding-top для секции #about */
         section.full-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 40px; border-top: 1px solid #1a1a1a; }
+        #about.full-section { padding-top: 20px; } 
         .big-title { font-size: 100px; color: var(--custom-red); margin-bottom: 30px; line-height: 1; }
 
         .section-label { color: var(--custom-green); font-size: 22px; font-weight: 700; margin-bottom: 10px; display: block; }
@@ -121,7 +123,6 @@
         .mode-item p { font-size: 18px; color: #aaa; text-transform: uppercase; margin: 0; }
 
         /* --- НОВЫЙ БЛОК МЕДИА --- */
-        /* Добавлена красная линия над секцией */
         #media { border-top: 3px solid var(--custom-red); }
         .media-tape { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; scrollbar-width: thin; scrollbar-color: var(--custom-red) transparent; }
         .media-tape img { height: 250px; border: 2px solid #222; transition: 0.3s; cursor: pointer; }
