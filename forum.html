@@ -2,56 +2,265 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TEAMS WAR | FORUM v15.2</title>
-    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEAMS WAR | FORUM & TERMINAL</title>
     <style>
-        /* ИСПРАВЛЕНО: Путь к шрифту */
-        @font-face { font-family: 'Sangyo'; src: url('ofont.ru_Sangyo.ttf') format('truetype'); }
-        :root { --bg: #050505; --card: #0d0d0d; --green: #777c4e; --red: #bc0000; --glow: rgba(188, 0, 0, 0.4); --font: 'Sangyo', sans-serif; }
-        * { box-sizing: border-box; }
-        body { background: var(--bg); color: white; margin: 0; font-family: var(--font); text-transform: uppercase; overflow-x: hidden; }
-        header { padding: 15px 40px; background: #000; border-bottom: 3px solid var(--red); display: flex; align-items: center; justify-content: space-between; }
-        .main-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; padding: 20px 40px; }
-        .card { background: var(--card); border: 1px solid var(--red); padding: 20px; border-radius: 8px; margin-bottom: 15px; }
-        .btn { background: var(--red); color: white; border: none; padding: 12px; cursor: pointer; width: 100%; font-family: var(--font); }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 5000; display: none; align-items: center; justify-content: center; }
-        /* ИСПРАВЛЕНО: Кнопка ведет назад на сайт */
-        .exit-btn { position: fixed; bottom: 20px; right: 20px; background: var(--red); color: white !important; padding: 10px 25px; border-radius: 20px; text-decoration: none !important; font-weight: bold; z-index: 6000; box-shadow: 0 0 15px var(--red); }
+        @font-face {
+            font-family: 'Sangyo';
+            src: url('ofont.ru_Sangyo.ttf') format('truetype');
+            font-weight: normal; font-style: normal;
+        }
+
+        :root { 
+            --bg: #050505; 
+            --custom-green: #777c4e; 
+            --custom-red: #bc0000;   
+            --text-white: #ffffff; 
+            --font-main: 'Sangyo', 'Oswald', sans-serif;
+            --panel-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+        body {
+            margin: 0; background-color: var(--bg); color: var(--text-white);
+            font-family: var(--font-main); text-transform: uppercase;
+        }
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -5; background-image: url('bg.jpg.png');
+            background-size: cover; background-position: center; filter: brightness(0.15) blur(8px);
+        }
+
+        /* --- ХЕДЕР --- */
+        header {
+            position: sticky; top: 0; z-index: 1500;
+            padding: 20px 40px; background: #050505;
+            border-bottom: 3px solid var(--custom-red);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-container { display: flex; align-items: center; flex: 1; gap: 15px; }
+        .logo-static { font-size: 24px; text-decoration: none; margin-right: 30px; }
+        .logo-static .t { color: var(--custom-green); }
+        .logo-static .w { color: var(--custom-red); }
+        
+        .nav-btn { padding: 10px 20px; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.3); font-size: 13px; transition: 0.3s; }
+        .nav-btn:hover, .btn-active { background: var(--custom-red); border-color: var(--custom-red); }
+
+        .online-counter { color: var(--custom-green); font-size: 12px; font-weight: bold; border: 1px solid var(--custom-green); padding: 5px 10px; }
+
+        /* --- СЕТКА ФОРУМА --- */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 20px;
+            padding: 40px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .panel { background: var(--panel-bg); border: 1px solid #222; padding: 20px; position: relative; }
+        .panel-header { color: var(--custom-red); border-bottom: 1px solid var(--custom-red); margin-bottom: 15px; padding-bottom: 5px; font-size: 16px; }
+
+        /* --- ПРОФИЛЬ И УВЕДОМЛЕНИЯ --- */
+        .user-mini-profile { text-align: center; }
+        .avatar-box { width: 120px; height: 120px; border: 2px solid var(--custom-green); margin: 0 auto 15px; background: #111; overflow: hidden; }
+        .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+        .user-stats { font-size: 12px; margin-top: 10px; color: #888; }
+        .points-val { color: var(--custom-green); font-weight: bold; }
+
+        .notification-item { font-size: 11px; padding: 10px; border-bottom: 1px solid #222; color: #aaa; text-transform: none; }
+        .notif-new { border-left: 3px solid var(--custom-red); background: rgba(188,0,0,0.05); }
+
+        /* --- ЧАТ --- */
+        .chat-box { height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 10px; }
+        .chat-msg { font-size: 13px; text-transform: none; border-bottom: 1px solid #1a1a1a; padding-bottom: 5px; }
+        .chat-meta { font-size: 10px; color: var(--custom-green); margin-bottom: 3px; }
+        .chat-input { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 10px; margin-top: 10px; outline: none; }
+
+        /* --- СПИСОК ТЕМ --- */
+        .topic-row { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 15px; border: 1px solid #222; margin-bottom: 10px; transition: 0.3s;
+            cursor: pointer; text-decoration: none; color: white;
+        }
+        .topic-row:hover { border-color: var(--custom-green); background: rgba(119, 124, 78, 0.05); }
+        .topic-title { font-size: 18px; color: var(--text-white); }
+        .topic-author { font-size: 11px; color: #666; display: flex; align-items: center; gap: 8px; margin-top: 5px; }
+        .author-img-small { width: 20px; height: 20px; border: 1px solid var(--custom-green); }
+
+        /* --- РЕЙТИНГ --- */
+        .rating-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a1a1a; font-size: 14px; }
+        .rank-num { color: var(--custom-red); width: 30px; }
+
+        /* --- МОДАЛЬНЫЕ ОКНА --- */
+        .modal-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: rgba(0,0,0,0.9); z-index: 2000; display: none;
+            align-items: center; justify-content: center;
+        }
+        .modal-content { background: #0a0a0a; border: 2px solid var(--custom-red); padding: 40px; width: 400px; }
+        .modal-input { width: 100%; background: #111; border: 1px solid #333; color: white; padding: 12px; margin-bottom: 15px; outline: none; }
+        .modal-btn { width: 100%; background: var(--custom-red); color: white; border: none; padding: 12px; cursor: pointer; font-family: var(--font-main); }
+
+        .search-bar { width: 100%; padding: 10px; background: #111; border: 1px solid var(--custom-red); color: white; margin-bottom: 20px; }
+
     </style>
 </head>
 <body>
-    <div id="auth-box" class="overlay">
-        <div class="card" style="width: 400px; text-align: center;">
-            <h2>ВХОД</h2>
-            <input type="text" id="a-login" style="width:100%; padding:10px; margin:10px 0;" placeholder="ЛОГИН">
-            <input type="password" id="a-pass" style="width:100%; padding:10px; margin:10px 0;" placeholder="ПАРОЛЬ">
-            <button class="btn" onclick="processAuth()">ПОДТВЕРДИТЬ</button>
-        </div>
+
+<header>
+    <div class="nav-container">
+        <a href="index.html" class="logo-static"><span class="t">TEAMS</span> <span class="w">WAR</span></a>
+        <a href="#" class="nav-btn" onclick="showModal('auth')">ВХОД</a>
+        <a href="#" class="nav-btn" onclick="showModal('reg')">РЕГИСТРАЦИЯ</a>
+        <a href="index.html" class="nav-btn">ГЛАВНАЯ</a>
+        <div class="online-counter">ONLINE: <span id="online-count">127</span></div>
     </div>
-    <header>
-        <div><span style="color:var(--green)">TEAMS</span> <span style="color:var(--red)">WAR</span></div>
-        <div id="u-info" style="font-size:12px;">ГОСТЬ | 0 БАЛЛОВ</div>
-    </header>
-    <main class="main-layout">
-        <section><button class="btn" onclick="alert('ТЕМЫ БУДУТ В v16')">+ СОЗДАТЬ ТЕМУ</button></section>
-        <aside><div class="card"><b>ЧАТ</b><div id="chat" style="height:300px; overflow-y:auto; border-bottom:1px solid #222;"></div></div></aside>
+    <div class="age-limit" style="color: var(--custom-red); border: 2px solid var(--custom-red); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">6+</div>
+</header>
+
+<div class="main-layout">
+    
+    <aside>
+        <div class="panel user-mini-profile">
+            <div class="panel-header">ВАШ ТЕРМИНАЛ</div>
+            <div class="avatar-box">
+                <img src="default-avatar.png" id="user-avatar" alt="Avatar">
+            </div>
+            <div id="username-display">ГОСТЬ</div>
+            <div class="user-stats">
+                БАЛЛЫ: <span class="points-val">0</span><br>
+                РЕЙТИНГ: #---
+            </div>
+            <button class="modal-btn" style="margin-top: 15px; font-size: 10px;" onclick="showModal('profile')">ИЗМЕНИТЬ ПРОФИЛЬ</button>
+        </div>
+
+        <div class="panel" style="margin-top: 20px;">
+            <div class="panel-header">УВЕДОМЛЕНИЯ</div>
+            <div id="notif-list">
+                <div class="notification-item notif-new">Добро пожаловать в TEAMS WAR! Начните общение.</div>
+                <div class="notification-item">+5 баллов за регистрацию.</div>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 20px;">
+            <div class="panel-header">ТОП ОПЕРАТИВНИКОВ</div>
+            <div id="rating-list">
+                <div class="rating-item"><span class="rank-num">01</span> ALPHA_LEADER <span class="points-val">2540</span></div>
+                <div class="rating-item"><span class="rank-num">02</span> GHOST_DOG <span class="points-val">1920</span></div>
+                <div class="rating-item"><span class="rank-num">03</span> STALKER_77 <span class="points-val">1500</span></div>
+            </div>
+        </div>
+    </aside>
+
+    <main>
+        <input type="text" class="search-bar" placeholder="ПОИСК ПО ТЕМАМ...">
+        
+        <div class="panel">
+            <div class="panel-header">ОБЩИЙ ЧАТ (LIVE)</div>
+            <div class="chat-box" id="main-chat">
+                <div class="chat-msg">
+                    <div class="chat-meta">16.01.2026 12:05 | ADMIN</div>
+                    Добро пожаловать в общий чат. Соблюдайте правила!
+                </div>
+            </div>
+            <input type="text" class="chat-input" placeholder="Введите сообщение...">
+        </div>
+
+        <div class="panel" style="margin-top: 20px;">
+            <div class="panel-header" style="display: flex; justify-content: space-between;">
+                ЛЕНТА ТЕМ 
+                <button onclick="showModal('create-topic')" style="background: none; border: 1px solid var(--custom-green); color: var(--custom-green); cursor: pointer; font-size: 10px;">+ СОЗДАТЬ ТЕМУ</button>
+            </div>
+            <div id="topics-container">
+                <a href="#" class="topic-row">
+                    <div>
+                        <div class="topic-title">Как быстро прокачать штурмовика?</div>
+                        <div class="topic-author">
+                            <div class="author-img-small"><img src="default-avatar.png" width="100%"></div>
+                            АВТОР: RECRUIT_X | СЕГОДНЯ 10:20
+                        </div>
+                    </div>
+                    <div style="text-align: right; color: var(--custom-green); font-size: 12px;">ОТВЕТОВ: 12</div>
+                </a>
+            </div>
+        </div>
     </main>
-    <a href="index.html" class="exit-btn">ВЕРНУТЬСЯ НА САЙТ</a>
-    <script>
-        const gun = Gun(['https://gun-manhattan.herokuapp.com/gun']);
-        const db = { users: gun.get('tw_v16_users'), chat: gun.get('tw_v16_chat') };
-        let user = JSON.parse(localStorage.getItem('tw_sess')) || null;
-        if(!user) document.getElementById('auth-box').style.display = 'flex';
-        function processAuth() {
-            const login = document.getElementById('a-login').value.trim().toLowerCase();
-            const pass = document.getElementById('a-pass').value;
-            if(login && pass) {
-                db.users.get(login).once(d => {
-                    if(d && d.pass === pass) { localStorage.setItem('tw_sess', JSON.stringify(d)); location.reload(); }
-                    else alert("ОШИБКА!");
-                });
-            }
-        }
-    </script>
+
+    <aside>
+        <div class="panel">
+            <div class="panel-header">ДРУЗЬЯ</div>
+            <div id="friends-list">
+                <div class="rating-item" style="border: none;">
+                    <span>USER_44</span>
+                    <button style="font-size: 9px; background: var(--custom-red); color: white; border: none;">УДАЛИТЬ</button>
+                </div>
+            </div>
+            <input type="text" class="chat-input" placeholder="Найти игрока...">
+        </div>
+
+        <div class="panel" style="margin-top: 20px;">
+            <div class="panel-header">ЛОГ СОБЫТИЙ</div>
+            <div id="event-log" style="font-size: 10px; color: #666;">
+                - Создана тема: "Баг на карте Лес"<br>
+                - Новое сообщение в ЛС от Admin<br>
+                - Вам начислено 10 баллов
+            </div>
+        </div>
+    </aside>
+</div>
+
+<div id="modal-auth" class="modal-overlay">
+    <div class="modal-content">
+        <div class="panel-header">ВХОД В ТЕРМИНАЛ</div><br>
+        <input type="text" class="modal-input" placeholder="ЛОГИН">
+        <input type="password" class="modal-input" placeholder="ПАРОЛЬ">
+        <button class="modal-btn">ВОЙТИ</button>
+        <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ОТМЕНА</button>
+    </div>
+</div>
+
+<div id="modal-reg" class="modal-overlay">
+    <div class="modal-content">
+        <div class="panel-header">РЕГИСТРАЦИЯ</div><br>
+        <input type="text" class="modal-input" placeholder="ЛОГИН">
+        <input type="email" class="modal-input" placeholder="E-MAIL">
+        <input type="password" class="modal-input" placeholder="ПАРОЛЬ">
+        <button class="modal-btn" style="background: var(--custom-green);">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+        <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ОТМЕНА</button>
+    </div>
+</div>
+
+<div id="modal-profile" class="modal-overlay">
+    <div class="modal-content">
+        <div class="panel-header">ПРОФИЛЬ</div><br>
+        <label style="font-size: 10px;">СМЕНИТЬ АВАТАР:</label>
+        <input type="file" class="modal-input" accept="image/*">
+        <input type="password" class="modal-input" placeholder="СТАРЫЙ ПАРОЛЬ">
+        <input type="password" class="modal-input" placeholder="НОВЫЙ ПАРОЛЬ">
+        <button class="modal-btn">СОХРАНИТЬ</button>
+        <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ЗАКРЫТЬ</button>
+    </div>
+</div>
+
+<script>
+    function showModal(type) {
+        closeModals();
+        if(type === 'auth') document.getElementById('modal-auth').style.display = 'flex';
+        if(type === 'reg') document.getElementById('modal-reg').style.display = 'flex';
+        if(type === 'profile') document.getElementById('modal-profile').style.display = 'flex';
+    }
+
+    function closeModals() {
+        document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+    }
+
+    // Симуляция онлайна
+    setInterval(() => {
+        const count = 120 + Math.floor(Math.random() * 20);
+        document.getElementById('online-count').innerText = count;
+    }, 5000);
+</script>
+
 </body>
 </html>
