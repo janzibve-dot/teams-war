@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | FORUM v15.6 OFFICIAL</title>
+    <title>TEAMS WAR | FORUM v15.7 OFFICIAL</title>
     <style>
+        /* Шрифты и переменные оставлены без изменений */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -128,7 +129,6 @@
 </header>
 
 <div class="main-layout">
-    
     <aside>
         <div class="panel user-mini-profile">
             <div class="panel-header">ВАШ ТЕРМИНАЛ</div>
@@ -161,7 +161,6 @@
 
     <main>
         <input type="text" class="search-bar" placeholder="ПОИСК ПО ТЕМАМ...">
-        
         <div class="panel">
             <div class="panel-header">ОБЩИЙ ЧАТ (LIVE)</div>
             <div class="chat-box" id="main-chat"></div>
@@ -235,13 +234,25 @@
 
 <script>
 /**
- * Глобальный объект состояния (AppState)
- * Хранит данные в localStorage
+ * БЕЗОПАСНЫЙ JavaScript ДЛЯ FORUM v15.7
+ * Использует localStorage для хранения данных
  */
+
+// Попытка загрузить данные без ошибок (White Page Fix)
+function safeData(key) {
+    try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch(e) {
+        console.error("Ошибка чтения памяти:", e);
+        return null;
+    }
+}
+
 const AppState = {
-    user: JSON.parse(localStorage.getItem('tw_user')) || null,
-    chat: JSON.parse(localStorage.getItem('tw_chat')) || [],
-    topics: JSON.parse(localStorage.getItem('tw_topics')) || [],
+    user: safeData('tw_user'),
+    chat: safeData('tw_chat') || [],
+    topics: safeData('tw_topics') || [],
     activeTopic: null
 };
 
@@ -266,9 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function sync() {
-    localStorage.setItem('tw_user', JSON.stringify(AppState.user));
-    localStorage.setItem('tw_chat', JSON.stringify(AppState.chat));
-    localStorage.setItem('tw_topics', JSON.stringify(AppState.topics));
+    try {
+        localStorage.setItem('tw_user', JSON.stringify(AppState.user));
+        localStorage.setItem('tw_chat', JSON.stringify(AppState.chat));
+        localStorage.setItem('tw_topics', JSON.stringify(AppState.topics));
+    } catch(e) { console.error("Память переполнена"); }
 }
 
 function updateUI() {
@@ -277,20 +290,20 @@ function updateUI() {
     const authBtn = document.getElementById('nav-auth-btn');
     const regBtn = document.getElementById('nav-reg-btn');
 
-    if (AppState.user) {
+    if (AppState.user && nameDisp) {
         nameDisp.innerText = AppState.user.login.toUpperCase();
-        ptsDisp.innerText = AppState.user.pts || 10;
+        if(ptsDisp) ptsDisp.innerText = AppState.user.pts || 10;
         if(authBtn) authBtn.style.display = 'none';
         if(regBtn) regBtn.style.display = 'none';
-    } else {
+    } else if (nameDisp) {
         nameDisp.innerText = "ГОСТЬ";
-        ptsDisp.innerText = "0";
+        if(ptsDisp) ptsDisp.innerText = "0";
         if(authBtn) authBtn.style.display = 'block';
         if(regBtn) regBtn.style.display = 'block';
     }
 }
 
-// 1. ПОЛЬЗОВАТЕЛЬ
+// --- ФУНКЦИИ ПОЛЬЗОВАТЕЛЯ ---
 function handleLogin() {
     const val = document.getElementById('auth-login').value.trim();
     if(!val) return;
@@ -309,7 +322,7 @@ function handleLogout() {
     AppState.user = null; sync(); location.reload();
 }
 
-// 2. ЧАТ
+// --- ЧАТ ---
 function renderChat() {
     const box = document.getElementById('main-chat');
     if(!box) return;
@@ -337,7 +350,7 @@ function sendChatMessage() {
     }
 }
 
-// 3. ТЕМЫ
+// --- ТЕМЫ ---
 function handleCreateTopic() {
     if(!AppState.user) return;
     const input = document.getElementById('topic-title-input');
@@ -373,7 +386,7 @@ function renderTopics() {
     `).join('');
 }
 
-// 4. OVERLAY ТЕМЫ
+// --- OVERLAY ТЕМЫ ---
 function openTopicOverlay(id) {
     const topic = AppState.topics.find(t => t.id === id);
     if(!topic) return;
@@ -391,7 +404,7 @@ function openTopicOverlay(id) {
             </div>
             <div id="replies-list" style="margin-top:20px;"></div>
             <div style="margin-top:20px; border-top:1px solid #222; padding-top:20px;">
-                <textarea id="reply-input" class="modal-input" style="height:70px; resize:none" 
+                <textarea id="reply-input" class="modal-input" style="height:70px; resize:none; font-family:inherit" 
                           placeholder="${AppState.user ? 'Ваш ответ...' : 'Войдите для ответа'}" ${AppState.user ? '' : 'disabled'}></textarea>
                 <button class="modal-btn" onclick="sendReply('${topic.id}')">ОТПРАВИТЬ</button>
             </div>
@@ -405,7 +418,7 @@ function renderReplies() {
     const list = document.getElementById('replies-list');
     if(!list || !AppState.activeTopic) return;
     list.innerHTML = AppState.activeTopic.replies.map(r => `
-        <div style="margin-bottom:15px; padding:10px; background:rgba(255,255,255,0.02)">
+        <div style="margin-bottom:15px; padding:10px; background:rgba(255,255,255,0.02); border-bottom:1px solid #111">
             <div style="color:var(--custom-green); font-size:11px;">${r.author} | ${r.time}</div>
             <div style="text-transform:none; color:#ccc; margin-top:5px;">${r.text}</div>
         </div>
