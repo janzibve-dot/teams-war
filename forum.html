@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | FORUM v15.7 OFFICIAL</title>
+    <title>TEAMS WAR | FORUM v15.8 OFFICIAL</title>
     <style>
-        /* Шрифты и переменные оставлены без изменений */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -160,7 +159,7 @@
     </aside>
 
     <main>
-        <input type="text" class="search-bar" placeholder="ПОИСК ПО ТЕМАМ...">
+        <input type="text" id="topic-search-input" class="search-bar" placeholder="ПОИСК ПО ТЕМАМ...">
         <div class="panel">
             <div class="panel-header">ОБЩИЙ ЧАТ (LIVE)</div>
             <div class="chat-box" id="main-chat"></div>
@@ -180,12 +179,8 @@
         <div class="panel">
             <div class="panel-header">ДРУЗЬЯ</div>
             <div id="friends-list">
-                <div class="rating-item" style="border: none;">
-                    <span>USER_44</span>
-                    <button style="font-size: 9px; background: var(--custom-red); color: white; border: none; font-weight: bold;">УДАЛИТЬ</button>
                 </div>
-            </div>
-            <input type="text" class="chat-input" placeholder="Найти игрока...">
+            <input type="text" id="friend-add-input" class="chat-input" placeholder="Найти игрока..." onkeydown="if(event.key==='Enter') handleAddFriend()">
         </div>
 
         <div class="panel" style="margin-top: 20px;">
@@ -218,7 +213,12 @@
 <div id="modal-profile" class="modal-overlay">
     <div class="modal-content">
         <div class="panel-header">ПРОФИЛЬ</div><br>
-        <button class="modal-btn" style="background:var(--custom-red);" onclick="handleLogout()">ВЫЙТИ ИЗ АККАУНТА</button>
+        <label style="font-size: 10px;">СМЕНИТЬ АВАТАР:</label>
+        <input type="file" id="avatar-input" class="modal-input" accept="image/*">
+        <input type="password" id="old-pass" class="modal-input" placeholder="СТАРЫЙ ПАРОЛЬ">
+        <input type="password" id="new-pass" class="modal-input" placeholder="НОВЫЙ ПАРОЛЬ">
+        <button class="modal-btn" onclick="handleUpdateProfile()">СОХРАНИТЬ</button>
+        <button class="modal-btn" style="background:var(--custom-red); margin-top:10px;" onclick="handleLogout()">ВЫЙТИ ИЗ АККАУНТА</button>
         <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ЗАКРЫТЬ</button>
     </div>
 </div>
@@ -234,34 +234,32 @@
 
 <script>
 /**
- * БЕЗОПАСНЫЙ JavaScript ДЛЯ FORUM v15.7
- * Использует localStorage для хранения данных
+ * Глобальный объект состояния FORUM v15.8
  */
-
-// Попытка загрузить данные без ошибок (White Page Fix)
-function safeData(key) {
-    try {
-        const data = localStorage.getItem(key);
-        return data ? JSON.parse(data) : null;
-    } catch(e) {
-        console.error("Ошибка чтения памяти:", e);
-        return null;
-    }
-}
-
 const AppState = {
-    user: safeData('tw_user'),
-    chat: safeData('tw_chat') || [],
-    topics: safeData('tw_topics') || [],
-    activeTopic: null
+    user: JSON.parse(localStorage.getItem('tw_user')) || null,
+    chat: JSON.parse(localStorage.getItem('tw_chat')) || [],
+    topics: JSON.parse(localStorage.getItem('tw_topics')) || [],
+    friends: JSON.parse(localStorage.getItem('tw_friends')) || [],
+    activeTopic: null,
+    searchQuery: ""
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     updateUI();
     renderChat();
     renderTopics();
+    renderFriends();
     
-    // Закрытие по ESC
+    // Живой поиск тем
+    const searchInput = document.getElementById('topic-search-input');
+    if(searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            AppState.searchQuery = e.target.value.toLowerCase();
+            renderTopics();
+        });
+    }
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeModals();
@@ -269,7 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Случайный онлайн
     setInterval(() => {
         const el = document.getElementById('online-count');
         if(el) el.innerText = 110 + Math.floor(Math.random() * 40);
@@ -277,44 +274,76 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function sync() {
-    try {
-        localStorage.setItem('tw_user', JSON.stringify(AppState.user));
-        localStorage.setItem('tw_chat', JSON.stringify(AppState.chat));
-        localStorage.setItem('tw_topics', JSON.stringify(AppState.topics));
-    } catch(e) { console.error("Память переполнена"); }
+    localStorage.setItem('tw_user', JSON.stringify(AppState.user));
+    localStorage.setItem('tw_chat', JSON.stringify(AppState.chat));
+    localStorage.setItem('tw_topics', JSON.stringify(AppState.topics));
+    localStorage.setItem('tw_friends', JSON.stringify(AppState.friends));
+}
+
+/**
+ * 1. ЛИЧНЫЙ КАБИНЕТ (ПРОФИЛЬ)
+ */
+function handleUpdateProfile() {
+    if(!AppState.user) return;
+    
+    const fileInput = document.getElementById('avatar-input');
+    const newPass = document.getElementById('new-pass').value.trim();
+    
+    // Смена аватара
+    if(fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            AppState.user.avatar = e.target.result;
+            sync();
+            updateUI();
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+    
+    // Имитация смены пароля
+    if(newPass) {
+        AppState.user.password = newPass;
+        const log = document.getElementById('event-log');
+        if(log) log.innerHTML = `- ПАРОЛЬ ОБНОВЛЕН<br>` + log.innerHTML;
+    }
+    
+    sync();
+    closeModals();
 }
 
 function updateUI() {
     const nameDisp = document.getElementById('username-display');
     const ptsDisp = document.getElementById('user-pts');
+    const avatarImg = document.getElementById('user-avatar');
     const authBtn = document.getElementById('nav-auth-btn');
     const regBtn = document.getElementById('nav-reg-btn');
 
     if (AppState.user && nameDisp) {
         nameDisp.innerText = AppState.user.login.toUpperCase();
         if(ptsDisp) ptsDisp.innerText = AppState.user.pts || 10;
+        if(avatarImg && AppState.user.avatar) avatarImg.src = AppState.user.avatar;
         if(authBtn) authBtn.style.display = 'none';
         if(regBtn) regBtn.style.display = 'none';
     } else if (nameDisp) {
         nameDisp.innerText = "ГОСТЬ";
         if(ptsDisp) ptsDisp.innerText = "0";
+        if(avatarImg) avatarImg.src = "default-avatar.png";
         if(authBtn) authBtn.style.display = 'block';
         if(regBtn) regBtn.style.display = 'block';
     }
 }
 
-// --- ФУНКЦИИ ПОЛЬЗОВАТЕЛЯ ---
 function handleLogin() {
     const val = document.getElementById('auth-login').value.trim();
     if(!val) return;
-    AppState.user = { login: val, pts: 10 };
+    AppState.user = { login: val, pts: 10, avatar: null, password: "123" };
     sync(); updateUI(); closeModals();
 }
 
 function handleRegister() {
     const val = document.getElementById('reg-login').value.trim();
     if(!val) return;
-    AppState.user = { login: val, pts: 10 };
+    AppState.user = { login: val, pts: 10, avatar: null, password: "123" };
     sync(); updateUI(); closeModals();
 }
 
@@ -322,7 +351,40 @@ function handleLogout() {
     AppState.user = null; sync(); location.reload();
 }
 
-// --- ЧАТ ---
+/**
+ * 2. СИСТЕМА ДРУЗЕЙ
+ */
+function handleAddFriend() {
+    if(!AppState.user) return;
+    const input = document.getElementById('friend-add-input');
+    const name = input.value.trim();
+    if(name && !AppState.friends.includes(name)) {
+        AppState.friends.push(name);
+        const log = document.getElementById('event-log');
+        if(log) log.innerHTML = `- ДОБАВЛЕН ДРУГ: ${name}<br>` + log.innerHTML;
+        sync(); renderFriends(); input.value = '';
+    }
+}
+
+function removeFriend(name) {
+    AppState.friends = AppState.friends.filter(f => f !== name);
+    sync(); renderFriends();
+}
+
+function renderFriends() {
+    const list = document.getElementById('friends-list');
+    if(!list) return;
+    list.innerHTML = AppState.friends.map(f => `
+        <div class="rating-item" style="border: none;">
+            <span>${f.toUpperCase()}</span>
+            <button onclick="removeFriend('${f}')" style="font-size: 9px; background: var(--custom-red); color: white; border: none; font-weight: bold; cursor:pointer;">УДАЛИТЬ</button>
+        </div>
+    `).join('');
+}
+
+/**
+ * 3. ЧАТ И ЛЕНТА ТЕМ
+ */
 function renderChat() {
     const box = document.getElementById('main-chat');
     if(!box) return;
@@ -350,7 +412,6 @@ function sendChatMessage() {
     }
 }
 
-// --- ТЕМЫ ---
 function handleCreateTopic() {
     if(!AppState.user) return;
     const input = document.getElementById('topic-title-input');
@@ -370,7 +431,11 @@ function handleCreateTopic() {
 function renderTopics() {
     const cont = document.getElementById('topics-container');
     if(!cont) return;
-    cont.innerHTML = AppState.topics.map(t => `
+    
+    // Фильтрация для поиска
+    const filtered = AppState.topics.filter(t => t.title.toLowerCase().includes(AppState.searchQuery));
+    
+    cont.innerHTML = filtered.map(t => `
         <div class="topic-row" onclick="openTopicOverlay('${t.id}')">
             <div>
                 <div class="topic-title">${t.title}</div>
@@ -386,7 +451,9 @@ function renderTopics() {
     `).join('');
 }
 
-// --- OVERLAY ТЕМЫ ---
+/**
+ * 4. ОВЕРЛЕЙ И КОММЕНТАРИИ
+ */
 function openTopicOverlay(id) {
     const topic = AppState.topics.find(t => t.id === id);
     if(!topic) return;
@@ -446,7 +513,6 @@ function closeTopicOverlay() {
     AppState.activeTopic = null;
 }
 
-// МОДАЛКИ
 function showModal(t) {
     closeModals();
     const el = document.getElementById('modal-' + t);
@@ -459,6 +525,5 @@ function closeModals() {
     });
 }
 </script>
-
 </body>
 </html>
