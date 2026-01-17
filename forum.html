@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | FORUM v16.1 STABLE</title>
+    <title>TEAMS WAR | FORUM v16.2 REAL-TIME</title>
     <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
-        /* ДИЗАЙН ПОЛНОСТЬЮ СОХРАНЕН БЕЗ ИЗМЕНЕНИЙ */
+        /* ДИЗАЙН ИЗ v15.9 (НЕ МЕНЯЛСЯ) */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -33,7 +33,6 @@
             background-size: cover; background-position: center; filter: brightness(0.15) blur(8px);
         }
 
-        /* --- ХЕДЕР --- */
         header {
             position: sticky; top: 0; z-index: 1500;
             padding: 20px 40px; background: #050505;
@@ -50,7 +49,6 @@
 
         .online-counter { color: var(--custom-green); font-size: 12px; font-weight: bold; border: 1px solid var(--custom-green); padding: 5px 10px; }
 
-        /* --- СЕТКА --- */
         .main-layout {
             display: grid;
             grid-template-columns: 300px 1fr 300px;
@@ -70,7 +68,6 @@
             font-size: 16px; 
         }
 
-        /* --- ПРОФИЛЬ --- */
         .user-mini-profile { text-align: center; }
         .avatar-box { width: 120px; height: 120px; border: 2px solid var(--custom-green); margin: 0 auto 15px; background: #111; overflow: hidden; }
         .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
@@ -80,13 +77,11 @@
         .notification-item { font-size: 11px; padding: 10px; border-bottom: 1px solid #222; color: #aaa; text-transform: none; }
         .notif-new { border-left: 5px solid var(--custom-red); background: rgba(188,0,0,0.05); }
 
-        /* --- ЧАТ --- */
         .chat-box { height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 10px; scrollbar-width: thin; scrollbar-color: var(--custom-red) transparent; }
         .chat-msg { font-size: 13px; text-transform: none; border-bottom: 1px solid #1a1a1a; padding-bottom: 5px; }
         .chat-meta { font-size: 10px; color: var(--custom-green); margin-bottom: 3px; }
         .chat-input { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 10px; margin-top: 10px; outline: none; }
 
-        /* --- ТЕМЫ --- */
         .topic-row { 
             display: flex; align-items: center; justify-content: space-between; 
             padding: 15px; border: 1px solid #222; margin-bottom: 10px; transition: 0.3s;
@@ -97,7 +92,9 @@
         .topic-author { font-size: 11px; color: #666; display: flex; align-items: center; gap: 8px; margin-top: 5px; }
         .author-img-small { width: 20px; height: 20px; border: 1px solid var(--custom-green); }
 
-        /* --- МОДАЛКИ --- */
+        .rating-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a1a1a; font-size: 14px; }
+        .rank-num { color: var(--custom-red); font-weight: bold; width: 30px; }
+
         .modal-overlay {
             position: fixed; top:0; left:0; width:100%; height:100%; 
             background: rgba(0,0,0,0.9); z-index: 2000; display: none;
@@ -109,7 +106,6 @@
         .modal-btn:hover { filter: brightness(1.2); }
 
         .search-bar { width: 100%; padding: 10px; background: #111; border: 2px solid var(--custom-red); color: white; margin-bottom: 20px; outline: none; }
-
     </style>
 </head>
 <body>
@@ -143,7 +139,7 @@
         <div class="panel" style="margin-top: 20px;">
             <div class="panel-header">УВЕДОМЛЕНИЯ</div>
             <div id="notif-list">
-                <div class="notification-item notif-new">Ожидание подключения к сети...</div>
+                <div class="notification-item notif-new">Поиск сети TEAMS WAR...</div>
             </div>
         </div>
 
@@ -188,7 +184,7 @@
         <div class="panel" style="margin-top: 20px;">
             <div class="panel-header">ЛОГ СОБЫТИЙ</div>
             <div id="event-log" style="font-size: 10px; color: #666;">
-                - Инициализация протоколов...<br>
+                - Подключение...<br>
             </div>
         </div>
     </aside>
@@ -234,25 +230,28 @@
 
 <script>
 /**
- * TEAMS WAR v16.1 - STABLE CONNECTION
- * Используем массив серверов для надежности.
+ * TEAMS WAR v16.2 - FIXED REAL-TIME SYNC
+ * Используем .on() для живых обновлений и расширенный список пиров.
  */
 
-// Список публичных серверов Gun (если один упадет, другие подхватят)
+// Расширенный список серверов для бесшовного переключения
 const peers = [
     'https://gun-manhattan.herokuapp.com/gun',
     'https://gun-eu.herokuapp.com/gun',
-    'https://relay.peer.ooo/gun'
+    'https://gun-us.herokuapp.com/gun',
+    'https://relay.peer.ooo/gun',
+    'https://gunjs.herokuapp.com/gun'
 ];
 
-const gun = Gun({ peers: peers });
+const gun = Gun({ peers: peers, localStorage: false }); // Отключаем локальный кэш, чтобы форсировать сеть
 
-// Ссылки на ветки базы данных
+// Базы данных
 const db = {
-    chat: gun.get('tw_v16_chat_global_stable'),
-    topics: gun.get('tw_v16_topics_global_stable')
+    chat: gun.get('tw_v16_chat_live_fix'),
+    topics: gun.get('tw_v16_topics_live_fix')
 };
 
+// Состояние
 let currentUser = JSON.parse(localStorage.getItem('tw_current_user')) || null;
 let myFriends = JSON.parse(localStorage.getItem('tw_my_friends')) || [];
 let localTopics = []; 
@@ -276,10 +275,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
 });
 
+// --- СИНХРОНИЗАЦИЯ ---
 function initGunListeners() {
-    // Слушаем ЧАТ
-    db.chat.map().once((data, id) => {
+    addLog("ПОДКЛЮЧЕНИЕ К УЗЛАМ...");
+
+    // ЧАТ: Используем .map().on() для живых обновлений!
+    db.chat.map().on((data, id) => {
         if(!data || !data.text) return;
+        
+        // Проверка на дубликаты
         if(!document.getElementById('msg-'+id)) {
             const box = document.getElementById('main-chat');
             const div = document.createElement('div');
@@ -291,7 +295,7 @@ function initGunListeners() {
         }
     });
 
-    // Слушаем ТЕМЫ
+    // ТЕМЫ: Используем .map().on() для отслеживания изменений в реальном времени
     db.topics.map().on((data, id) => {
         if(!data || !data.title) return;
         
@@ -301,17 +305,20 @@ function initGunListeners() {
         } else {
             localTopics.unshift({ ...data, id });
         }
+        
         renderTopics();
         
+        // Обновляем открытую тему, если есть
         const overlay = document.getElementById('topic-overlay');
         if(overlay && overlay.dataset.topicId === id) {
             renderReplies(id);
         }
     });
     
-    addLog("СЕТЬ АКТИВНА");
+    addLog("СИНХРОНИЗАЦИЯ АКТИВНА");
 }
 
+// --- АВТОРИЗАЦИЯ ---
 function handleAuth(isReg) {
     const inputId = isReg ? 'reg-login' : 'auth-login';
     const login = document.getElementById(inputId).value.trim();
@@ -321,7 +328,7 @@ function handleAuth(isReg) {
     localStorage.setItem('tw_current_user', JSON.stringify(currentUser));
     updateUI();
     closeModals();
-    addLog(`ВЫ ВОШЛИ КАК ${login.toUpperCase()}`);
+    addLog(`ВХОД ВЫПОЛНЕН: ${login}`);
 }
 
 function handleLogout() {
@@ -366,8 +373,9 @@ function updateUI() {
     }
 }
 
+// --- ЧАТ ---
 function sendChatMessage() {
-    if(!currentUser) return alert("ВОЙДИТЕ В СИСТЕМУ!");
+    if(!currentUser) return alert("НУЖНА АВТОРИЗАЦИЯ!");
     const input = document.getElementById('chat-input-field');
     const text = input.value.trim();
     if(!text) return;
@@ -375,6 +383,7 @@ function sendChatMessage() {
     const now = new Date();
     const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
 
+    // Отправляем сообщение всем
     db.chat.set({
         user: currentUser.login,
         text: text,
@@ -385,8 +394,9 @@ function sendChatMessage() {
     input.value = '';
 }
 
+// --- ТЕМЫ ---
 function handleCreateTopic() {
-    if(!currentUser) return alert("ВОЙДИТЕ В СИСТЕМУ!");
+    if(!currentUser) return alert("НУЖНА АВТОРИЗАЦИЯ!");
     const input = document.getElementById('topic-title-input');
     const title = input.value.trim();
     if(!title) return;
@@ -482,7 +492,8 @@ function sendReply(id) {
             time: new Date().toLocaleString()
         });
         
-        db.topics.get(id).put({
+        // Обновляем тему в облаке
+        gun.get('tw_v16_topics_live_fix').get(id).put({
             replies: JSON.stringify(replies)
         });
         
@@ -490,6 +501,7 @@ function sendReply(id) {
     }
 }
 
+// --- ДРУЗЬЯ ---
 function handleAddFriend() {
     const input = document.getElementById('friend-add-input');
     const name = input.value.trim();
@@ -518,6 +530,7 @@ function removeFriend(name) {
     renderFriends();
 }
 
+// --- ЛОГИ И МОДАЛКИ ---
 function addLog(msg) {
     const log = document.getElementById('event-log');
     log.innerHTML = `- ${msg}<br>` + log.innerHTML;
