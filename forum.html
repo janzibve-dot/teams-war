@@ -1,411 +1,241 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | FORUM & TERMINAL v15.6</title>
-    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
-    <style>
-        @font-face {
-            font-family: 'Sangyo';
-            src: url('ofont.ru_Sangyo.ttf') format('truetype');
-            font-weight: normal; font-style: normal;
-        }
-
-        :root { 
-            --bg: #050505; 
-            --custom-green: #777c4e; 
-            --custom-red: #bc0000;   
-            --text-white: #ffffff; 
-            --font-main: 'Sangyo', 'Oswald', sans-serif;
-            --panel-bg: rgba(255, 255, 255, 0.03);
-        }
-
-        * { box-sizing: border-box; scroll-behavior: smooth; }
-        body {
-            margin: 0; background-color: var(--bg); color: var(--text-white);
-            font-family: var(--font-main); text-transform: uppercase;
-        }
-        body::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -5; background-image: url('bg.jpg.png');
-            background-size: cover; background-position: center; filter: brightness(0.15) blur(8px);
-        }
-
-        /* --- ХЕДЕР --- */
-        header {
-            position: sticky; top: 0; z-index: 1500;
-            padding: 20px 40px; background: #050505;
-            border-bottom: 5px solid var(--custom-red);
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .nav-container { display: flex; align-items: center; flex: 1; gap: 15px; }
-        .logo-static { font-size: 24px; text-decoration: none; margin-right: 30px; }
-        .logo-static .t { color: var(--custom-green); }
-        .logo-static .w { color: var(--custom-red); font-weight: 900; }
-        
-        .nav-btn { padding: 10px 20px; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.3); font-size: 13px; transition: 0.3s; cursor: pointer; }
-        .nav-btn:hover, .btn-active { background: var(--custom-red); border-color: var(--custom-red); }
-
-        .online-counter { color: var(--custom-green); font-size: 12px; font-weight: bold; border: 1px solid var(--custom-green); padding: 5px 10px; }
-
-        /* --- СЕТКА ФОРУМА --- */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 300px 1fr 300px;
-            gap: 20px;
-            padding: 40px;
-            max-width: 1800px;
-            margin: 0 auto;
-        }
-
-        .panel { background: var(--panel-bg); border: 1px solid #222; padding: 20px; position: relative; }
-        .panel-header { 
-            color: var(--custom-red); 
-            font-weight: bold;
-            border-bottom: 2px solid var(--custom-red); 
-            margin-bottom: 15px; 
-            padding-bottom: 5px; 
-            font-size: 16px; 
-        }
-
-        /* --- ПРОФИЛЬ И УВЕДОМЛЕНИЯ --- */
-        .user-mini-profile { text-align: center; }
-        .avatar-box { width: 120px; height: 120px; border: 2px solid var(--custom-green); margin: 0 auto 15px; background: #111; overflow: hidden; }
-        .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
-        .user-stats { font-size: 12px; margin-top: 10px; color: #888; }
-        .points-val { color: var(--custom-green); font-weight: bold; }
-
-        .notification-item { font-size: 11px; padding: 10px; border-bottom: 1px solid #222; color: #aaa; text-transform: none; }
-        .notif-new { border-left: 5px solid var(--custom-red); background: rgba(188,0,0,0.05); }
-
-        /* --- ЧАТ --- */
-        .chat-box { height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 10px; scrollbar-width: thin; scrollbar-color: var(--custom-red) transparent; }
-        .chat-msg { font-size: 13px; text-transform: none; border-bottom: 1px solid #1a1a1a; padding-bottom: 5px; }
-        .chat-meta { font-size: 10px; color: var(--custom-green); margin-bottom: 3px; }
-        .chat-input { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 10px; margin-top: 10px; outline: none; }
-
-        /* --- СПИСОК ТЕМ --- */
-        .topic-row { 
-            display: flex; align-items: center; justify-content: space-between; 
-            padding: 15px; border: 1px solid #222; margin-bottom: 10px; transition: 0.3s;
-            cursor: pointer; text-decoration: none; color: white;
-        }
-        .topic-row:hover { border-color: var(--custom-green); background: rgba(119, 124, 78, 0.05); }
-        .topic-title { font-size: 18px; color: var(--text-white); }
-        .topic-author { font-size: 11px; color: #666; display: flex; align-items: center; gap: 8px; margin-top: 5px; }
-        .author-img-small { width: 20px; height: 20px; border: 1px solid var(--custom-green); }
-
-        /* --- РЕЙТИНГ --- */
-        .rating-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a1a1a; font-size: 14px; }
-        .rank-num { color: var(--custom-red); font-weight: bold; width: 30px; }
-
-        /* --- МОДАЛЬНЫЕ ОКНА --- */
-        .modal-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%; 
-            background: rgba(0,0,0,0.9); z-index: 2000; display: none;
-            align-items: center; justify-content: center;
-        }
-        .modal-content { background: #0a0a0a; border: 4px solid var(--custom-red); padding: 40px; width: 400px; }
-        .modal-input { width: 100%; background: #111; border: 1px solid #333; color: white; padding: 12px; margin-bottom: 15px; outline: none; }
-        .modal-btn { width: 100%; background: var(--custom-red); color: white; border: none; padding: 12px; cursor: pointer; font-family: var(--font-main); transition: 0.3s; font-weight: bold; }
-        .modal-btn:hover { filter: brightness(1.2); }
-
-        .search-bar { width: 100%; padding: 10px; background: #111; border: 2px solid var(--custom-red); color: white; margin-bottom: 20px; }
-
-    </style>
-</head>
-<body>
-
-<header>
-    <div class="nav-container">
-        <a href="index.html" class="logo-static"><span class="t">TEAMS</span> <span class="w">WAR</span></a>
-        <a href="#" id="nav-auth-btn" class="nav-btn" onclick="showModal('auth')">ВХОД</a>
-        <a href="#" id="nav-reg-btn" class="nav-btn" onclick="showModal('reg')">РЕГИСТРАЦИЯ</a>
-        <a href="index.html" class="nav-btn">ГЛАВНАЯ</a>
-        <div class="online-counter">ONLINE: <span id="online-count">127</span></div>
-    </div>
-    <div class="age-limit" style="color: var(--custom-red); border: 3px solid var(--custom-red); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 900;">6+</div>
-</header>
-
-<div class="main-layout">
-    
-    <aside>
-        <div class="panel user-mini-profile">
-            <div class="panel-header">ВАШ ТЕРМИНАЛ</div>
-            <div class="avatar-box">
-                <img src="default-avatar.png" id="user-avatar" alt="Avatar">
-            </div>
-            <div id="username-display">ГОСТЬ</div>
-            <div class="user-stats">
-                БАЛЛЫ: <span class="points-val" id="user-pts">0</span><br>
-                РЕЙТИНГ: #---
-            </div>
-            <button class="modal-btn" style="margin-top: 15px; font-size: 10px;" onclick="showModal('profile')">ИЗМЕНИТЬ ПРОФИЛЬ</button>
-        </div>
-
-        <div class="panel" style="margin-top: 20px;">
-            <div class="panel-header">УВЕДОМЛЕНИЯ</div>
-            <div id="notif-list">
-                <div class="notification-item notif-new">Добро пожаловать в TEAMS WAR! Начните общение.</div>
-                <div class="notification-item">+5 баллов за регистрацию.</div>
-            </div>
-        </div>
-
-        <div class="panel" style="margin-top: 20px;">
-            <div class="panel-header">ТОП ОПЕРАТИВНИКОВ</div>
-            <div id="rating-list">
-                <div class="rating-item"><span class="rank-num">01</span> ALPHA_LEADER <span class="points-val">2540</span></div>
-                <div class="rating-item"><span class="rank-num">02</span> GHOST_DOG <span class="points-val">1920</span></div>
-                <div class="rating-item"><span class="rank-num">03</span> STALKER_77 <span class="points-val">1500</span></div>
-            </div>
-        </div>
-    </aside>
-
-    <main>
-        <input type="text" class="search-bar" placeholder="ПОИСК ПО ТЕМАМ...">
-        
-        <div class="panel">
-            <div class="panel-header">ОБЩИЙ ЧАТ (LIVE)</div>
-            <div class="chat-box" id="main-chat">
-                </div>
-            <input type="text" id="chat-input-field" class="chat-input" placeholder="Введите сообщение..." onkeydown="if(event.key==='Enter') sendChatMessage()">
-        </div>
-
-        <div class="panel" style="margin-top: 20px;">
-            <div class="panel-header" style="display: flex; justify-content: space-between;">
-                ЛЕНТА ТЕМ 
-                <button onclick="showModal('create-topic')" style="background: none; border: 1px solid var(--custom-green); color: var(--custom-green); cursor: pointer; font-size: 10px;">+ СОЗДАТЬ ТЕМУ</button>
-            </div>
-            <div id="topics-container">
-                </div>
-        </div>
-    </main>
-
-    <aside>
-        <div class="panel">
-            <div class="panel-header">ДРУЗЬЯ</div>
-            <div id="friends-list">
-                <div class="rating-item" style="border: none;">
-                    <span>USER_44</span>
-                    <button style="font-size: 9px; background: var(--custom-red); color: white; border: none; font-weight: bold;">УДАЛИТЬ</button>
-                </div>
-            </div>
-            <input type="text" class="chat-input" placeholder="Найти игрока...">
-        </div>
-
-        <div class="panel" style="margin-top: 20px;">
-            <div class="panel-header">ЛОГ СОБЫТИЙ</div>
-            <div id="event-log" style="font-size: 10px; color: #666;">
-                - Терминал запущен...<br>
-            </div>
-        </div>
-    </aside>
-</div>
-
-<div id="modal-auth" class="modal-overlay">
-    <div class="modal-content">
-        <div class="panel-header">ВХОД В ТЕРМИНАЛ</div><br>
-        <input type="text" id="auth-login" class="modal-input" placeholder="ЛОГИН">
-        <input type="password" id="auth-pass" class="modal-input" placeholder="ПАРОЛЬ">
-        <button class="modal-btn" onclick="handleLogin()">ВОЙТИ</button>
-        <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ОТМЕНА</button>
-    </div>
-</div>
-
-<div id="modal-reg" class="modal-overlay">
-    <div class="modal-content">
-        <div class="panel-header">РЕГИСТРАЦИЯ</div><br>
-        <input type="text" id="reg-login" class="modal-input" placeholder="ЛОГИН">
-        <input type="email" id="reg-email" class="modal-input" placeholder="E-MAIL">
-        <input type="password" id="reg-pass" class="modal-input" placeholder="ПАРОЛЬ">
-        <button class="modal-btn" style="background: var(--custom-green);" onclick="handleRegister()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
-        <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ОТМЕНА</button>
-    </div>
-</div>
-
-<div id="modal-profile" class="modal-overlay">
-    <div class="modal-content">
-        <div class="panel-header">ПРОФИЛЬ</div><br>
-        <label style="font-size: 10px;">СМЕНИТЬ АВАТАР:</label>
-        <input type="file" class="modal-input" accept="image/*">
-        <input type="password" class="modal-input" placeholder="СТАРЫЙ ПАРОЛЬ">
-        <input type="password" class="modal-input" placeholder="НОВЫЙ ПАРОЛЬ">
-        <button class="modal-btn" onclick="alert('Функция будет доступна в v16')">СОХРАНИТЬ</button>
-        <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ЗАКРЫТЬ</button>
-        <button class="modal-btn" style="background:var(--custom-red); margin-top:10px;" onclick="handleLogout()">ВЫЙТИ ИЗ АККАУНТА</button>
-    </div>
-</div>
-
-<div id="modal-create-topic" class="modal-overlay">
-    <div class="modal-content">
-        <div class="panel-header">НОВАЯ ТЕМА</div><br>
-        <input type="text" id="topic-title-input" class="modal-input" placeholder="ЗАГОЛОВОК ТЕМЫ">
-        <button class="modal-btn" onclick="handleCreateTopic()">ОПУБЛИКОВАТЬ</button>
-        <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ОТМЕНА</button>
-    </div>
-</div>
-
 <script>
-    // --- ЛОГИКА БАЗЫ ДАННЫХ (FORUM v15.6) ---
-    const gun = Gun(['https://gun-manhattan.herokuapp.com/gun']);
-    const db = {
-        users: gun.get('tw_v16_users'),
-        chat: gun.get('tw_v16_chat'),
-        topics: gun.get('tw_v16_topics')
+/* =====================================================
+   CONFIG
+===================================================== */
+const STORAGE_KEY = 'TW_FORUM_STATE';
+const ADMINS = ['ADMIN', 'ROOT', 'TW_ADMIN'];
+
+/* =====================================================
+   APP STATE
+===================================================== */
+const AppState = {
+  user: {
+    loggedIn: false,
+    username: 'ГОСТЬ',
+    avatar: 'default-avatar.png',
+    role: 'guest'
+  },
+  chat: [],
+  topics: [],
+  currentTopic: null
+};
+
+/* =====================================================
+   STORAGE
+===================================================== */
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState));
+}
+
+function loadState() {
+  const data = localStorage.getItem(STORAGE_KEY);
+  if (data) Object.assign(AppState, JSON.parse(data));
+}
+
+/* =====================================================
+   HELPERS
+===================================================== */
+function getUserRole(username) {
+  return ADMINS.includes(username.toUpperCase()) ? 'admin' : 'user';
+}
+
+/* =====================================================
+   USER UI
+===================================================== */
+function updateUserUI() {
+  document.getElementById('username-display').innerText = AppState.user.username;
+  document.getElementById('user-avatar').src = AppState.user.avatar;
+}
+
+/* =====================================================
+   AUTH (EXISTING MODAL)
+===================================================== */
+document.querySelector('#modal-auth .modal-btn').onclick = () => {
+  const loginInput = document.querySelector('#modal-auth input[type="text"]');
+  const login = loginInput.value.trim();
+  if (!login) return;
+
+  AppState.user.loggedIn = true;
+  AppState.user.username = login;
+  AppState.user.role = getUserRole(login);
+
+  saveState();
+  updateUserUI();
+  closeModals();
+};
+
+/* =====================================================
+   CHAT
+===================================================== */
+const chatBox = document.getElementById('main-chat');
+const chatInput = document.querySelector('.chat-input');
+
+function renderChat() {
+  chatBox.innerHTML = '';
+
+  AppState.chat.forEach((m, index) => {
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg';
+
+    msg.innerHTML = `
+      <div class="chat-meta">
+        ${m.time} | ${m.user}
+        ${AppState.user.role === 'admin'
+          ? `<span style="color:var(--custom-red);cursor:pointer;float:right" data-i="${index}">X</span>`
+          : ''}
+      </div>
+      ${m.text}
+    `;
+
+    if (AppState.user.role === 'admin') {
+      msg.querySelector('span').onclick = () => {
+        AppState.chat.splice(index, 1);
+        saveState();
+        renderChat();
+      };
+    }
+
+    chatBox.appendChild(msg);
+  });
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+chatInput.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (!AppState.user.loggedIn) return;
+  if (!chatInput.value.trim()) return;
+
+  AppState.chat.push({
+    user: AppState.user.username,
+    text: chatInput.value.trim().slice(0, 200),
+    time: new Date().toLocaleString()
+  });
+
+  chatInput.value = '';
+  saveState();
+  renderChat();
+});
+
+/* =====================================================
+   TOPICS LIST
+===================================================== */
+const topicsContainer = document.getElementById('topics-container');
+
+function renderTopics() {
+  topicsContainer.innerHTML = '';
+  AppState.topics.forEach((t, i) => {
+    const row = document.createElement('a');
+    row.className = 'topic-row';
+    row.href = '#';
+
+    row.innerHTML = `
+      <div>
+        <div class="topic-title">${t.title}</div>
+        <div class="topic-author">АВТОР: ${t.author}</div>
+      </div>
+      <div style="font-size:12px;color:var(--custom-green)">
+        ОТВЕТОВ: ${t.posts.length}
+      </div>
+    `;
+
+    row.onclick = () => openTopic(i);
+    topicsContainer.appendChild(row);
+  });
+}
+
+/* =====================================================
+   TOPIC VIEW (EXISTING modal-profile)
+===================================================== */
+function openTopic(index) {
+  AppState.currentTopic = index;
+
+  const modal = document.getElementById('modal-profile');
+  const content = modal.querySelector('.modal-content');
+
+  content.innerHTML = `
+    <div class="panel-header">${AppState.topics[index].title}</div>
+    <div id="topic-posts" style="max-height:250px;overflow:auto;margin-bottom:15px;"></div>
+    <input id="topic-input" class="modal-input" placeholder="Ответить...">
+    <button class="modal-btn">ОТПРАВИТЬ</button>
+    <button class="modal-btn" style="background:none;margin-top:10px;" onclick="closeModals()">ЗАКРЫТЬ</button>
+  `;
+
+  renderTopicPosts();
+  modal.style.display = 'flex';
+
+  content.querySelector('.modal-btn').onclick = () => {
+    const input = document.getElementById('topic-input');
+    if (!input.value.trim() || !AppState.user.loggedIn) return;
+
+    AppState.topics[index].posts.push({
+      user: AppState.user.username,
+      text: input.value.trim()
+    });
+
+    input.value = '';
+    saveState();
+    renderTopicPosts();
+    renderTopics();
+  };
+}
+
+function renderTopicPosts() {
+  const box = document.getElementById('topic-posts');
+  box.innerHTML = '';
+
+  AppState.topics[AppState.currentTopic].posts.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.style.marginBottom = '8px';
+
+    div.innerHTML = `
+      <b>${p.user}</b>: ${p.text}
+      ${AppState.user.role === 'admin'
+        ? `<span style="color:var(--custom-red);cursor:pointer;float:right" data-i="${i}">X</span>`
+        : ''}
+    `;
+
+    if (AppState.user.role === 'admin') {
+      div.querySelector('span').onclick = () => {
+        AppState.topics[AppState.currentTopic].posts.splice(i, 1);
+        saveState();
+        renderTopicPosts();
+        renderTopics();
+      };
+    }
+
+    box.appendChild(div);
+  });
+}
+
+/* =====================================================
+   CREATE TOPIC BUTTON
+===================================================== */
+document.querySelectorAll('button').forEach(btn => {
+  if (btn.innerText.includes('СОЗДАТЬ ТЕМУ')) {
+    btn.onclick = () => {
+      if (!AppState.user.loggedIn) return;
+
+      const title = prompt('Название темы');
+      if (!title) return;
+
+      AppState.topics.push({
+        title: title,
+        author: AppState.user.username,
+        posts: []
+      });
+
+      saveState();
+      renderTopics();
     };
+  }
+});
 
-    let userSession = JSON.parse(localStorage.getItem('tw_sess')) || null;
-
-    window.onload = () => {
-        updateUI();
-        loadChat();
-        loadTopics();
-    };
-
-    function updateUI() {
-        if(userSession) {
-            document.getElementById('username-display').innerText = userSession.login;
-            document.getElementById('user-pts').innerText = userSession.pts || 10;
-            document.getElementById('nav-auth-btn').style.display = 'none';
-            document.getElementById('nav-reg-btn').style.display = 'none';
-        }
-    }
-
-    // --- ФУНКЦИОНАЛ ТЕМ (v15.6) ---
-    function handleCreateTopic() {
-        if(!userSession) return alert("ВОЙДИТЕ В ТЕРМИНАЛ!");
-        const title = document.getElementById('topic-title-input').value.trim();
-        if(!title) return alert("ВВЕДИТЕ ЗАГОЛОВОК!");
-
-        const now = new Date();
-        const timeStr = now.toLocaleDateString() + " " + now.toLocaleTimeString().slice(0,5);
-
-        db.topics.set({
-            title: title,
-            author: userSession.login,
-            time: timeStr,
-            replies: 0
-        });
-
-        // Запись в лог событий
-        const log = document.getElementById('event-log');
-        log.innerHTML = `- СОЗДАНА ТЕМА: "${title}"<br>` + log.innerHTML;
-
-        document.getElementById('topic-title-input').value = "";
-        closeModals();
-    }
-
-    function loadTopics() {
-        const container = document.getElementById('topics-container');
-        db.topics.map().once((data, id) => {
-            if(!data || !data.title || document.getElementById(id)) return;
-            const topicRow = document.createElement('div');
-            topicRow.id = id;
-            topicRow.className = 'topic-row';
-            topicRow.innerHTML = `
-                <div>
-                    <div class="topic-title">${data.title}</div>
-                    <div class="topic-author">
-                        <div class="author-img-small"><img src="default-avatar.png" width="100%"></div>
-                        АВТОР: ${data.author} | ${data.time}
-                    </div>
-                </div>
-                <div style="text-align: right; color: var(--custom-green); font-size: 12px;">ОТВЕТОВ: ${data.replies || 0}</div>
-            `;
-            // Добавляем в начало ленты
-            container.prepend(topicRow);
-        });
-    }
-
-    // --- ОСТАЛЬНАЯ ЛОГИКА ---
-    function handleRegister() {
-        const login = document.getElementById('reg-login').value.trim().toLowerCase();
-        const email = document.getElementById('reg-email').value.trim();
-        const pass = document.getElementById('reg-pass').value;
-
-        if(!login || !pass) return alert("ЗАПОЛНИТЕ ПОЛЯ!");
-
-        db.users.get(login).once((data) => {
-            if(data) return alert("ЛОГИН ЗАНЯТ!");
-            db.users.get(login).put({ login, pass, email, pts: 10 }, (ack) => {
-                if(!ack.err) {
-                    alert("РЕГИСТРАЦИЯ УСПЕШНА! ВОЙДИТЕ.");
-                    closeModals();
-                }
-            });
-        });
-    }
-
-    function handleLogin() {
-        const login = document.getElementById('auth-login').value.trim().toLowerCase();
-        const pass = document.getElementById('auth-pass').value;
-
-        db.users.get(login).once((data) => {
-            if(data && data.pass === pass) {
-                userSession = data;
-                localStorage.setItem('tw_sess', JSON.stringify(data));
-                location.reload();
-            } else {
-                alert("ОШИБКА ДОСТУПА!");
-            }
-        });
-    }
-
-    function handleLogout() {
-        localStorage.removeItem('tw_sess');
-        location.reload();
-    }
-
-    function loadChat() {
-        const chatBox = document.getElementById('main-chat');
-        db.chat.map().once((data, id) => {
-            if(!data || !data.text || document.getElementById(id)) return;
-            const msgDiv = document.createElement('div');
-            msgDiv.id = id;
-            msgDiv.className = 'chat-msg';
-            msgDiv.innerHTML = `
-                <div class="chat-meta">${data.time} | ${data.user}</div>
-                ${data.text}
-            `;
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        });
-    }
-
-    function sendChatMessage() {
-        if(!userSession) return alert("ВОЙДИТЕ В ТЕРМИНАЛ!");
-        const input = document.getElementById('chat-input-field');
-        if(!input.value.trim()) return;
-
-        const now = new Date();
-        const timeStr = now.toLocaleDateString() + " " + now.toLocaleTimeString().slice(0,5);
-
-        db.chat.set({
-            user: userSession.login,
-            text: input.value,
-            time: timeStr
-        });
-        input.value = "";
-    }
-
-    function showModal(type) {
-        closeModals();
-        if(type === 'auth') document.getElementById('modal-auth').style.display = 'flex';
-        if(type === 'reg') document.getElementById('modal-reg').style.display = 'flex';
-        if(type === 'profile') document.getElementById('modal-profile').style.display = 'flex';
-        if(type === 'create-topic') document.getElementById('modal-create-topic').style.display = 'flex';
-    }
-
-    function closeModals() {
-        document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
-    }
-
-    setInterval(() => {
-        const count = 120 + Math.floor(Math.random() * 20);
-        document.getElementById('online-count').innerText = count;
-    }, 5000);
+/* =====================================================
+   INIT
+===================================================== */
+loadState();
+updateUserUI();
+renderChat();
+renderTopics();
 </script>
-
-</body>
-</html>
