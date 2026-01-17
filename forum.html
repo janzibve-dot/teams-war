@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | FORUM v16.0 ONLINE</title>
+    <title>TEAMS WAR | FORUM v16.1 STABLE</title>
     <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
-        /* ДИЗАЙН ПОЛНОСТЬЮ СОХРАНЕН (v15.9) */
+        /* ДИЗАЙН ПОЛНОСТЬЮ СОХРАНЕН БЕЗ ИЗМЕНЕНИЙ */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -143,7 +143,7 @@
         <div class="panel" style="margin-top: 20px;">
             <div class="panel-header">УВЕДОМЛЕНИЯ</div>
             <div id="notif-list">
-                <div class="notification-item notif-new">Соединение с сетью установлено...</div>
+                <div class="notification-item notif-new">Ожидание подключения к сети...</div>
             </div>
         </div>
 
@@ -188,7 +188,7 @@
         <div class="panel" style="margin-top: 20px;">
             <div class="panel-header">ЛОГ СОБЫТИЙ</div>
             <div id="event-log" style="font-size: 10px; color: #666;">
-                - Запуск терминала...<br>
+                - Инициализация протоколов...<br>
             </div>
         </div>
     </aside>
@@ -234,34 +234,34 @@
 
 <script>
 /**
- * TEAMS WAR v16.0 - MULTIPLAYER ENABLED
- * Теперь используем Gun.js для вещания (broadcasting) сообщений всем игрокам.
+ * TEAMS WAR v16.1 - STABLE CONNECTION
+ * Используем массив серверов для надежности.
  */
 
-// Подключение к публичным узлам Gun (для работы без своего сервера)
-const gun = Gun(['https://gun-manhattan.herokuapp.com/gun']);
+// Список публичных серверов Gun (если один упадет, другие подхватят)
+const peers = [
+    'https://gun-manhattan.herokuapp.com/gun',
+    'https://gun-eu.herokuapp.com/gun',
+    'https://relay.peer.ooo/gun'
+];
+
+const gun = Gun({ peers: peers });
 
 // Ссылки на ветки базы данных
 const db = {
-    chat: gun.get('tw_v16_chat_global'),
-    topics: gun.get('tw_v16_topics_global')
+    chat: gun.get('tw_v16_chat_global_stable'),
+    topics: gun.get('tw_v16_topics_global_stable')
 };
 
-// Локальное состояние (текущий пользователь)
 let currentUser = JSON.parse(localStorage.getItem('tw_current_user')) || null;
-// Кэш для друзей (локально, так как это личный список)
 let myFriends = JSON.parse(localStorage.getItem('tw_my_friends')) || [];
-
-// Локальные копии данных для отображения
 let localTopics = []; 
-let localChat = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     updateUI();
     initGunListeners();
     renderFriends();
 
-    // Закрытие по ESC
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeModals();
@@ -276,12 +276,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
 });
 
-// --- СИНХРОНИЗАЦИЯ (GUN.JS) ---
 function initGunListeners() {
     // Слушаем ЧАТ
-    db.chat.map().on((data, id) => {
+    db.chat.map().once((data, id) => {
         if(!data || !data.text) return;
-        // Избегаем дубликатов
         if(!document.getElementById('msg-'+id)) {
             const box = document.getElementById('main-chat');
             const div = document.createElement('div');
@@ -297,7 +295,6 @@ function initGunListeners() {
     db.topics.map().on((data, id) => {
         if(!data || !data.title) return;
         
-        // Обновляем или добавляем тему
         const existingIndex = localTopics.findIndex(t => t.id === id);
         if(existingIndex >= 0) {
             localTopics[existingIndex] = { ...data, id };
@@ -306,15 +303,15 @@ function initGunListeners() {
         }
         renderTopics();
         
-        // Если открыт оверлей этой темы, обновляем ответы
         const overlay = document.getElementById('topic-overlay');
         if(overlay && overlay.dataset.topicId === id) {
             renderReplies(id);
         }
     });
+    
+    addLog("СЕТЬ АКТИВНА");
 }
 
-// --- АВТОРИЗАЦИЯ ---
 function handleAuth(isReg) {
     const inputId = isReg ? 'reg-login' : 'auth-login';
     const login = document.getElementById(inputId).value.trim();
@@ -322,7 +319,6 @@ function handleAuth(isReg) {
 
     currentUser = { login: login, pts: 10, avatar: null };
     localStorage.setItem('tw_current_user', JSON.stringify(currentUser));
-    
     updateUI();
     closeModals();
     addLog(`ВЫ ВОШЛИ КАК ${login.toUpperCase()}`);
@@ -370,7 +366,6 @@ function updateUI() {
     }
 }
 
-// --- ЧАТ (Global) ---
 function sendChatMessage() {
     if(!currentUser) return alert("ВОЙДИТЕ В СИСТЕМУ!");
     const input = document.getElementById('chat-input-field');
@@ -380,7 +375,6 @@ function sendChatMessage() {
     const now = new Date();
     const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
 
-    // Отправляем в Gun (всем)
     db.chat.set({
         user: currentUser.login,
         text: text,
@@ -391,19 +385,17 @@ function sendChatMessage() {
     input.value = '';
 }
 
-// --- ТЕМЫ (Global) ---
 function handleCreateTopic() {
     if(!currentUser) return alert("ВОЙДИТЕ В СИСТЕМУ!");
     const input = document.getElementById('topic-title-input');
     const title = input.value.trim();
     if(!title) return;
 
-    // Создаем тему в Gun
     db.topics.set({
         title: title,
         author: currentUser.login,
         time: new Date().toLocaleDateString(),
-        replies: JSON.stringify([]) // Храним ответы как JSON строку для простоты
+        replies: JSON.stringify([])
     });
 
     closeModals();
@@ -415,7 +407,6 @@ function renderTopics() {
     const container = document.getElementById('topics-container');
     const query = document.getElementById('topic-search-input').value.toLowerCase();
     
-    // Сортировка и фильтрация
     const filtered = localTopics.filter(t => t.title && t.title.toLowerCase().includes(query));
     
     container.innerHTML = filtered.map(t => {
@@ -432,7 +423,6 @@ function renderTopics() {
     }).join('');
 }
 
-// --- ОВЕРЛЕЙ ТЕМЫ ---
 function openTopicOverlay(id) {
     const topic = localTopics.find(t => t.id === id);
     if(!topic) return;
@@ -443,7 +433,6 @@ function openTopicOverlay(id) {
     div.className = 'modal-overlay';
     div.style.display = 'flex';
     
-    // Начальная отрисовка
     renderOverlayContent(div, topic);
     document.body.appendChild(div);
 }
@@ -493,18 +482,14 @@ function sendReply(id) {
             time: new Date().toLocaleString()
         });
         
-        // Обновляем тему в Gun (перезаписываем массив ответов)
-        // В Gun это делается через .put, зная ID узла
-        gun.get('tw_v16_topics_global').get(id).put({
+        db.topics.get(id).put({
             replies: JSON.stringify(replies)
         });
         
-        // Временное обновление интерфейса для скорости
         document.getElementById('reply-text').value = '';
     }
 }
 
-// --- ДРУЗЬЯ (Локально) ---
 function handleAddFriend() {
     const input = document.getElementById('friend-add-input');
     const name = input.value.trim();
@@ -533,7 +518,6 @@ function removeFriend(name) {
     renderFriends();
 }
 
-// --- ВСПОМОГАТЕЛЬНОЕ ---
 function addLog(msg) {
     const log = document.getElementById('event-log');
     log.innerHTML = `- ${msg}<br>` + log.innerHTML;
