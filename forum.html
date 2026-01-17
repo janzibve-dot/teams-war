@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | FORUM v16.2 REAL-TIME</title>
+    <title>TEAMS WAR | FORUM v16.3 LIVE</title>
     <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
-        /* ДИЗАЙН ИЗ v15.9 (НЕ МЕНЯЛСЯ) */
+        /* Стили остались прежними (v15.9), добавлена только индикация статуса */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -33,6 +33,7 @@
             background-size: cover; background-position: center; filter: brightness(0.15) blur(8px);
         }
 
+        /* --- ХЕДЕР --- */
         header {
             position: sticky; top: 0; z-index: 1500;
             padding: 20px 40px; background: #050505;
@@ -47,8 +48,16 @@
         .nav-btn { padding: 10px 20px; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.3); font-size: 13px; transition: 0.3s; cursor: pointer; }
         .nav-btn:hover, .btn-active { background: var(--custom-red); border-color: var(--custom-red); }
 
-        .online-counter { color: var(--custom-green); font-size: 12px; font-weight: bold; border: 1px solid var(--custom-green); padding: 5px 10px; }
+        .online-counter { color: var(--custom-green); font-size: 12px; font-weight: bold; border: 1px solid var(--custom-green); padding: 5px 10px; display: flex; align-items: center; gap: 10px; }
+        
+        /* ИНДИКАТОР СТАТУСА СЕТИ */
+        #net-status {
+            width: 10px; height: 10px; border-radius: 50%; background: red;
+            box-shadow: 0 0 10px red; transition: 0.3s;
+        }
+        #net-status.connected { background: #0f0; box-shadow: 0 0 10px #0f0; }
 
+        /* --- СЕТКА --- */
         .main-layout {
             display: grid;
             grid-template-columns: 300px 1fr 300px;
@@ -116,7 +125,10 @@
         <a href="#" id="nav-auth-btn" class="nav-btn" onclick="showModal('auth')">ВХОД</a>
         <a href="#" id="nav-reg-btn" class="nav-btn" onclick="showModal('reg')">РЕГИСТРАЦИЯ</a>
         <a href="index.html" class="nav-btn">ГЛАВНАЯ</a>
-        <div class="online-counter">ONLINE: <span id="online-count">...</span></div>
+        <div class="online-counter">
+            <div id="net-status" title="Статус соединения"></div>
+            ONLINE: <span id="online-count">...</span>
+        </div>
     </div>
     <div class="age-limit" style="color: var(--custom-red); border: 3px solid var(--custom-red); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 900;">6+</div>
 </header>
@@ -139,7 +151,7 @@
         <div class="panel" style="margin-top: 20px;">
             <div class="panel-header">УВЕДОМЛЕНИЯ</div>
             <div id="notif-list">
-                <div class="notification-item notif-new">Поиск сети TEAMS WAR...</div>
+                <div class="notification-item notif-new">Ожидание синхронизации сети...</div>
             </div>
         </div>
 
@@ -184,7 +196,7 @@
         <div class="panel" style="margin-top: 20px;">
             <div class="panel-header">ЛОГ СОБЫТИЙ</div>
             <div id="event-log" style="font-size: 10px; color: #666;">
-                - Подключение...<br>
+                - Загрузка модулей...<br>
             </div>
         </div>
     </aside>
@@ -230,28 +242,28 @@
 
 <script>
 /**
- * TEAMS WAR v16.2 - FIXED REAL-TIME SYNC
- * Используем .on() для живых обновлений и расширенный список пиров.
+ * TEAMS WAR v16.3 - LIVE HEARTBEAT EDITION
+ * Исправлена проблема "нужно обновлять страницу".
+ * Добавлен механизм Keep-Alive.
  */
 
-// Расширенный список серверов для бесшовного переключения
+// Список надежных публичных серверов
 const peers = [
     'https://gun-manhattan.herokuapp.com/gun',
-    'https://gun-eu.herokuapp.com/gun',
     'https://gun-us.herokuapp.com/gun',
-    'https://relay.peer.ooo/gun',
-    'https://gunjs.herokuapp.com/gun'
+    'https://plato.design/gun',
+    'https://gun-eu.herokuapp.com/gun'
 ];
 
-const gun = Gun({ peers: peers, localStorage: false }); // Отключаем локальный кэш, чтобы форсировать сеть
+// Инициализация
+const gun = Gun({ peers: peers });
 
-// Базы данных
+// Уникальные ключи базы данных для v16.3 (чтобы сбросить старый мусор)
 const db = {
-    chat: gun.get('tw_v16_chat_live_fix'),
-    topics: gun.get('tw_v16_topics_live_fix')
+    chat: gun.get('tw_v16_3_chat_pulse'),
+    topics: gun.get('tw_v16_3_topics_pulse')
 };
 
-// Состояние
 let currentUser = JSON.parse(localStorage.getItem('tw_current_user')) || null;
 let myFriends = JSON.parse(localStorage.getItem('tw_my_friends')) || [];
 let localTopics = []; 
@@ -260,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateUI();
     initGunListeners();
     renderFriends();
+    startHeartbeat(); // ЗАПУСК "ПУЛЬСА"
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
@@ -275,15 +288,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
 });
 
+// --- "ПУЛЬС" СЕТИ (HEARTBEAT) ---
+// Пингуем сервера, чтобы они не разрывали WebSocket соединение
+function startHeartbeat() {
+    setInterval(() => {
+        gun.get('heartbeat').put({ time: Date.now() });
+    }, 10000); // Каждые 10 сек
+}
+
 // --- СИНХРОНИЗАЦИЯ ---
 function initGunListeners() {
-    addLog("ПОДКЛЮЧЕНИЕ К УЗЛАМ...");
+    const statusDot = document.getElementById('net-status');
+    addLog("ПОДКЛЮЧЕНИЕ...");
 
-    // ЧАТ: Используем .map().on() для живых обновлений!
+    // ЧАТ
     db.chat.map().on((data, id) => {
-        if(!data || !data.text) return;
+        // Как только пришли данные, значит мы онлайн
+        statusDot.classList.add('connected');
         
-        // Проверка на дубликаты
+        if(!data || !data.text) return;
         if(!document.getElementById('msg-'+id)) {
             const box = document.getElementById('main-chat');
             const div = document.createElement('div');
@@ -295,8 +318,10 @@ function initGunListeners() {
         }
     });
 
-    // ТЕМЫ: Используем .map().on() для отслеживания изменений в реальном времени
+    // ТЕМЫ
     db.topics.map().on((data, id) => {
+        statusDot.classList.add('connected');
+        
         if(!data || !data.title) return;
         
         const existingIndex = localTopics.findIndex(t => t.id === id);
@@ -308,14 +333,12 @@ function initGunListeners() {
         
         renderTopics();
         
-        // Обновляем открытую тему, если есть
+        // Живое обновление открытой темы
         const overlay = document.getElementById('topic-overlay');
         if(overlay && overlay.dataset.topicId === id) {
             renderReplies(id);
         }
     });
-    
-    addLog("СИНХРОНИЗАЦИЯ АКТИВНА");
 }
 
 // --- АВТОРИЗАЦИЯ ---
@@ -328,7 +351,7 @@ function handleAuth(isReg) {
     localStorage.setItem('tw_current_user', JSON.stringify(currentUser));
     updateUI();
     closeModals();
-    addLog(`ВХОД ВЫПОЛНЕН: ${login}`);
+    addLog(`ВХОД: ${login.toUpperCase()}`);
 }
 
 function handleLogout() {
@@ -373,7 +396,7 @@ function updateUI() {
     }
 }
 
-// --- ЧАТ ---
+// --- ЧАТ (Global) ---
 function sendChatMessage() {
     if(!currentUser) return alert("НУЖНА АВТОРИЗАЦИЯ!");
     const input = document.getElementById('chat-input-field');
@@ -381,31 +404,31 @@ function sendChatMessage() {
     if(!text) return;
 
     const now = new Date();
-    const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+    const timeStr = now.toLocaleTimeString().slice(0,5);
 
-    // Отправляем сообщение всем
-    db.chat.set({
+    db.chat.get(Date.now().toString()).put({
         user: currentUser.login,
         text: text,
-        time: timeStr,
-        timestamp: Date.now()
+        time: timeStr
     });
     
     input.value = '';
 }
 
-// --- ТЕМЫ ---
+// --- ТЕМЫ (Global) ---
 function handleCreateTopic() {
     if(!currentUser) return alert("НУЖНА АВТОРИЗАЦИЯ!");
     const input = document.getElementById('topic-title-input');
     const title = input.value.trim();
     if(!title) return;
 
-    db.topics.set({
+    const topicId = 't' + Date.now();
+    
+    db.topics.get(topicId).put({
         title: title,
         author: currentUser.login,
         time: new Date().toLocaleDateString(),
-        replies: JSON.stringify([])
+        replies: JSON.stringify([]) 
     });
 
     closeModals();
@@ -492,8 +515,8 @@ function sendReply(id) {
             time: new Date().toLocaleString()
         });
         
-        // Обновляем тему в облаке
-        gun.get('tw_v16_topics_live_fix').get(id).put({
+        // Исправленная запись ответа (перезапись массива)
+        db.topics.get(id).put({
             replies: JSON.stringify(replies)
         });
         
@@ -501,7 +524,7 @@ function sendReply(id) {
     }
 }
 
-// --- ДРУЗЬЯ ---
+// --- ДРУЗЬЯ (Локально) ---
 function handleAddFriend() {
     const input = document.getElementById('friend-add-input');
     const name = input.value.trim();
@@ -530,7 +553,6 @@ function removeFriend(name) {
     renderFriends();
 }
 
-// --- ЛОГИ И МОДАЛКИ ---
 function addLog(msg) {
     const log = document.getElementById('event-log');
     log.innerHTML = `- ${msg}<br>` + log.innerHTML;
