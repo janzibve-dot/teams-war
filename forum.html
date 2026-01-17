@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | FORUM v15.9 OFFICIAL</title>
+    <title>TEAMS WAR | FORUM v16.0 ONLINE</title>
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
-        /* СОХРАНЕННЫЙ ДИЗАЙН И ШРИФТЫ */
+        /* ДИЗАЙН ПОЛНОСТЬЮ СОХРАНЕН (v15.9) */
         @font-face {
             font-family: 'Sangyo';
             src: url('ofont.ru_Sangyo.ttf') format('truetype');
@@ -32,7 +33,7 @@
             background-size: cover; background-position: center; filter: brightness(0.15) blur(8px);
         }
 
-        /* --- ХЕДЕР (Жирная рамка v15.5) --- */
+        /* --- ХЕДЕР --- */
         header {
             position: sticky; top: 0; z-index: 1500;
             padding: 20px 40px; background: #050505;
@@ -96,7 +97,7 @@
         .topic-author { font-size: 11px; color: #666; display: flex; align-items: center; gap: 8px; margin-top: 5px; }
         .author-img-small { width: 20px; height: 20px; border: 1px solid var(--custom-green); }
 
-        /* --- МОДАЛКИ (Жирная рамка v15.5) --- */
+        /* --- МОДАЛКИ --- */
         .modal-overlay {
             position: fixed; top:0; left:0; width:100%; height:100%; 
             background: rgba(0,0,0,0.9); z-index: 2000; display: none;
@@ -119,7 +120,7 @@
         <a href="#" id="nav-auth-btn" class="nav-btn" onclick="showModal('auth')">ВХОД</a>
         <a href="#" id="nav-reg-btn" class="nav-btn" onclick="showModal('reg')">РЕГИСТРАЦИЯ</a>
         <a href="index.html" class="nav-btn">ГЛАВНАЯ</a>
-        <div class="online-counter">ONLINE: <span id="online-count">127</span></div>
+        <div class="online-counter">ONLINE: <span id="online-count">...</span></div>
     </div>
     <div class="age-limit" style="color: var(--custom-red); border: 3px solid var(--custom-red); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 900;">6+</div>
 </header>
@@ -142,7 +143,7 @@
         <div class="panel" style="margin-top: 20px;">
             <div class="panel-header">УВЕДОМЛЕНИЯ</div>
             <div id="notif-list">
-                <div class="notification-item notif-new">Добро пожаловать в TEAMS WAR!</div>
+                <div class="notification-item notif-new">Соединение с сетью установлено...</div>
             </div>
         </div>
 
@@ -151,6 +152,9 @@
             <div id="rating-list">
                 <div class="rating-item" style="display:flex; justify-content:space-between; font-size:14px; padding:5px 0;">
                     <span>ALPHA_LEADER</span> <span class="points-val">2540</span>
+                </div>
+                <div class="rating-item" style="display:flex; justify-content:space-between; font-size:14px; padding:5px 0;">
+                    <span>GHOST_DOG</span> <span class="points-val">1920</span>
                 </div>
             </div>
         </div>
@@ -170,8 +174,7 @@
                 ЛЕНТА ТЕМ 
                 <button onclick="showModal('create-topic')" style="background: none; border: 1px solid var(--custom-green); color: var(--custom-green); cursor: pointer; font-size: 10px;">+ СОЗДАТЬ ТЕМУ</button>
             </div>
-            <div id="topics-container">
-                </div>
+            <div id="topics-container"></div>
         </div>
     </main>
 
@@ -179,13 +182,13 @@
         <div class="panel">
             <div class="panel-header">ДРУЗЬЯ</div>
             <div id="friends-list"></div>
-            <input type="text" id="friend-add-input" class="chat-input" placeholder="Добавить друга..." onkeydown="if(event.key==='Enter') handleAddFriend()">
+            <input type="text" id="friend-add-input" class="chat-input" placeholder="Добавить друга (ENTER)..." onkeydown="if(event.key==='Enter') handleAddFriend()">
         </div>
 
         <div class="panel" style="margin-top: 20px;">
             <div class="panel-header">ЛОГ СОБЫТИЙ</div>
             <div id="event-log" style="font-size: 10px; color: #666;">
-                - Терминал активен...<br>
+                - Запуск терминала...<br>
             </div>
         </div>
     </aside>
@@ -195,7 +198,7 @@
     <div class="modal-content">
         <div class="panel-header">ВХОД В ТЕРМИНАЛ</div><br>
         <input type="text" id="auth-login" class="modal-input" placeholder="ЛОГИН">
-        <button class="modal-btn" onclick="handleAuth('auth')">ВОЙТИ</button>
+        <button class="modal-btn" onclick="handleAuth()">ВОЙТИ</button>
         <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ОТМЕНА</button>
     </div>
 </div>
@@ -204,7 +207,7 @@
     <div class="modal-content">
         <div class="panel-header">РЕГИСТРАЦИЯ</div><br>
         <input type="text" id="reg-login" class="modal-input" placeholder="ЛОГИН">
-        <button class="modal-btn" style="background: var(--custom-green);" onclick="handleAuth('reg')">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+        <button class="modal-btn" style="background: var(--custom-green);" onclick="handleAuth(true)">ЗАРЕГИСТРИРОВАТЬСЯ</button>
         <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ОТМЕНА</button>
     </div>
 </div>
@@ -214,7 +217,6 @@
         <div class="panel-header">ПРОФИЛЬ</div><br>
         <label style="font-size: 10px;">АВАТАР:</label>
         <input type="file" id="avatar-input" class="modal-input" accept="image/*">
-        <input type="password" id="new-pass" class="modal-input" placeholder="НОВЫЙ ПАРОЛЬ">
         <button class="modal-btn" onclick="handleUpdateProfile()">СОХРАНИТЬ</button>
         <button class="modal-btn" style="background:var(--custom-red); margin-top:10px;" onclick="handleLogout()">ВЫЙТИ</button>
         <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ЗАКРЫТЬ</button>
@@ -232,24 +234,31 @@
 
 <script>
 /**
- * FORUM v15.9 LOGIC (localStorage)
+ * TEAMS WAR v16.0 - MULTIPLAYER ENABLED
+ * Теперь используем Gun.js для вещания (broadcasting) сообщений всем игрокам.
  */
 
-// 1. СОСТОЯНИЕ (AppState)
-const AppState = {
-    user: JSON.parse(localStorage.getItem('tw_user')) || null,
-    chat: JSON.parse(localStorage.getItem('tw_chat')) || [],
-    topics: JSON.parse(localStorage.getItem('tw_topics')) || [
-        { id: 'start', title: 'ДОБРО ПОЖАЛОВАТЬ НА ФОРУМ!', author: 'ADMIN', time: '01.01.2026', replies: [] }
-    ],
-    friends: JSON.parse(localStorage.getItem('tw_friends')) || []
+// Подключение к публичным узлам Gun (для работы без своего сервера)
+const gun = Gun(['https://gun-manhattan.herokuapp.com/gun']);
+
+// Ссылки на ветки базы данных
+const db = {
+    chat: gun.get('tw_v16_chat_global'),
+    topics: gun.get('tw_v16_topics_global')
 };
 
-// 2. ИНИЦИАЛИЗАЦИЯ
+// Локальное состояние (текущий пользователь)
+let currentUser = JSON.parse(localStorage.getItem('tw_current_user')) || null;
+// Кэш для друзей (локально, так как это личный список)
+let myFriends = JSON.parse(localStorage.getItem('tw_my_friends')) || [];
+
+// Локальные копии данных для отображения
+let localTopics = []; 
+let localChat = [];
+
 document.addEventListener('DOMContentLoaded', () => {
     updateUI();
-    renderChat();
-    renderTopics();
+    initGunListeners();
     renderFriends();
 
     // Закрытие по ESC
@@ -260,174 +269,257 @@ document.addEventListener('DOMContentLoaded', () => {
             if(ov) ov.remove();
         }
     });
+
+    setInterval(() => {
+        const el = document.getElementById('online-count');
+        if(el) el.innerText = 120 + Math.floor(Math.random() * 50);
+    }, 5000);
 });
 
-function sync() {
-    localStorage.setItem('tw_user', JSON.stringify(AppState.user));
-    localStorage.setItem('tw_chat', JSON.stringify(AppState.chat));
-    localStorage.setItem('tw_topics', JSON.stringify(AppState.topics));
-    localStorage.setItem('tw_friends', JSON.stringify(AppState.friends));
+// --- СИНХРОНИЗАЦИЯ (GUN.JS) ---
+function initGunListeners() {
+    // Слушаем ЧАТ
+    db.chat.map().on((data, id) => {
+        if(!data || !data.text) return;
+        // Избегаем дубликатов
+        if(!document.getElementById('msg-'+id)) {
+            const box = document.getElementById('main-chat');
+            const div = document.createElement('div');
+            div.id = 'msg-'+id;
+            div.className = 'chat-msg';
+            div.innerHTML = `<div class="chat-meta">${data.time} | ${data.user}</div>${data.text}`;
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
+        }
+    });
+
+    // Слушаем ТЕМЫ
+    db.topics.map().on((data, id) => {
+        if(!data || !data.title) return;
+        
+        // Обновляем или добавляем тему
+        const existingIndex = localTopics.findIndex(t => t.id === id);
+        if(existingIndex >= 0) {
+            localTopics[existingIndex] = { ...data, id };
+        } else {
+            localTopics.unshift({ ...data, id });
+        }
+        renderTopics();
+        
+        // Если открыт оверлей этой темы, обновляем ответы
+        const overlay = document.getElementById('topic-overlay');
+        if(overlay && overlay.dataset.topicId === id) {
+            renderReplies(id);
+        }
+    });
 }
 
-// 3. АВТОРИЗАЦИЯ И ПРОФИЛЬ
-function handleAuth(type) {
-    const inputId = type === 'auth' ? 'auth-login' : 'reg-login';
+// --- АВТОРИЗАЦИЯ ---
+function handleAuth(isReg) {
+    const inputId = isReg ? 'reg-login' : 'auth-login';
     const login = document.getElementById(inputId).value.trim();
     if(!login) return;
+
+    currentUser = { login: login, pts: 10, avatar: null };
+    localStorage.setItem('tw_current_user', JSON.stringify(currentUser));
     
-    AppState.user = { login: login, pts: 10, avatar: null };
-    sync(); updateUI(); closeModals();
-    addLog(`ПОЛЬЗОВАТЕЛЬ ${login} ВОШЕЛ В СИСТЕМУ`);
+    updateUI();
+    closeModals();
+    addLog(`ВЫ ВОШЛИ КАК ${login.toUpperCase()}`);
 }
 
 function handleLogout() {
-    AppState.user = null; sync(); location.reload();
+    currentUser = null;
+    localStorage.removeItem('tw_current_user');
+    location.reload();
 }
 
 function handleUpdateProfile() {
-    if(!AppState.user) return;
+    if(!currentUser) return;
     const file = document.getElementById('avatar-input').files[0];
     if(file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            AppState.user.avatar = e.target.result;
-            sync(); updateUI();
+            currentUser.avatar = e.target.result;
+            localStorage.setItem('tw_current_user', JSON.stringify(currentUser));
+            updateUI();
         };
         reader.readAsDataURL(file);
     }
-    addLog("ПРОФИЛЬ ОБНОВЛЕН");
     closeModals();
+    addLog("ПРОФИЛЬ ОБНОВЛЕН");
 }
 
 function updateUI() {
     const disp = document.getElementById('username-display');
     const pts = document.getElementById('user-pts');
     const av = document.getElementById('user-avatar');
-    if(AppState.user) {
-        disp.innerText = AppState.user.login.toUpperCase();
-        pts.innerText = AppState.user.pts;
-        if(AppState.user.avatar) av.src = AppState.user.avatar;
+    
+    if(currentUser) {
+        disp.innerText = currentUser.login.toUpperCase();
+        pts.innerText = currentUser.pts;
+        if(currentUser.avatar) av.src = currentUser.avatar;
         document.getElementById('nav-auth-btn').style.display = 'none';
         document.getElementById('nav-reg-btn').style.display = 'none';
+    } else {
+        disp.innerText = "ГОСТЬ";
+        pts.innerText = "0";
+        av.src = "default-avatar.png";
+        document.getElementById('nav-auth-btn').style.display = 'block';
+        document.getElementById('nav-reg-btn').style.display = 'block';
     }
 }
 
-// 4. ТЕМЫ И КОММЕНТАРИИ
+// --- ЧАТ (Global) ---
+function sendChatMessage() {
+    if(!currentUser) return alert("ВОЙДИТЕ В СИСТЕМУ!");
+    const input = document.getElementById('chat-input-field');
+    const text = input.value.trim();
+    if(!text) return;
+
+    const now = new Date();
+    const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+
+    // Отправляем в Gun (всем)
+    db.chat.set({
+        user: currentUser.login,
+        text: text,
+        time: timeStr,
+        timestamp: Date.now()
+    });
+    
+    input.value = '';
+}
+
+// --- ТЕМЫ (Global) ---
 function handleCreateTopic() {
-    if(!AppState.user) return;
-    const title = document.getElementById('topic-title-input').value.trim();
+    if(!currentUser) return alert("ВОЙДИТЕ В СИСТЕМУ!");
+    const input = document.getElementById('topic-title-input');
+    const title = input.value.trim();
     if(!title) return;
 
-    const newTopic = {
-        id: 't_' + Date.now(),
+    // Создаем тему в Gun
+    db.topics.set({
         title: title,
-        author: AppState.user.login,
+        author: currentUser.login,
         time: new Date().toLocaleDateString(),
-        replies: []
-    };
+        replies: JSON.stringify([]) // Храним ответы как JSON строку для простоты
+    });
 
-    AppState.topics.unshift(newTopic);
-    sync(); renderTopics(); 
-    document.getElementById('topic-title-input').value = '';
     closeModals();
-    addLog(`СОЗДАНА ТЕМА: ${title}`);
+    input.value = '';
+    addLog(`ТЕМА СОЗДАНА`);
 }
 
 function renderTopics() {
     const container = document.getElementById('topics-container');
     const query = document.getElementById('topic-search-input').value.toLowerCase();
     
-    container.innerHTML = AppState.topics
-        .filter(t => t.title.toLowerCase().includes(query))
-        .map(t => `
+    // Сортировка и фильтрация
+    const filtered = localTopics.filter(t => t.title && t.title.toLowerCase().includes(query));
+    
+    container.innerHTML = filtered.map(t => {
+        const replies = t.replies ? JSON.parse(t.replies) : [];
+        return `
             <div class="topic-row" onclick="openTopicOverlay('${t.id}')">
                 <div>
                     <div class="topic-title">${t.title}</div>
                     <div class="topic-author">АВТОР: ${t.author} | ${t.time}</div>
                 </div>
-                <div style="color:var(--custom-green); font-size:12px;">ОТВЕТОВ: ${t.replies.length}</div>
+                <div style="color:var(--custom-green); font-size:12px;">ОТВЕТОВ: ${replies.length}</div>
             </div>
-        `).join('');
+        `;
+    }).join('');
 }
 
+// --- ОВЕРЛЕЙ ТЕМЫ ---
 function openTopicOverlay(id) {
-    const topic = AppState.topics.find(t => t.id === id);
+    const topic = localTopics.find(t => t.id === id);
     if(!topic) return;
 
     const div = document.createElement('div');
     div.id = 'topic-overlay';
+    div.dataset.topicId = id;
     div.className = 'modal-overlay';
     div.style.display = 'flex';
-    div.innerHTML = `
+    
+    // Начальная отрисовка
+    renderOverlayContent(div, topic);
+    document.body.appendChild(div);
+}
+
+function renderOverlayContent(container, topic) {
+    const replies = topic.replies ? JSON.parse(topic.replies) : [];
+    
+    container.innerHTML = `
         <div class="modal-content" style="width: 800px; max-height: 85vh; overflow-y: auto;">
             <div class="panel-header" style="display:flex; justify-content:space-between;">
                 <span>ТЕМА: ${topic.title}</span>
-                <span style="cursor:pointer; color:var(--custom-red)" onclick="this.parentElement.parentElement.parentElement.remove()">[X]</span>
+                <span style="cursor:pointer; color:var(--custom-red)" onclick="document.getElementById('topic-overlay').remove()">[X]</span>
             </div>
             <div id="replies-box" style="margin: 20px 0;">
-                ${topic.replies.map(r => `
+                ${replies.map(r => `
                     <div style="border-bottom:1px solid #111; padding:10px 0;">
                         <div style="color:var(--custom-green); font-size:11px;">${r.author} | ${r.time}</div>
                         <div style="text-transform:none; color:#ccc; margin-top:5px;">${r.text}</div>
                     </div>
                 `).join('') || '<div style="color:#444">ОТВЕТОВ ПОКА НЕТ</div>'}
             </div>
-            <textarea id="reply-text" class="modal-input" placeholder="ВАШ ОТВЕТ..." style="height:80px; resize:none;"></textarea>
-            <button class="modal-btn" onclick="sendReply('${t.id}')">ОТПРАВИТЬ</button>
+            <textarea id="reply-text" class="modal-input" placeholder="ВАШ ОТВЕТ..." style="height:80px; resize:none;" ${currentUser ? '' : 'disabled'}></textarea>
+            <button class="modal-btn" onclick="sendReply('${topic.id}')">ОТПРАВИТЬ</button>
         </div>
     `;
-    document.body.appendChild(div);
+}
+
+function renderReplies(id) {
+    const topic = localTopics.find(t => t.id === id);
+    const container = document.getElementById('topic-overlay');
+    if(topic && container) {
+        renderOverlayContent(container, topic);
+    }
 }
 
 function sendReply(id) {
-    if(!AppState.user) return;
+    if(!currentUser) return;
     const text = document.getElementById('reply-text').value.trim();
     if(!text) return;
 
-    const topic = AppState.topics.find(t => t.id === id);
-    topic.replies.push({ author: AppState.user.login, text: text, time: new Date().toLocaleString() });
-    sync(); 
-    document.getElementById('topic-overlay').remove();
-    openTopicOverlay(id); // Обновить
-    renderTopics();
+    const topic = localTopics.find(t => t.id === id);
+    if(topic) {
+        let replies = topic.replies ? JSON.parse(topic.replies) : [];
+        replies.push({
+            author: currentUser.login,
+            text: text,
+            time: new Date().toLocaleString()
+        });
+        
+        // Обновляем тему в Gun (перезаписываем массив ответов)
+        // В Gun это делается через .put, зная ID узла
+        gun.get('tw_v16_topics_global').get(id).put({
+            replies: JSON.stringify(replies)
+        });
+        
+        // Временное обновление интерфейса для скорости
+        document.getElementById('reply-text').value = '';
+    }
 }
 
-// 5. ЧАТ И ДРУЗЬЯ
-function sendChatMessage() {
-    if(!AppState.user) return;
-    const input = document.getElementById('chat-input-field');
-    const text = input.value.trim();
-    if(!text) return;
-
-    AppState.chat.push({ user: AppState.user.login, text: text, time: new Date().toLocaleTimeString().slice(0,5) });
-    if(AppState.chat.length > 50) AppState.chat.shift();
-    sync(); renderChat(); input.value = '';
-}
-
-function renderChat() {
-    const box = document.getElementById('main-chat');
-    box.innerHTML = AppState.chat.map(m => `
-        <div class="chat-msg">
-            <div class="chat-meta">${m.time} | ${m.user}</div>
-            ${m.text}
-        </div>
-    `).join('');
-    box.scrollTop = box.scrollHeight;
-}
-
+// --- ДРУЗЬЯ (Локально) ---
 function handleAddFriend() {
-    const name = document.getElementById('friend-add-input').value.trim();
-    if(name && !AppState.friends.includes(name)) {
-        AppState.friends.push(name);
-        sync(); renderFriends();
-        document.getElementById('friend-add-input').value = '';
-        addLog(`ДРУГ ${name} ДОБАВЛЕН`);
+    const input = document.getElementById('friend-add-input');
+    const name = input.value.trim();
+    if(name && !myFriends.includes(name)) {
+        myFriends.push(name);
+        localStorage.setItem('tw_my_friends', JSON.stringify(myFriends));
+        renderFriends();
+        input.value = '';
+        addLog(`ДРУГ ДОБАВЛЕН`);
     }
 }
 
 function renderFriends() {
     const list = document.getElementById('friends-list');
-    list.innerHTML = AppState.friends.map(f => `
+    list.innerHTML = myFriends.map(f => `
         <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;">
             <span>${f.toUpperCase()}</span>
             <span style="color:var(--custom-red); cursor:pointer;" onclick="removeFriend('${f}')">[УДАЛИТЬ]</span>
@@ -436,11 +528,12 @@ function renderFriends() {
 }
 
 function removeFriend(name) {
-    AppState.friends = AppState.friends.filter(n => n !== name);
-    sync(); renderFriends();
+    myFriends = myFriends.filter(f => f !== name);
+    localStorage.setItem('tw_my_friends', JSON.stringify(myFriends));
+    renderFriends();
 }
 
-// 6. ВСПОМОГАТЕЛЬНОЕ
+// --- ВСПОМОГАТЕЛЬНОЕ ---
 function addLog(msg) {
     const log = document.getElementById('event-log');
     log.innerHTML = `- ${msg}<br>` + log.innerHTML;
