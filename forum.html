@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEAMS WAR | FORUM & TERMINAL v15.5</title>
+    <title>TEAMS WAR | FORUM & TERMINAL v15.6</title>
     <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <style>
         @font-face {
@@ -36,14 +36,12 @@
         header {
             position: sticky; top: 0; z-index: 1500;
             padding: 20px 40px; background: #050505;
-            /* ПРАВКА: Рамка жирнее */
             border-bottom: 5px solid var(--custom-red);
             display: flex; align-items: center; justify-content: space-between;
         }
         .nav-container { display: flex; align-items: center; flex: 1; gap: 15px; }
         .logo-static { font-size: 24px; text-decoration: none; margin-right: 30px; }
         .logo-static .t { color: var(--custom-green); }
-        /* ПРАВКА: Красный текст жирнее */
         .logo-static .w { color: var(--custom-red); font-weight: 900; }
         
         .nav-btn { padding: 10px 20px; color: white; text-decoration: none; border: 1px solid rgba(188, 0, 0, 0.3); font-size: 13px; transition: 0.3s; cursor: pointer; }
@@ -62,7 +60,6 @@
         }
 
         .panel { background: var(--panel-bg); border: 1px solid #222; padding: 20px; position: relative; }
-        /* ПРАВКА: Заголовок и линия жирнее */
         .panel-header { 
             color: var(--custom-red); 
             font-weight: bold;
@@ -80,7 +77,6 @@
         .points-val { color: var(--custom-green); font-weight: bold; }
 
         .notification-item { font-size: 11px; padding: 10px; border-bottom: 1px solid #222; color: #aaa; text-transform: none; }
-        /* ПРАВКА: Рамка (полоска) жирнее */
         .notif-new { border-left: 5px solid var(--custom-red); background: rgba(188,0,0,0.05); }
 
         /* --- ЧАТ --- */
@@ -102,7 +98,6 @@
 
         /* --- РЕЙТИНГ --- */
         .rating-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a1a1a; font-size: 14px; }
-        /* ПРАВКА: Красный текст жирнее */
         .rank-num { color: var(--custom-red); font-weight: bold; width: 30px; }
 
         /* --- МОДАЛЬНЫЕ ОКНА --- */
@@ -111,13 +106,11 @@
             background: rgba(0,0,0,0.9); z-index: 2000; display: none;
             align-items: center; justify-content: center;
         }
-        /* ПРАВКА: Рамка модалки жирнее */
         .modal-content { background: #0a0a0a; border: 4px solid var(--custom-red); padding: 40px; width: 400px; }
         .modal-input { width: 100%; background: #111; border: 1px solid #333; color: white; padding: 12px; margin-bottom: 15px; outline: none; }
         .modal-btn { width: 100%; background: var(--custom-red); color: white; border: none; padding: 12px; cursor: pointer; font-family: var(--font-main); transition: 0.3s; font-weight: bold; }
         .modal-btn:hover { filter: brightness(1.2); }
 
-        /* ПРАВКА: Рамка поиска жирнее */
         .search-bar { width: 100%; padding: 10px; background: #111; border: 2px solid var(--custom-red); color: white; margin-bottom: 20px; }
 
     </style>
@@ -185,17 +178,7 @@
                 <button onclick="showModal('create-topic')" style="background: none; border: 1px solid var(--custom-green); color: var(--custom-green); cursor: pointer; font-size: 10px;">+ СОЗДАТЬ ТЕМУ</button>
             </div>
             <div id="topics-container">
-                <a href="#" class="topic-row">
-                    <div>
-                        <div class="topic-title">Как быстро прокачать штурмовика?</div>
-                        <div class="topic-author">
-                            <div class="author-img-small"><img src="default-avatar.png" width="100%"></div>
-                            АВТОР: RECRUIT_X | СЕГОДНЯ 10:20
-                        </div>
-                    </div>
-                    <div style="text-align: right; color: var(--custom-green); font-size: 12px;">ОТВЕТОВ: 12</div>
-                </a>
-            </div>
+                </div>
         </div>
     </main>
 
@@ -214,9 +197,7 @@
         <div class="panel" style="margin-top: 20px;">
             <div class="panel-header">ЛОГ СОБЫТИЙ</div>
             <div id="event-log" style="font-size: 10px; color: #666;">
-                - Создана тема: "Баг на карте Лес"<br>
-                - Новое сообщение в ЛС от Admin<br>
-                - Вам начислено 10 баллов
+                - Терминал запущен...<br>
             </div>
         </div>
     </aside>
@@ -256,12 +237,22 @@
     </div>
 </div>
 
+<div id="modal-create-topic" class="modal-overlay">
+    <div class="modal-content">
+        <div class="panel-header">НОВАЯ ТЕМА</div><br>
+        <input type="text" id="topic-title-input" class="modal-input" placeholder="ЗАГОЛОВОК ТЕМЫ">
+        <button class="modal-btn" onclick="handleCreateTopic()">ОПУБЛИКОВАТЬ</button>
+        <button class="modal-btn" style="background:none; margin-top:10px;" onclick="closeModals()">ОТМЕНА</button>
+    </div>
+</div>
+
 <script>
-    // --- ЛОГИКА БАЗЫ ДАННЫХ (FORUM v15.5) ---
+    // --- ЛОГИКА БАЗЫ ДАННЫХ (FORUM v15.6) ---
     const gun = Gun(['https://gun-manhattan.herokuapp.com/gun']);
     const db = {
         users: gun.get('tw_v16_users'),
-        chat: gun.get('tw_v16_chat')
+        chat: gun.get('tw_v16_chat'),
+        topics: gun.get('tw_v16_topics')
     };
 
     let userSession = JSON.parse(localStorage.getItem('tw_sess')) || null;
@@ -269,6 +260,7 @@
     window.onload = () => {
         updateUI();
         loadChat();
+        loadTopics();
     };
 
     function updateUI() {
@@ -280,6 +272,53 @@
         }
     }
 
+    // --- ФУНКЦИОНАЛ ТЕМ (v15.6) ---
+    function handleCreateTopic() {
+        if(!userSession) return alert("ВОЙДИТЕ В ТЕРМИНАЛ!");
+        const title = document.getElementById('topic-title-input').value.trim();
+        if(!title) return alert("ВВЕДИТЕ ЗАГОЛОВОК!");
+
+        const now = new Date();
+        const timeStr = now.toLocaleDateString() + " " + now.toLocaleTimeString().slice(0,5);
+
+        db.topics.set({
+            title: title,
+            author: userSession.login,
+            time: timeStr,
+            replies: 0
+        });
+
+        // Запись в лог событий
+        const log = document.getElementById('event-log');
+        log.innerHTML = `- СОЗДАНА ТЕМА: "${title}"<br>` + log.innerHTML;
+
+        document.getElementById('topic-title-input').value = "";
+        closeModals();
+    }
+
+    function loadTopics() {
+        const container = document.getElementById('topics-container');
+        db.topics.map().once((data, id) => {
+            if(!data || !data.title || document.getElementById(id)) return;
+            const topicRow = document.createElement('div');
+            topicRow.id = id;
+            topicRow.className = 'topic-row';
+            topicRow.innerHTML = `
+                <div>
+                    <div class="topic-title">${data.title}</div>
+                    <div class="topic-author">
+                        <div class="author-img-small"><img src="default-avatar.png" width="100%"></div>
+                        АВТОР: ${data.author} | ${data.time}
+                    </div>
+                </div>
+                <div style="text-align: right; color: var(--custom-green); font-size: 12px;">ОТВЕТОВ: ${data.replies || 0}</div>
+            `;
+            // Добавляем в начало ленты
+            container.prepend(topicRow);
+        });
+    }
+
+    // --- ОСТАЛЬНАЯ ЛОГИКА ---
     function handleRegister() {
         const login = document.getElementById('reg-login').value.trim().toLowerCase();
         const email = document.getElementById('reg-email').value.trim();
@@ -355,6 +394,7 @@
         if(type === 'auth') document.getElementById('modal-auth').style.display = 'flex';
         if(type === 'reg') document.getElementById('modal-reg').style.display = 'flex';
         if(type === 'profile') document.getElementById('modal-profile').style.display = 'flex';
+        if(type === 'create-topic') document.getElementById('modal-create-topic').style.display = 'flex';
     }
 
     function closeModals() {
