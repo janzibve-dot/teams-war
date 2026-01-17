@@ -1,241 +1,90 @@
-<script>
-/* =====================================================
-   CONFIG
-===================================================== */
-const STORAGE_KEY = 'TW_FORUM_STATE';
-const ADMINS = ['ADMIN', 'ROOT', 'TW_ADMIN'];
-
-/* =====================================================
-   APP STATE
-===================================================== */
-const AppState = {
-  user: {
-    loggedIn: false,
-    username: 'ГОСТЬ',
-    avatar: 'default-avatar.png',
-    role: 'guest'
-  },
-  chat: [],
-  topics: [],
-  currentTopic: null
-};
-
-/* =====================================================
-   STORAGE
-===================================================== */
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState));
-}
-
-function loadState() {
-  const data = localStorage.getItem(STORAGE_KEY);
-  if (data) Object.assign(AppState, JSON.parse(data));
-}
-
-/* =====================================================
-   HELPERS
-===================================================== */
-function getUserRole(username) {
-  return ADMINS.includes(username.toUpperCase()) ? 'admin' : 'user';
-}
-
-/* =====================================================
-   USER UI
-===================================================== */
-function updateUserUI() {
-  document.getElementById('username-display').innerText = AppState.user.username;
-  document.getElementById('user-avatar').src = AppState.user.avatar;
-}
-
-/* =====================================================
-   AUTH (EXISTING MODAL)
-===================================================== */
-document.querySelector('#modal-auth .modal-btn').onclick = () => {
-  const loginInput = document.querySelector('#modal-auth input[type="text"]');
-  const login = loginInput.value.trim();
-  if (!login) return;
-
-  AppState.user.loggedIn = true;
-  AppState.user.username = login;
-  AppState.user.role = getUserRole(login);
-
-  saveState();
-  updateUserUI();
-  closeModals();
-};
-
-/* =====================================================
-   CHAT
-===================================================== */
-const chatBox = document.getElementById('main-chat');
-const chatInput = document.querySelector('.chat-input');
-
-function renderChat() {
-  chatBox.innerHTML = '';
-
-  AppState.chat.forEach((m, index) => {
-    const msg = document.createElement('div');
-    msg.className = 'chat-msg';
-
-    msg.innerHTML = `
-      <div class="chat-meta">
-        ${m.time} | ${m.user}
-        ${AppState.user.role === 'admin'
-          ? `<span style="color:var(--custom-red);cursor:pointer;float:right" data-i="${index}">X</span>`
-          : ''}
-      </div>
-      ${m.text}
-    `;
-
-    if (AppState.user.role === 'admin') {
-      msg.querySelector('span').onclick = () => {
-        AppState.chat.splice(index, 1);
-        saveState();
-        renderChat();
-      };
-    }
-
-    chatBox.appendChild(msg);
-  });
-
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-chatInput.addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return;
-  if (!AppState.user.loggedIn) return;
-  if (!chatInput.value.trim()) return;
-
-  AppState.chat.push({
-    user: AppState.user.username,
-    text: chatInput.value.trim().slice(0, 200),
-    time: new Date().toLocaleString()
-  });
-
-  chatInput.value = '';
-  saveState();
-  renderChat();
-});
-
-/* =====================================================
-   TOPICS LIST
-===================================================== */
-const topicsContainer = document.getElementById('topics-container');
-
-function renderTopics() {
-  topicsContainer.innerHTML = '';
-  AppState.topics.forEach((t, i) => {
-    const row = document.createElement('a');
-    row.className = 'topic-row';
-    row.href = '#';
-
-    row.innerHTML = `
-      <div>
-        <div class="topic-title">${t.title}</div>
-        <div class="topic-author">АВТОР: ${t.author}</div>
-      </div>
-      <div style="font-size:12px;color:var(--custom-green)">
-        ОТВЕТОВ: ${t.posts.length}
-      </div>
-    `;
-
-    row.onclick = () => openTopic(i);
-    topicsContainer.appendChild(row);
-  });
-}
-
-/* =====================================================
-   TOPIC VIEW (EXISTING modal-profile)
-===================================================== */
-function openTopic(index) {
-  AppState.currentTopic = index;
-
-  const modal = document.getElementById('modal-profile');
-  const content = modal.querySelector('.modal-content');
-
-  content.innerHTML = `
-    <div class="panel-header">${AppState.topics[index].title}</div>
-    <div id="topic-posts" style="max-height:250px;overflow:auto;margin-bottom:15px;"></div>
-    <input id="topic-input" class="modal-input" placeholder="Ответить...">
-    <button class="modal-btn">ОТПРАВИТЬ</button>
-    <button class="modal-btn" style="background:none;margin-top:10px;" onclick="closeModals()">ЗАКРЫТЬ</button>
-  `;
-
-  renderTopicPosts();
-  modal.style.display = 'flex';
-
-  content.querySelector('.modal-btn').onclick = () => {
-    const input = document.getElementById('topic-input');
-    if (!input.value.trim() || !AppState.user.loggedIn) return;
-
-    AppState.topics[index].posts.push({
-      user: AppState.user.username,
-      text: input.value.trim()
-    });
-
-    input.value = '';
-    saveState();
-    renderTopicPosts();
-    renderTopics();
-  };
-}
-
-function renderTopicPosts() {
-  const box = document.getElementById('topic-posts');
-  box.innerHTML = '';
-
-  AppState.topics[AppState.currentTopic].posts.forEach((p, i) => {
-    const div = document.createElement('div');
-    div.style.marginBottom = '8px';
-
-    div.innerHTML = `
-      <b>${p.user}</b>: ${p.text}
-      ${AppState.user.role === 'admin'
-        ? `<span style="color:var(--custom-red);cursor:pointer;float:right" data-i="${i}">X</span>`
-        : ''}
-    `;
-
-    if (AppState.user.role === 'admin') {
-      div.querySelector('span').onclick = () => {
-        AppState.topics[AppState.currentTopic].posts.splice(i, 1);
-        saveState();
-        renderTopicPosts();
-        renderTopics();
-      };
-    }
-
-    box.appendChild(div);
-  });
-}
-
-/* =====================================================
-   CREATE TOPIC BUTTON
-===================================================== */
-document.querySelectorAll('button').forEach(btn => {
-  if (btn.innerText.includes('СОЗДАТЬ ТЕМУ')) {
-    btn.onclick = () => {
-      if (!AppState.user.loggedIn) return;
-
-      const title = prompt('Название темы');
-      if (!title) return;
-
-      AppState.topics.push({
-        title: title,
-        author: AppState.user.username,
-        posts: []
-      });
-
-      saveState();
-      renderTopics();
-    };
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Форум Gemini</title>
+<style>
+  :root {
+    --bg: #f0f0f0;
+    --custom-red: #e74c3c;
+    --custom-green: #27ae60;
+    --panel-bg: #ffffff;
+    --panel-border: #ccc;
   }
-});
-
-/* =====================================================
-   INIT
-===================================================== */
-loadState();
-updateUserUI();
-renderChat();
-renderTopics();
-</script>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: var(--bg);
+  }
+  .panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  .panel-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+  }
+  #main-chat {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--panel-border);
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .chat-msg {
+    margin-bottom: 6px;
+  }
+  .chat-meta {
+    font-size: 0.8em;
+    color: #555;
+  }
+  .chat-input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  #topics-container a {
+    display: flex;
+    justify-content: space-between;
+    text-decoration: none;
+    color: #000;
+    padding: 8px;
+    border-bottom: 1px solid var(--panel-border);
+    cursor: pointer;
+  }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-content {
+    background: var(--panel-bg);
+    border-radius: 6px;
+    padding: 20px;
+    width: 600px;
+    max-width: 90%;
+  }
+  .modal-input {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  .modal-btn {
+    padding: 6px 12px;
+    margin-top: 5px;
+    cursor: pointer;
+  }
+  #user-info {
+    display: flex;
